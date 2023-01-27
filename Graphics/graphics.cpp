@@ -47,7 +47,7 @@ void Graphics::clearScreen(GLbitfield mask){
     glClear(mask);
 }
 
-void GraphicssetClearColor(glm::vec3 clearColor){
+void Graphics::setClearColor(glm::vec3 clearColor){
     glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
 }
 

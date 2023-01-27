@@ -17,6 +17,10 @@ public:
     void scrollEvent(double distance);
     void windowResizeEvent(int width, int height);
     void framebufferResizeEvent(int width, int height);
+
 private:
     std::shared_ptr<Shape> m_cone;
+    std::shared_ptr<Camera> camera;
+    std::shared_ptr<Shape> shape;
+    std::shared_ptr<ModelTransform> modelTransform;
 };
