@@ -23,6 +23,9 @@ void Window::start(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+
     m_GLFWwindow = glfwCreateWindow(640, 480, "CS1950U Engine", NULL, NULL);
     if (!m_GLFWwindow)
     {
