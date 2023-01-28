@@ -20,7 +20,12 @@ public:
 
 private:
     std::shared_ptr<Shape> m_cone;
+
     std::shared_ptr<Camera> camera;
     std::shared_ptr<Shape> shape;
     std::shared_ptr<ModelTransform> modelTransform;
+
+    bool keyStateW, keyStateA, keyStateS, keyStateD;
+    bool mouseStateRight;
+    glm::vec2 previousMousePosition;
 };
