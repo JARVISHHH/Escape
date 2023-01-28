@@ -9,7 +9,7 @@ class Core
 public:
     Core();
     ~Core();
-    void update();
+    void update(double t);
     void draw();
     void keyEvent(int key, int action);
     void mousePosEvent(double xpos, double ypos);

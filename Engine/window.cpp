@@ -78,7 +78,7 @@ void Window::loop(){
     while (!glfwWindowShouldClose(m_GLFWwindow))
     {
         glfwPollEvents();
-        m_core->update();
+        m_core->update(glfwGetTime() - previous);
         m_core->draw();
         glfwSwapBuffers(m_GLFWwindow);
     }
