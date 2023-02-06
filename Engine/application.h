@@ -14,9 +14,11 @@ public:
     Application();
     ~Application();
 
+    virtual void start();
+
     void addScreen(std::string name, std::shared_ptr<Screen> screen);
     void activateScreen(std::string name);
-
+    
     void update(double seconds);
     void draw();
     void keyEvent(int key, int action);
@@ -26,7 +28,7 @@ public:
     void windowResizeEvent(int width, int height);
     void framebufferResizeEvent(int width, int height);
 
-private:
+protected:
     std::unordered_map<std::string, std::shared_ptr<Screen>> screens;
     std::shared_ptr<Screen> activeScreen;
 };

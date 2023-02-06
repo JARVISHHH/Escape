@@ -1,16 +1,20 @@
 #include "application.h"
 
 Application::Application() {
-	screens["test"] = std::make_shared<Screen>();
-	activeScreen = screens["test"];
+	
 }
 
 Application::~Application() {
 
 }
 
+void Application::start() {
+
+}
+
 void Application::addScreen(std::string name, std::shared_ptr<Screen> screen) {
 	screens[name] = screen;
+	//screen->setApp(std::make_shared<Application>(this));
 }
 
 void Application::activateScreen(std::string name) {

@@ -12,7 +12,7 @@ public:
     Core();
     ~Core();
 
-    void setApp(Application* app);
+    void setApp(std::shared_ptr<Application> app);
 
     void update(double seconds);
     void draw();
@@ -24,5 +24,5 @@ public:
     void framebufferResizeEvent(int width, int height);
 
 private:
-    Application* app;
+    std::shared_ptr<Application> app;
 };

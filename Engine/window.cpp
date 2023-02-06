@@ -1,8 +1,8 @@
 #include "window.h"
 
-Window::Window(){
+Window::Window(std::shared_ptr<Application> app){
     std::cout<<"Start"<<std::endl;
-    start();
+    start(app);
     std::cout<<"Loop"<<std::endl;
     loop();
     std::cout<<"End"<<std::endl;
@@ -13,7 +13,7 @@ Window::~Window(){
 
 }
 
-void Window::start(){
+void Window::start(std::shared_ptr<Application> app){
     // Testing glfw
     if(!glfwInit()){
         std::cout<<"GLFW init failed :("<<std::endl;
@@ -48,7 +48,8 @@ void Window::start(){
 
     // Set up core now that windowing and opengl are set up
     m_core = new Core();
-    m_core->setApp(new Application);  // Set application for core
+    app->start();  // start the application
+    m_core->setApp(app);  // Set application for core
 
     // Stores variable in glfw to reference our m_core object. This allows it to be accessed
     // even in static methods such as keyCallback and windowSizeCallback

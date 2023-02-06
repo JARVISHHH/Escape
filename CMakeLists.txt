@@ -88,6 +88,13 @@ add_executable(${PROJECT_NAME}
     Graphics/GLWrappers/vbo.cpp
     Graphics/GLWrappers/vao.h
     Graphics/GLWrappers/vao.cpp
+
+    Game/app.h
+    Game/app.cpp
+    Game/menuScreen.h
+    Game/menuScreen.cpp
+    Game/gameScreen.h
+    Game/gameScreen.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})

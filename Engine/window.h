@@ -5,11 +5,11 @@
 class Window
 {
 public:
-    Window();
+    Window(std::shared_ptr<Application> app);
     ~Window();
 
 private:
-    void start();
+    void start(std::shared_ptr<Application> app);
     void loop();
     void end();
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

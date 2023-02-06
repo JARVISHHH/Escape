@@ -8,7 +8,7 @@ Core::~Core() {
 
 }
 
-void Core::setApp(Application* app) {
+void Core::setApp(std::shared_ptr<Application> app) {
 	this->app = app;
 }
 

@@ -9,21 +9,19 @@ class Screen
 public:
     Screen();
     ~Screen();
-    void update(double seconds);
-    void draw();
-    void keyEvent(int key, int action);
-    void mousePosEvent(double xpos, double ypos);
-    void mouseButtonEvent(int button, int action);
-    void scrollEvent(double distance);
-    void windowResizeEvent(int width, int height);
-    void framebufferResizeEvent(int width, int height);
 
-private:
+    //void setApp(std::shared_ptr<Application> app);
+
+    virtual void update(double seconds);
+    virtual void draw();
+    virtual void keyEvent(int key, int action);
+    virtual void mousePosEvent(double xpos, double ypos);
+    virtual void mouseButtonEvent(int button, int action);
+    virtual void scrollEvent(double distance);
+    virtual void windowResizeEvent(int width, int height);
+    virtual void framebufferResizeEvent(int width, int height);
+
+protected:
+    //std::shared_ptr<Application> app;
     std::shared_ptr<Camera> camera;
-    std::shared_ptr<Shape> shape;
-    std::shared_ptr<ModelTransform> modelTransform;
-
-    bool keyStateW, keyStateA, keyStateS, keyStateD;
-    bool mouseStateRight;
-    glm::vec2 previousMousePosition;
 };
