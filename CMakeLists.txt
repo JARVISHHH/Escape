@@ -55,6 +55,11 @@ add_executable(${PROJECT_NAME}
     Engine/window.h
     Engine/window.cpp
 
+    Engine/application.cpp
+    Engine/application.h
+    Engine/screen.cpp
+    Engine/screen.h
+
     Graphics/graphics.h
     Graphics/graphics.cpp
     Graphics/global.h

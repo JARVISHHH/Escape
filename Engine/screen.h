@@ -4,16 +4,11 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Engine/application.h"
-
-class Core
+class Screen
 {
 public:
-    Core();
-    ~Core();
-
-    void setApp(Application* app);
-
+    Screen();
+    ~Screen();
     void update(double seconds);
     void draw();
     void keyEvent(int key, int action);
@@ -24,5 +19,11 @@ public:
     void framebufferResizeEvent(int width, int height);
 
 private:
-    Application* app;
+    std::shared_ptr<Camera> camera;
+    std::shared_ptr<Shape> shape;
+    std::shared_ptr<ModelTransform> modelTransform;
+
+    bool keyStateW, keyStateA, keyStateS, keyStateD;
+    bool mouseStateRight;
+    glm::vec2 previousMousePosition;
 };

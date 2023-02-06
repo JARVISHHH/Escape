@@ -1,18 +1,21 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "Graphics/global.h"
 
 #include <GLFW/glfw3.h>
 
-#include "Engine/application.h"
+#include "screen.h"
 
-class Core
+class Application
 {
 public:
-    Core();
-    ~Core();
+    Application();
+    ~Application();
 
-    void setApp(Application* app);
+    void addScreen(std::string name, std::shared_ptr<Screen> screen);
+    void activateScreen(std::string name);
 
     void update(double seconds);
     void draw();
@@ -24,5 +27,6 @@ public:
     void framebufferResizeEvent(int width, int height);
 
 private:
-    Application* app;
+    std::unordered_map<std::string, std::shared_ptr<Screen>> screens;
+    std::shared_ptr<Screen> activeScreen;
 };

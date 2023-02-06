@@ -48,6 +48,7 @@ void Window::start(){
 
     // Set up core now that windowing and opengl are set up
     m_core = new Core();
+    m_core->setApp(new Application);  // Set application for core
 
     // Stores variable in glfw to reference our m_core object. This allows it to be accessed
     // even in static methods such as keyCallback and windowSizeCallback
