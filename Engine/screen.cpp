@@ -12,7 +12,7 @@ Screen::~Screen() {
 //	this->app = app;
 //}
 
-void Screen::update(double t) {
+void Screen::update(double seconds) {
 	
 }
 

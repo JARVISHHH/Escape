@@ -29,9 +29,13 @@ private:
     std::shared_ptr<Shape> character;
     std::shared_ptr<ModelTransform> characterModelTransform;
 
+    float gravity = 10;
+    float jumpSpeed = 5;
+    float characterFallSpeed;
+
     bool firstPerson = true;
 
-    bool keyStateW, keyStateA, keyStateS, keyStateD;
+    bool keyStateW, keyStateA, keyStateS, keyStateD, keyStateSpace;
     bool mouseStateRight;
     glm::vec2 previousMousePosition = { 0, 0 };
 };

@@ -4,10 +4,9 @@ extern std::shared_ptr<App> app;
 
 GameScreen::GameScreen() : 
 	Screen(),
-	keyStateW(false), keyStateA(false), keyStateS(false), keyStateD(false),
+	characterFallSpeed(0),
+	keyStateW(false), keyStateA(false), keyStateS(false), keyStateD(false), keyStateSpace(false),
 	mouseStateRight(false) {
-
-	camera->setPos(glm::vec3(0, 0.5, 0));
 
 	int xNum = 8, zNum = 8;
 
@@ -15,14 +14,15 @@ GameScreen::GameScreen() :
 		for (int z = 0; z < zNum; z++) {
 			shapes.push_back(Global::graphics.getShape("quad"));
 			modelTransforms.push_back(std::make_shared<ModelTransform>());
-			modelTransforms[x * xNum + z]->translate(glm::vec3(x - xNum / 2, 0, z - zNum / 2));
+			modelTransforms[x * xNum + z]->translate(glm::vec3(x - xNum / 2, -0.125, z - zNum / 2));
 		}
 	}
 
 	character = Global::graphics.getShape("cube");
 	characterModelTransform = std::make_shared<ModelTransform>();
 	characterModelTransform->scale(0.25);
-	characterModelTransform->translate(glm::vec3(0, 0.5, 0));
+
+	camera->setPos(characterModelTransform->getPos());
 
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
 }
@@ -36,7 +36,7 @@ void GameScreen::update(double seconds) {
 
 	// Move
 	glm::vec3 moveDir(0, 0, 0);
-	float speed = 0.01f;
+	float speed = 1.5f;
 
 	if (keyStateW) {
 		moveDir += glm::vec3(look.x, 0, look.z);
@@ -56,6 +56,29 @@ void GameScreen::update(double seconds) {
 		characterModelTransform->translate(speed * (float)seconds * moveDir);
 		camera->translate(speed * (float)seconds * moveDir);
 	}
+
+	auto characterPosition = characterModelTransform->getPos();
+
+	// Jump
+	if (keyStateSpace && characterPosition.y == 0) {
+		characterFallSpeed += jumpSpeed;
+		//std::cout << "jump" << std::endl;
+	}
+
+	// Fall
+	if (characterPosition.y > 0) {
+		characterFallSpeed -= gravity * seconds;
+	}
+	
+	auto moveDistance = glm::vec3(0, characterFallSpeed * seconds, 0);
+	if (moveDistance.y < 0 && characterPosition.y < std::abs(moveDistance.y)) {
+		characterFallSpeed = 0;
+		moveDistance.y = -characterPosition.y;
+	}
+	characterModelTransform->translate(glm::vec3(0, moveDistance.y, 0));
+	camera->translate(glm::vec3(0, moveDistance.y, 0));
+
+	//std::cout << "time: " << seconds << ". speed " << characterFallSpeed << ". position.y " << characterModelTransform->getPos().y << std::endl;
 }
 
 void GameScreen::draw() {
@@ -93,6 +116,9 @@ void GameScreen::keyEvent(int key, int action) {
 		case GLFW_KEY_B:
 			app->activateScreen("menu");
 			break;
+		case GLFW_KEY_SPACE:
+			keyStateSpace = true;
+			break;
 		}
 	}
 	else if (action == GLFW_RELEASE) {
@@ -108,6 +134,9 @@ void GameScreen::keyEvent(int key, int action) {
 			break;
 		case GLFW_KEY_D:
 			keyStateD = false;
+			break;
+		case GLFW_KEY_SPACE:
+			keyStateSpace = false;
 			break;
 		}
 	}
