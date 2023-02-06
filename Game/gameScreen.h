@@ -23,8 +23,13 @@ public:
     void framebufferResizeEvent(int width, int height) override;
 
 private:
-    std::shared_ptr<Shape> shape;
-    std::shared_ptr<ModelTransform> modelTransform;
+    std::vector<std::shared_ptr<Shape>> shapes;
+    std::vector<std::shared_ptr<ModelTransform>> modelTransforms;
+
+    std::shared_ptr<Shape> character;
+    std::shared_ptr<ModelTransform> characterModelTransform;
+
+    bool firstPerson = true;
 
     bool keyStateW, keyStateA, keyStateS, keyStateD;
     bool mouseStateRight;
