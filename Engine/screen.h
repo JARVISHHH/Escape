@@ -10,8 +10,6 @@ public:
     Screen();
     ~Screen();
 
-    //void setApp(std::shared_ptr<Application> app);
-
     virtual void update(double seconds);
     virtual void draw();
     virtual void keyEvent(int key, int action);
@@ -22,6 +20,5 @@ public:
     virtual void framebufferResizeEvent(int width, int height);
 
 protected:
-    //std::shared_ptr<Application> app;
     std::shared_ptr<Camera> camera;
 };

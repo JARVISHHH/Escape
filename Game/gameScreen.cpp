@@ -14,17 +14,19 @@ GameScreen::GameScreen() :
 		for (int z = 0; z < zNum; z++) {
 			shapes.push_back(Global::graphics.getShape("quad"));
 			modelTransforms.push_back(std::make_shared<ModelTransform>());
-			modelTransforms[x * xNum + z]->translate(glm::vec3(x - xNum / 2, -0.125, z - zNum / 2));
+			modelTransforms[x * xNum + z]->translate(glm::vec3(x - xNum / 2, 0, z - zNum / 2));
 		}
 	}
 
 	character = Global::graphics.getShape("cube");
 	characterModelTransform = std::make_shared<ModelTransform>();
 	characterModelTransform->scale(0.25);
+	characterModelTransform->translate(glm::vec3(0, 0.5 / 4, 0));
 
 	camera->setPos(characterModelTransform->getPos());
 
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
+	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");
 }
 
 GameScreen::~GameScreen() {
@@ -57,23 +59,23 @@ void GameScreen::update(double seconds) {
 		camera->translate(speed * (float)seconds * moveDir);
 	}
 
-	auto characterPosition = characterModelTransform->getPos();
+	auto characterPosition = characterModelTransform->getPos(), characterBottonPosition = characterPosition - glm::vec3(0, 0.125, 0);
 
 	// Jump
-	if (keyStateSpace && characterPosition.y == 0) {
+	if (keyStateSpace && characterBottonPosition.y == 0) {
 		characterFallSpeed += jumpSpeed;
 		//std::cout << "jump" << std::endl;
 	}
 
 	// Fall
-	if (characterPosition.y > 0) {
+	if (characterBottonPosition.y > 0) {
 		characterFallSpeed -= gravity * seconds;
 	}
 	
 	auto moveDistance = glm::vec3(0, characterFallSpeed * seconds, 0);
-	if (moveDistance.y < 0 && characterPosition.y < std::abs(moveDistance.y)) {
+	if (moveDistance.y < 0 && characterBottonPosition.y < std::abs(moveDistance.y)) {
 		characterFallSpeed = 0;
-		moveDistance.y = -characterPosition.y;
+		moveDistance.y = -characterBottonPosition.y;
 	}
 	characterModelTransform->translate(glm::vec3(0, moveDistance.y, 0));
 	camera->translate(glm::vec3(0, moveDistance.y, 0));
@@ -91,11 +93,11 @@ void GameScreen::draw() {
 	Global::graphics.setGlobalData(glm::vec3(0.5f));
 	Global::graphics.setCameraData(camera);
 	for(int i = 0; i < shapes.size(); i++) Global::graphics.drawShape(shapes[i], modelTransforms[i], Global::graphics.getMaterial("grass"));
-	Global::graphics.drawShape(character, characterModelTransform, nullptr);
+	Global::graphics.drawShape(character, characterModelTransform, Global::graphics.getMaterial("monokuma"));
 
 	// Text
 	Global::graphics.bindShader("text");
-	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press B to go back.", glm::ivec2(0, 200), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 1.f, 0.1f, glm::vec3(1, 0, 1));
+	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press B to go back.", glm::ivec2(0, 30), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
 }
 
 void GameScreen::keyEvent(int key, int action) {

@@ -21,7 +21,7 @@ void MenuScreen::draw() {
 
 	// Text
 	Global::graphics.bindShader("text");
-	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press any key to start...", glm::ivec2(0, 200), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 1.f, 0.1f, glm::vec3(1, 0, 1));
+	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press any key to start...", glm::ivec2(0, 200), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 1.f, 0.1f, glm::vec3(0, 0, 1));
 }
 
 void MenuScreen::keyEvent(int key, int action) {

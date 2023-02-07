@@ -8,10 +8,6 @@ Screen::~Screen() {
 
 }
 
-//void Screen::setApp(std::shared_ptr<Application> app) {
-//	this->app = app;
-//}
-
 void Screen::update(double seconds) {
 	
 }
