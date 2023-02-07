@@ -22,6 +22,7 @@ void Application::activateScreen(std::string name) {
 		std::cerr << "Screen with name " << name << " does not exist." << std::endl;
 	}
 	activeScreen = screens[name];
+	activeScreen->windowResizeEvent(width, height);
 }
 
 void Application::update(double seconds) {
@@ -54,4 +55,5 @@ void Application::framebufferResizeEvent(int width, int height) {
 
 void Application::windowResizeEvent(int width, int height) {
 	if (activeScreen != nullptr) activeScreen->windowResizeEvent(width, height);
+	this->width = width, this->height = height;
 }

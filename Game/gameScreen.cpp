@@ -195,12 +195,3 @@ void GameScreen::scrollEvent(double distance) {
 	}
 	camera->setPos(newPosition);
 }
-
-void GameScreen::framebufferResizeEvent(int width, int height) {
-	Global::graphics.setFramebufferSize(glm::ivec2(width, height));
-}
-
-void GameScreen::windowResizeEvent(int width, int height) {
-	Global::graphics.setWindowSize(glm::ivec2(width, height));
-	camera->resize(width, height);
-}

@@ -19,8 +19,6 @@ public:
     void mousePosEvent(double xpos, double ypos) override;
     void mouseButtonEvent(int button, int action) override;
     void scrollEvent(double distance) override;
-    void windowResizeEvent(int width, int height) override;
-    void framebufferResizeEvent(int width, int height) override;
 
 private:
     std::vector<std::shared_ptr<Shape>> shapes;

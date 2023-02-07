@@ -31,4 +31,6 @@ public:
 protected:
     std::unordered_map<std::string, std::shared_ptr<Screen>> screens;
     std::shared_ptr<Screen> activeScreen;
+
+    int width = 640, height = 480;
 };
