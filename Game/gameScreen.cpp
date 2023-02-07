@@ -154,8 +154,8 @@ void GameScreen::mousePosEvent(double xpos, double ypos) {
 			camera->rotate(rotateSpeed * (ypos - previousMousePosition.y), glm::vec3(look.z, 0, look.x));
 		}
 		else {
-			camera->rotate(rotateSpeed * (xpos - previousMousePosition.x), glm::vec3(0, 1, 0));
-			camera->rotate(rotateSpeed * (ypos - previousMousePosition.y), glm::vec3(look.z, 0, look.x));
+			camera->rotate(rotateSpeed * (previousMousePosition.x - xpos), glm::vec3(0, 1, 0));
+			camera->rotate(rotateSpeed * (previousMousePosition.y - ypos), glm::vec3(look.z, 0, look.x));
 			auto characterPosition = characterModelTransform->getPos(), cameraPosition = camera->getPos();
 			camera->setPos(characterPosition - camera->getLook() * (glm::length(characterPosition - cameraPosition)));
 		}
