@@ -95,6 +95,15 @@ add_executable(${PROJECT_NAME}
     Game/menuScreen.cpp
     Game/gameScreen.h
     Game/gameScreen.cpp
+
+    Engine/Game/component.h
+    Engine/Game/component.cpp
+    Engine/Game/gameObject.h
+    Engine/Game/gameObject.cpp
+    Engine/Game/gameSystem.h
+    Engine/Game/gameSystem.cpp
+    Engine/Game/gameWorld.h
+    Engine/Game/gameWorld.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})
