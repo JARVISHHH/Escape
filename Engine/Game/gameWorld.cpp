@@ -11,13 +11,6 @@ GameWorld::~GameWorld()
 {
 }
 
-template<class T>
-bool GameWorld::addGameSystem(std::string tag)
-{
-	gameSystems[tag] = std::make_shared<T>();
-	return true;
-}
-
 bool GameWorld::addGameSystem(std::string tag, std::shared_ptr<GameSystem> gameSystem)
 {
 	gameSystems[tag] = gameSystem;
@@ -27,21 +20,6 @@ bool GameWorld::addGameSystem(std::string tag, std::shared_ptr<GameSystem> gameS
 bool GameWorld::removeGameSystem(std::string tag)
 {
 	gameSystems[tag] = nullptr;
-	return true;
-}
-
-template<class T>
-std::shared_ptr<T> GameWorld::getGameSystem(std::string tag)
-{
-	if (gameSystems.find(tag) != gameSystems.end()) return gameSystems[tag];
-	else return nullptr;
-}
-
-template<class T>
-bool GameWorld::addGameObject(std::string tag)
-{
-	if (gameObjects.find(tag) == gameObjects.end()) gameObjects[tag] = std::vector<std::shared_ptr<GameObject>>();
-	gameObjects[tag].push_back(std::make_shared<T>());
 	return true;
 }
 
@@ -60,11 +38,4 @@ bool GameWorld::removeGameObject(std::string tag, std::shared_ptr<GameObject> ga
 			gameObjects[tag].erase(gameObjects[tag].begin() + i);
 	}
 	return true;
-}
-
-template<class T>
-std::vector<std::shared_ptr<T>> GameWorld::getGameObjects(std::string tag)
-{
-	if (gameObjects.find(tag) == gameObjects.end()) return std::vector<std::shared_ptr<T>>();
-	return gameObjects[tag];
 }

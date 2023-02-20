@@ -2,14 +2,12 @@
 
 #include "gameWorld.h"
 
-class GameWorld;
-
 class GameSystem
 {
 public:
-	GameSystem();
-	~GameSystem();
 
-private:
 
+protected:
+	std::string tag;
+	std::vector<std::shared_ptr<GameObject>> gameObjects;
 };

@@ -25,7 +25,36 @@ public:
 	bool removeGameObject(std::string tag, std::shared_ptr<GameObject> gameObject);  // Remove a game object
 	template <class T> std::vector<std::shared_ptr<T>> getGameObjects(std::string tag);  // Get a list of game object
 
-private:
+protected:
 	std::unordered_map<std::string, std::shared_ptr<GameSystem>> gameSystems;
 	std::unordered_map<std::string, std::vector<std::shared_ptr<GameObject>>> gameObjects;
 };
+
+template<class T>
+bool GameWorld::addGameSystem(std::string tag)
+{
+	gameSystems[tag] = std::make_shared<T>();
+	return true;
+}
+
+template<class T>
+std::shared_ptr<T> GameWorld::getGameSystem(std::string tag)
+{
+	if (gameSystems.find(tag) != gameSystems.end()) return gameSystems[tag];
+	else return nullptr;
+}
+
+template<class T>
+bool GameWorld::addGameObject(std::string tag)
+{
+	if (gameObjects.find(tag) == gameObjects.end()) gameObjects[tag] = std::vector<std::shared_ptr<GameObject>>();
+	gameObjects[tag].push_back(std::make_shared<T>());
+	return true;
+}
+
+template<class T>
+std::vector<std::shared_ptr<T>> GameWorld::getGameObjects(std::string tag)
+{
+	if (gameObjects.find(tag) == gameObjects.end()) return std::vector<std::shared_ptr<T>>();
+	return gameObjects[tag];
+}
