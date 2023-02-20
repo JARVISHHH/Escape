@@ -10,15 +10,17 @@ class GameComponent;
 class GameObject
 {
 public:
-	GameObject();
-	~GameObject();
+	void setGameWorld(std::shared_ptr<GameWorld> gameWorld);
 
 	template <class T> bool addComponent();
 	bool addComponent(std::shared_ptr<GameComponent> component);
 	bool removeComponent(std::string tag);
 	template <class T> std::shared_ptr<T> getComponent(std::string tag);
 
+	std::shared_ptr<Camera> getCamera();
+
 protected:
+	std::shared_ptr<GameWorld> gameWorld;
 	std::unordered_map<std::string, std::shared_ptr<GameComponent>> components;
 };
 

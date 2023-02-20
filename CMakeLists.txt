@@ -107,11 +107,17 @@ add_executable(${PROJECT_NAME}
 
     Engine/Game/gameSystems/drawSystem.h
     Engine/Game/gameSystems/drawSystem.cpp
+    Engine/Game/gameSystems/characterControllerSystem.h
+    Engine/Game/gameSystems/characterControllerSystem.cpp
 
     Engine/Game/components/drawComponent.h
     Engine/Game/components/drawComponent.cpp
     Engine/Game/components/transformComponent.h
     Engine/Game/components/transformComponent.cpp
+    Engine/Game/components/characterMoveComponent.h
+    Engine/Game/components/characterMoveComponent.cpp
+    Engine/Game/components/characterJumpComponent.h
+    Engine/Game/components/characterJumpComponent.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})

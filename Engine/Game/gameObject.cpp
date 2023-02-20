@@ -2,12 +2,9 @@
 
 #include "gameComponent.h"
 
-GameObject::GameObject()
+void GameObject::setGameWorld(std::shared_ptr<GameWorld> gameWorld)
 {
-}
-
-GameObject::~GameObject()
-{
+	this->gameWorld = gameWorld;
 }
 
 bool GameObject::addComponent(std::shared_ptr<GameComponent> component)
@@ -21,4 +18,9 @@ bool GameObject::removeComponent(std::string tag)
 {
 	components[tag] = nullptr;
 	return true;
+}
+
+std::shared_ptr<Camera> GameObject::getCamera()
+{
+	return gameWorld->getCamera();
 }

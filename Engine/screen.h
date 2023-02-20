@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "Graphics/global.h"
 
 #include <GLFW/glfw3.h>
@@ -9,6 +11,8 @@ class Screen
 public:
     Screen();
     ~Screen();
+
+    static std::unordered_map<int, bool> keyPressing;
 
     virtual void init();
 

@@ -1,5 +1,7 @@
 #include "screen.h"
 
+std::unordered_map<int, bool> Screen::keyPressing;
+
 Screen::Screen() :camera(std::make_shared<Camera>()) {
 	
 }

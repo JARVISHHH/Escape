@@ -4,14 +4,18 @@
 #include <vector>
 #include <memory>
 
+#include "Engine/screen.h"
+
 class GameSystem;
 class GameObject;
 
 class GameWorld
 {
 public:
-	GameWorld();
-	~GameWorld();
+	GameWorld(std::shared_ptr<Camera> camera);
+
+	void update(double seconds);
+	void draw();
 
 	// Game system related
 	template <class T> bool addGameSystem();  // Add a new game system
@@ -20,14 +24,18 @@ public:
 	template <class T> std::shared_ptr<T> getGameSystem(std::string tag);  // get a game system
 
 	// Game objects related
-	template <class T> bool addGameObject(std::string tag);  // Add a new game object
 	bool addGameObject(std::string tag, std::shared_ptr<GameObject> gameObject);  // Add an existed game object
 	bool removeGameObject(std::string tag, std::shared_ptr<GameObject> gameObject);  // Remove a game object
-	template <class T> std::vector<std::shared_ptr<T>> getGameObjects(std::string tag);  // Get a list of game object
+	std::vector<std::shared_ptr<GameObject>> getGameObjects(std::string tag);  // Get a list of game object
+
+	std::shared_ptr<Camera> getCamera();
 
 protected:
+	std::shared_ptr<Screen> screen;
 	std::unordered_map<std::string, std::shared_ptr<GameSystem>> gameSystems;
 	std::unordered_map<std::string, std::vector<std::shared_ptr<GameObject>>> gameObjects;
+
+	std::shared_ptr<Camera> camera;
 };
 
 template<class T>
@@ -43,19 +51,4 @@ std::shared_ptr<T> GameWorld::getGameSystem(std::string tag)
 {
 	if (gameSystems.find(tag) != gameSystems.end()) return static_pointer_cast<T>(gameSystems[tag]);
 	else return nullptr;
-}
-
-template<class T>
-bool GameWorld::addGameObject(std::string tag)
-{
-	if (gameObjects.find(tag) == gameObjects.end()) gameObjects[tag] = std::vector<std::shared_ptr<GameObject>>();
-	gameObjects[tag].push_back(std::make_shared<T>());
-	return true;
-}
-
-template<class T>
-std::vector<std::shared_ptr<T>> GameWorld::getGameObjects(std::string tag)
-{
-	if (gameObjects.find(tag) == gameObjects.end()) return std::vector<std::shared_ptr<T>>();
-	return gameObjects[tag];
 }
