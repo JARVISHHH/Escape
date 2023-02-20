@@ -7,4 +7,9 @@ public:
 	DrawSystem();
 
 	void draw();
+
+	bool addGameObject(std::shared_ptr<GameObject> gameObject);
+
+protected:
+	std::vector<std::shared_ptr<GameObject>> gameObjects;
 };

@@ -7,6 +7,12 @@ DrawComponent::DrawComponent() : GameComponent("draw")
 
 }
 
+DrawComponent::DrawComponent(std::string shapeType, std::string materialName) : GameComponent("draw")
+{
+	shape = Global::graphics.getShape(shapeType);
+	material = Global::graphics.getMaterial(materialName);
+}
+
 void DrawComponent::draw()
 {
 	std::shared_ptr<TransformComponent> transformComponent = gameObject->getComponent<TransformComponent>("transform");

@@ -12,8 +12,10 @@
 class DrawComponent : public GameComponent {
 public:
 	DrawComponent();
+	DrawComponent(std::string shapeType, std::string materialName);
 
 	void draw();
+
 	void setShape(std::string shapeType);
 	void setMaterial(std::string materialName);
 

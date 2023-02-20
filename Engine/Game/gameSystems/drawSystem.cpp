@@ -18,3 +18,9 @@ void DrawSystem::draw()
 		if (drawComponent != nullptr) drawComponent->draw();
 	}
 }
+
+bool DrawSystem::addGameObject(std::shared_ptr<GameObject> gameObject)
+{
+	gameObjects.push_back(gameObject);
+	return true;
+}

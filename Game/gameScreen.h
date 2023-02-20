@@ -24,6 +24,9 @@ public:
     void mouseButtonEvent(int button, int action) override;
     void scrollEvent(double distance) override;
 
+    std::shared_ptr<GameObject> createCharacter();
+    std::vector<std::shared_ptr<GameObject>> createGrounds();
+
 private:
     std::shared_ptr<GameWorld> gameWorld;
     std::vector<std::shared_ptr<Shape>> shapes;
