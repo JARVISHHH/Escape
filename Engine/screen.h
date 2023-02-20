@@ -6,13 +6,13 @@
 
 #include <GLFW/glfw3.h>
 
+class GameWorld;
+
 class Screen
 {
 public:
-    Screen();
-    ~Screen();
-
     static std::unordered_map<int, bool> keyPressing;
+    static std::unordered_map<int, bool> mousePressing;
 
     virtual void init();
 
@@ -26,5 +26,5 @@ public:
     virtual void framebufferResizeEvent(int width, int height);
 
 protected:
-    std::shared_ptr<Camera> camera;
+    std::shared_ptr<GameWorld> gameWorld;
 };

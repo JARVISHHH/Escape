@@ -109,6 +109,8 @@ add_executable(${PROJECT_NAME}
     Engine/Game/gameSystems/drawSystem.cpp
     Engine/Game/gameSystems/characterControllerSystem.h
     Engine/Game/gameSystems/characterControllerSystem.cpp
+    Engine/Game/gameSystems/cameraSystem.h
+    Engine/Game/gameSystems/cameraSystem.cpp
 
     Engine/Game/components/drawComponent.h
     Engine/Game/components/drawComponent.cpp

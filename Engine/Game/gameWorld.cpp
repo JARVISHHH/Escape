@@ -4,6 +4,7 @@
 #include "gameObject.h"
 #include <Engine/Game/gameSystems/drawSystem.h>
 #include <Engine/Game/gameSystems/characterControllerSystem.h>
+#include <Engine/Game/gameSystems/cameraSystem.h>
 
 
 GameWorld::GameWorld(std::shared_ptr<Camera> camera)
@@ -15,12 +16,32 @@ void GameWorld::update(double seconds)
 {
 	auto characterControllerSystem = getGameSystem<CharacterControllerSystem>("characterController");
 	if (characterControllerSystem != nullptr) characterControllerSystem->update(seconds);
+	auto cameraSystem = getGameSystem<CameraSystem>("camera");
+	if (cameraSystem != nullptr) cameraSystem->update(seconds);
 }
 
 void GameWorld::draw()
 {
 	auto drawSystem = getGameSystem<DrawSystem>("draw");
 	if (drawSystem != nullptr) drawSystem->draw();
+}
+
+void GameWorld::mousePosEvent(double xpos, double ypos)
+{
+	auto cameraSystem = getGameSystem<CameraSystem>("camera");
+	if (cameraSystem != nullptr) cameraSystem->mousePosEvent(xpos, ypos);
+}
+
+void GameWorld::scrollEvent(double distance)
+{
+	auto cameraSystem = getGameSystem<CameraSystem>("camera");
+	if (cameraSystem != nullptr) cameraSystem->scrollEvent(distance);
+}
+
+void GameWorld::windowResizeEvent(int width, int height)
+{
+	auto cameraSystem = getGameSystem<CameraSystem>("camera");
+	if (cameraSystem != nullptr) cameraSystem->windowResizeEvent(width, height);
 }
 
 bool GameWorld::addGameSystem(std::shared_ptr<GameSystem> gameSystem)

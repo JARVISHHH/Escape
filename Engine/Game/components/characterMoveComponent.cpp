@@ -37,6 +37,5 @@ void CharacterMoveComponent::update(double seconds)
 	if (moveDir != glm::vec3(0, 0, 0)) {
 		moveDir = glm::normalize(moveDir);
 		transformComponent->getModelTransform()->translate(speed * (float)seconds * moveDir);
-		camera->translate(speed * (float)seconds * moveDir);
 	}
 }

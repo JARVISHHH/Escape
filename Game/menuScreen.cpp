@@ -2,18 +2,6 @@
 
 extern std::shared_ptr<App> app;
 
-MenuScreen::MenuScreen() {
-
-}
-
-MenuScreen::~MenuScreen() {
-
-}
-
-void MenuScreen::update(double seconds) {
-
-}
-
 void MenuScreen::draw() {
 	// Set background color
 	Global::graphics.setClearColor(glm::vec3(0.0f, 1.0f, 1.0f));
@@ -25,6 +13,7 @@ void MenuScreen::draw() {
 }
 
 void MenuScreen::keyEvent(int key, int action) {
+	Screen::keyEvent(key, action);
 	if (action == GLFW_PRESS) {
 		app->activateScreen("game");
 	}

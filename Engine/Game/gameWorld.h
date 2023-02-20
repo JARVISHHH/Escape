@@ -16,6 +16,9 @@ public:
 
 	void update(double seconds);
 	void draw();
+	void mousePosEvent(double xpos, double ypos);
+	void scrollEvent(double distance);
+	void windowResizeEvent(int width, int height);
 
 	// Game system related
 	template <class T> bool addGameSystem();  // Add a new game system

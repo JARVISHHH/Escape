@@ -32,5 +32,4 @@ void CharacterJumpComponent::update(double seconds)
 		moveDistance.y = -bottomPosition;
 	}
 	modelTransform->translate(glm::vec3(0, moveDistance.y, 0));
-	gameObject->getCamera()->translate(glm::vec3(0, moveDistance.y, 0));
 }
