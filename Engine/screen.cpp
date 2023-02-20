@@ -8,6 +8,10 @@ Screen::~Screen() {
 
 }
 
+void Screen::init()
+{
+}
+
 void Screen::update(double seconds) {
 	
 }

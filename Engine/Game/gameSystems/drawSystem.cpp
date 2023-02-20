@@ -2,6 +2,11 @@
 #include "drawSystem.h"
 #include "Engine/Game/components/drawComponent.h"
 
+DrawSystem::DrawSystem() : GameSystem("draw")
+{
+	
+}
+
 void DrawSystem::draw()
 {
 	std::shared_ptr<DrawComponent> drawComponent = nullptr;

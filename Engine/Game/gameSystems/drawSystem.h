@@ -4,5 +4,7 @@
 
 class DrawSystem : public GameSystem {
 public:
+	DrawSystem();
+
 	void draw();
 };

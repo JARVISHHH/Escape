@@ -7,11 +7,15 @@
 
 #include <GLFW/glfw3.h>
 
+#include "Engine/Game/gameWorld.h"
+
 class GameScreen : public Screen {
 
 public:
 	GameScreen();
 	~GameScreen();
+
+    void init();
 
     void update(double seconds) override;
     void draw() override;
@@ -21,6 +25,7 @@ public:
     void scrollEvent(double distance) override;
 
 private:
+    std::shared_ptr<GameWorld> gameWorld;
     std::vector<std::shared_ptr<Shape>> shapes;
     std::vector<std::shared_ptr<ModelTransform>> modelTransforms;
 

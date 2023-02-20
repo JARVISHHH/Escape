@@ -10,6 +10,8 @@ public:
     Screen();
     ~Screen();
 
+    virtual void init();
+
     virtual void update(double seconds);
     virtual void draw();
     virtual void keyEvent(int key, int action);

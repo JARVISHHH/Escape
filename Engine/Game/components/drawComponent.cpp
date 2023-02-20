@@ -2,7 +2,7 @@
 #include "drawComponent.h"
 #include "transformComponent.h"
 
-DrawComponent::DrawComponent() : GameComponent()
+DrawComponent::DrawComponent() : GameComponent("draw")
 {
 
 }
@@ -10,8 +10,8 @@ DrawComponent::DrawComponent() : GameComponent()
 void DrawComponent::draw()
 {
 	std::shared_ptr<TransformComponent> transformComponent = gameObject->getComponent<TransformComponent>("transform");
-	//if (transformComponent == nullptr) return;
-	//Global::graphics.drawShape(shape, transformComponent->getModelTransform(), material);
+	if (transformComponent == nullptr) return;
+	Global::graphics.drawShape(shape, transformComponent->getModelTransform(), material);
 }
 
 void DrawComponent::setShape(std::string shapeType)

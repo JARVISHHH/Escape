@@ -13,8 +13,8 @@ public:
 	GameObject();
 	~GameObject();
 
-	template <class T> bool addComponent(std::string tag);
-	bool addComponent(std::string tag, std::shared_ptr<GameComponent> component);
+	template <class T> bool addComponent();
+	bool addComponent(std::shared_ptr<GameComponent> component);
 	bool removeComponent(std::string tag);
 	template <class T> std::shared_ptr<T> getComponent(std::string tag);
 
@@ -23,9 +23,10 @@ protected:
 };
 
 template<class T>
-inline bool GameObject::addComponent(std::string tag)
+inline bool GameObject::addComponent()
 {
-	components[tag] = std::make_shared<T>();
+	std::shared_ptr<T> component = std::make_shared<T>();
+	components[component->getTag()] = component;
 	return false;
 }
 

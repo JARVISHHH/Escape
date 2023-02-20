@@ -2,7 +2,7 @@
 
 #include "transformComponent.h"
 
-TransformComponent::TransformComponent() : GameComponent()
+TransformComponent::TransformComponent() : GameComponent("transform")
 {
 	modelTransform = std::make_shared<ModelTransform>();
 }

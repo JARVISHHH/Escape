@@ -5,9 +5,12 @@
 class GameComponent
 {
 public:
-	GameComponent();
+	GameComponent(std::string tag);
+
+	std::string getTag() const;
+	void setGameObject(std::shared_ptr<GameObject> gameObject);
 
 protected:
 	std::shared_ptr<GameObject> gameObject;
-	std::string tag;
+	const std::string tag;
 };

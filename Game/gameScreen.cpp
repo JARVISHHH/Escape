@@ -1,5 +1,9 @@
 #include "gameScreen.h"
 
+#include "Engine/Game/gameSystems/drawSystem.h"
+#include <Engine/Game/components/transformComponent.h>
+#include <Engine/Game/components/drawComponent.h>
+
 extern std::shared_ptr<App> app;
 
 GameScreen::GameScreen() : 
@@ -27,6 +31,24 @@ GameScreen::GameScreen() :
 
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");
+}
+
+void GameScreen::init()
+{
+	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>();
+	drawComponent->setShape("cube");
+	drawComponent->setMaterial("grass");
+
+	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
+	gameObject->addComponent(transformComponent);
+	gameObject->addComponent(drawComponent);
+
+	std::shared_ptr<DrawSystem> drawSystem = std::make_shared<DrawSystem>();
+	drawSystem->addGameObject(gameObject);
+
+	gameWorld = std::make_shared<GameWorld>();
+	gameWorld->addGameSystem(drawSystem);
 }
 
 GameScreen::~GameScreen() {
@@ -94,6 +116,7 @@ void GameScreen::draw() {
 	Global::graphics.setCameraData(camera);
 	for(int i = 0; i < shapes.size(); i++) Global::graphics.drawShape(shapes[i], modelTransforms[i], Global::graphics.getMaterial("grass"));
 	Global::graphics.drawShape(character, characterModelTransform, Global::graphics.getMaterial("monokuma"));
+	gameWorld->getGameSystem<DrawSystem>("draw")->draw();
 
 	// Text
 	Global::graphics.bindShader("text");

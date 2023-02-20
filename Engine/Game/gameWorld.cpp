@@ -11,9 +11,9 @@ GameWorld::~GameWorld()
 {
 }
 
-bool GameWorld::addGameSystem(std::string tag, std::shared_ptr<GameSystem> gameSystem)
+bool GameWorld::addGameSystem(std::shared_ptr<GameSystem> gameSystem)
 {
-	gameSystems[tag] = gameSystem;
+	gameSystems[gameSystem->getTag()] = gameSystem;
 	return true;
 }
 

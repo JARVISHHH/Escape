@@ -22,6 +22,7 @@ void Application::activateScreen(std::string name) {
 		std::cerr << "Screen with name " << name << " does not exist." << std::endl;
 	}
 	activeScreen = screens[name];
+	activeScreen->init();
 	activeScreen->windowResizeEvent(width, height);
 }
 

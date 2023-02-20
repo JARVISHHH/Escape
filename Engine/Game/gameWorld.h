@@ -14,8 +14,8 @@ public:
 	~GameWorld();
 
 	// Game system related
-	template <class T> bool addGameSystem(std::string tag);  // Add a new game system
-	bool addGameSystem(std::string tag, std::shared_ptr<GameSystem> gameSystem);  // Add an existed game system
+	template <class T> bool addGameSystem();  // Add a new game system
+	bool addGameSystem(std::shared_ptr<GameSystem> gameSystem);  // Add an existed game system
 	bool removeGameSystem(std::string tag);  // remove a game system
 	template <class T> std::shared_ptr<T> getGameSystem(std::string tag);  // get a game system
 
@@ -31,16 +31,17 @@ protected:
 };
 
 template<class T>
-bool GameWorld::addGameSystem(std::string tag)
+bool GameWorld::addGameSystem()
 {
-	gameSystems[tag] = std::make_shared<T>();
+	std::shared_ptr<T> gameSystem = std::make_shared<T>();
+	gameSystems[gameSystem->getTag()] = gameSystem;
 	return true;
 }
 
 template<class T>
 std::shared_ptr<T> GameWorld::getGameSystem(std::string tag)
 {
-	if (gameSystems.find(tag) != gameSystems.end()) return gameSystems[tag];
+	if (gameSystems.find(tag) != gameSystems.end()) return static_pointer_cast<T>(gameSystems[tag]);
 	else return nullptr;
 }
 
