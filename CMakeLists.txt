@@ -122,10 +122,15 @@ add_executable(${PROJECT_NAME}
     Engine/Game/components/characterMoveComponent.cpp
     Engine/Game/components/characterJumpComponent.h
     Engine/Game/components/characterJumpComponent.cpp
+    Engine/Game/components/collisionResponseComponent.h
+    Engine/Game/components/collisionResponseComponent.cpp
     Engine/Game/components/collisionComponents/collisionComponent.h
     Engine/Game/components/collisionComponents/collisionComponent.cpp
     Engine/Game/components/collisionComponents/cylinderComponent.h
     Engine/Game/components/collisionComponents/cylinderComponent.cpp
+
+    
+    
 )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})

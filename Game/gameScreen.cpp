@@ -9,6 +9,7 @@
 #include <Engine/Game/gameSystems/cameraSystem.h>
 #include <Engine/Game/gameSystems/collisionSystem.h>
 #include <Engine/Game/components/collisionComponents/cylinderComponent.h>
+#include <Engine/Game/components/collisionResponseComponent.h>
 
 extern std::shared_ptr<App> app;
 
@@ -78,6 +79,8 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	std::shared_ptr<CharacterJumpComponent> characterJumpComponent = std::make_shared<CharacterJumpComponent>();
 	// Collision component
 	std::shared_ptr<CylinderComponent> cylinderComponent = std::make_shared<CylinderComponent>();
+	// Collision response component
+	std::shared_ptr<CollisionResponseComponent> collisionResponseComponent = std::make_shared<CollisionResponseComponent>();
 
 	// Add components to game objects
 	character->addComponent(transformComponent);
@@ -85,6 +88,7 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	character->addComponent(characterMoveComponent);
 	character->addComponent(characterJumpComponent);
 	character->addComponent(cylinderComponent);
+	character->addComponent(collisionResponseComponent);
 
 	return character;
 }
@@ -127,11 +131,14 @@ std::shared_ptr<GameObject> GameScreen::createFalling()
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("monokuma");
 	// Collision component
 	std::shared_ptr<CylinderComponent> cylinderComponent = std::make_shared<CylinderComponent>();
+	// Collision response component
+	std::shared_ptr<CollisionResponseComponent> collisionResponseComponent = std::make_shared<CollisionResponseComponent>(true);
 
 	// Add components to game objects
 	fallingObject->addComponent(transformComponent);
 	fallingObject->addComponent(drawComponent);
 	fallingObject->addComponent(cylinderComponent);
+	fallingObject->addComponent(collisionResponseComponent);
 
 	return fallingObject;
 }

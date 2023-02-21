@@ -8,6 +8,6 @@ class CollisionComponent : public GameComponent {
 public:
 	CollisionComponent();
 
-	virtual bool checkCollision(std::shared_ptr<CollisionComponent> component) = 0;
-	virtual bool checkCollision(std::shared_ptr<CylinderComponent> component) = 0;
+	virtual glm::vec3 checkCollision(std::shared_ptr<CollisionComponent> component) = 0;
+	virtual glm::vec3 checkCollision(std::shared_ptr<CylinderComponent> component) = 0;
 };

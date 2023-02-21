@@ -10,13 +10,20 @@ void GameObject::setGameWorld(std::shared_ptr<GameWorld> gameWorld)
 bool GameObject::addComponent(std::shared_ptr<GameComponent> component)
 {
 	component->setGameObject(std::shared_ptr<GameObject>(this));
-	components[component->getTag()] = component;
+	auto componentTag = component->getTag();
+	if (components.find(componentTag) == components.end()) components[componentTag] = std::vector<std::shared_ptr<GameComponent>>();
+	components[componentTag].push_back(component);
 	return true;
 }
 
-bool GameObject::removeComponent(std::string tag)
+bool GameObject::removeComponent(std::string tag, std::shared_ptr<GameComponent> component)
 {
-	components[tag] = nullptr;
+	if (components.find(tag) == components.end()) return true;
+	int i = 0;
+	while (i < components.size()) {
+		if (components[tag][i] == component) components[tag].erase(components[tag].begin() + i);
+		else i++;
+	}
 	return true;
 }
 

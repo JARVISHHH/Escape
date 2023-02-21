@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Game/GameComponent.h"
+#include "Engine/Game/gameComponent.h"
 
 class CharacterJumpComponent : public GameComponent
 {
