@@ -21,4 +21,6 @@ public:
 
     std::shared_ptr<GameObject> createCharacter();
     std::vector<std::shared_ptr<GameObject>> createGrounds();
+
+    std::shared_ptr<GameObject> createFalling();
 };

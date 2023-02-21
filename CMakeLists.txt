@@ -111,6 +111,8 @@ add_executable(${PROJECT_NAME}
     Engine/Game/gameSystems/characterControllerSystem.cpp
     Engine/Game/gameSystems/cameraSystem.h
     Engine/Game/gameSystems/cameraSystem.cpp
+    Engine/Game/gameSystems/collisionSystem.h
+    Engine/Game/gameSystems/collisionSystem.cpp
 
     Engine/Game/components/drawComponent.h
     Engine/Game/components/drawComponent.cpp
@@ -120,6 +122,10 @@ add_executable(${PROJECT_NAME}
     Engine/Game/components/characterMoveComponent.cpp
     Engine/Game/components/characterJumpComponent.h
     Engine/Game/components/characterJumpComponent.cpp
+    Engine/Game/components/collisionComponents/collisionComponent.h
+    Engine/Game/components/collisionComponents/collisionComponent.cpp
+    Engine/Game/components/collisionComponents/cylinderComponent.h
+    Engine/Game/components/collisionComponents/cylinderComponent.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})
