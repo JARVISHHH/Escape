@@ -27,6 +27,6 @@ public:
 
 protected:
     std::shared_ptr<GameWorld> gameWorld;
-
+    int width = 640, height = 480;
     bool active = true;
 };

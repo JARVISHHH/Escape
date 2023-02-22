@@ -64,7 +64,10 @@ void GameScreen::init()
 	score = 0;
 	result = "";
 	time = 0;
+	fallingNumber = 0;
 	active = true;
+
+	Screen::init();
 }
 
 std::shared_ptr<GameObject> GameScreen::createCharacter()

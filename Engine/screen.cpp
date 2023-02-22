@@ -6,6 +6,7 @@ std::unordered_map<int, bool> Screen::mousePressing;
 
 void Screen::init()
 {
+	windowResizeEvent(width, height);
 }
 
 void Screen::update(double seconds) {
@@ -43,4 +44,5 @@ void Screen::framebufferResizeEvent(int width, int height) {
 void Screen::windowResizeEvent(int width, int height) {
 	Global::graphics.setWindowSize(glm::ivec2(width, height));
 	if (gameWorld != nullptr) gameWorld->windowResizeEvent(width, height);
+	this->width = width, this->height = height;
 }
