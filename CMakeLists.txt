@@ -113,6 +113,8 @@ add_executable(${PROJECT_NAME}
     Engine/Game/gameSystems/cameraSystem.cpp
     Engine/Game/gameSystems/collisionSystem.h
     Engine/Game/gameSystems/collisionSystem.cpp
+    Engine/Game/gameSystems/physicsSystem.h
+    Engine/Game/gameSystems/physicsSystem.cpp
 
     Engine/Game/components/drawComponent.h
     Engine/Game/components/drawComponent.cpp
@@ -122,6 +124,8 @@ add_executable(${PROJECT_NAME}
     Engine/Game/components/characterMoveComponent.cpp
     Engine/Game/components/characterJumpComponent.h
     Engine/Game/components/characterJumpComponent.cpp
+    Engine/Game/components/physicsComponent.h
+    Engine/Game/components/physicsComponent.cpp
     Engine/Game/components/collisionResponseComponent.h
     Engine/Game/components/collisionResponseComponent.cpp
     Engine/Game/components/collisionComponents/collisionComponent.h
@@ -129,7 +133,8 @@ add_executable(${PROJECT_NAME}
     Engine/Game/components/collisionComponents/cylinderComponent.h
     Engine/Game/components/collisionComponents/cylinderComponent.cpp
 
-    
+    Game/gameComponents/characterCollisionResponse.h
+    Game/gameComponents/characterCollisionResponse.cpp
     
 )
 

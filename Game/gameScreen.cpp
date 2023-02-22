@@ -10,6 +10,8 @@
 #include <Engine/Game/gameSystems/collisionSystem.h>
 #include <Engine/Game/components/collisionComponents/cylinderComponent.h>
 #include <Engine/Game/components/collisionResponseComponent.h>
+#include <Engine/Game/components/physicsComponent.h>
+#include <Engine/Game/gameSystems/physicsSystem.h>
 
 extern std::shared_ptr<App> app;
 
@@ -34,12 +36,14 @@ void GameScreen::init()
 
 	// Create systems
 	std::shared_ptr<DrawSystem> drawSystem = std::make_shared<DrawSystem>();
+	std::shared_ptr<PhysicsSystem> physicsSystem = std::make_shared<PhysicsSystem>();
 	std::shared_ptr<CharacterControllerSystem> characterControllerSystem = std::make_shared<CharacterControllerSystem>();
 	std::shared_ptr<CameraSystem> cameraSystem = std::make_shared<CameraSystem>(camera, character);
 	std::shared_ptr<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
 
 	// Add systems to game world
 	gameWorld->addGameSystem(drawSystem);
+	gameWorld->addGameSystem(physicsSystem);
 	gameWorld->addGameSystem(characterControllerSystem);
 	gameWorld->addGameSystem(cameraSystem);
 	gameWorld->addGameSystem(collisionSystem);
@@ -49,6 +53,8 @@ void GameScreen::init()
 	drawSystem->addGameObject(character);
 	for(auto ground: grounds) drawSystem->addGameObject(ground);
 	drawSystem->addGameObject(fallingObject);
+	// Physics system
+	physicsSystem->addGameObject(character);
 	// Character controller system
 	characterControllerSystem->setCharatcer(character);
 	// Collision system
@@ -73,6 +79,8 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	gameWorld->getCamera()->setPos(modelTransform->getPos());
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
+	// Physics component
+	std::shared_ptr<PhysicsComponent> physicsComponent = std::make_shared<PhysicsComponent>();
 	// CharacterMoveComponent
 	std::shared_ptr<CharacterMoveComponent> characterMoveComponent = std::make_shared<CharacterMoveComponent>();
 	// CharacterJumpComponent
@@ -85,6 +93,7 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	// Add components to game objects
 	character->addComponent(transformComponent);
 	character->addComponent(drawComponent);
+	character->addComponent(physicsComponent);
 	character->addComponent(characterMoveComponent);
 	character->addComponent(characterJumpComponent);
 	character->addComponent(cylinderComponent);

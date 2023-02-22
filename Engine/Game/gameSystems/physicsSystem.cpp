@@ -1,0 +1,22 @@
+#include "physicsSystem.h"
+
+#include "Engine/Game/gameObject.h"
+#include "Engine/Game/components/physicsComponent.h"
+
+PhysicsSystem::PhysicsSystem() : GameSystem("physics")
+{
+}
+
+void PhysicsSystem::update(double seconds)
+{
+	for (auto gameObject : gameObjects) {
+		auto physicsComponent = gameObject->getComponent<PhysicsComponent>("physics");
+		if (physicsComponent == nullptr) continue;
+		physicsComponent->update(seconds);
+	}
+}
+
+void PhysicsSystem::addGameObject(std::shared_ptr<GameObject> gameObject)
+{
+	gameObjects.push_back(gameObject);
+}

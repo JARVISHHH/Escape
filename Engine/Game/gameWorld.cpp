@@ -6,6 +6,7 @@
 #include <Engine/Game/gameSystems/characterControllerSystem.h>
 #include <Engine/Game/gameSystems/cameraSystem.h>
 #include <Engine/Game/gameSystems/collisionSystem.h>
+#include <Engine/Game/gameSystems/physicsSystem.h>
 
 
 GameWorld::GameWorld(std::shared_ptr<Camera> camera)
@@ -17,6 +18,8 @@ void GameWorld::update(double seconds)
 {
 	auto characterControllerSystem = getGameSystem<CharacterControllerSystem>("characterController");
 	if (characterControllerSystem != nullptr) characterControllerSystem->update(seconds);
+	auto physicsSystem = getGameSystem<PhysicsSystem>("physics");
+	if (physicsSystem != nullptr) physicsSystem->update(seconds);
 	auto collisionSystem = getGameSystem<CollisionSystem>("collision");
 	if (collisionSystem != nullptr) collisionSystem->update(seconds);
 	auto cameraSystem = getGameSystem<CameraSystem>("camera");

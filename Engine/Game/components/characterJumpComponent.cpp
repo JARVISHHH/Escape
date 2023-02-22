@@ -1,6 +1,7 @@
 #include "Engine/screen.h"
 #include "characterJumpComponent.h"
 #include <Engine/Game/components/transformComponent.h>
+#include <Engine/Game/components/physicsComponent.h>
 
 CharacterJumpComponent::CharacterJumpComponent()
 	: GameComponent("characterJump")
@@ -11,25 +12,15 @@ CharacterJumpComponent::CharacterJumpComponent()
 void CharacterJumpComponent::update(double seconds)
 {
 	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
-	if (transformComponent == nullptr) {
-		std::cerr << "CharatcerJumpComponent without a transformComponent." << std::endl;
+	auto physicsComponent = gameObject->getComponent<PhysicsComponent>("physics");
+	if (transformComponent == nullptr || physicsComponent == nullptr) {
+		std::cerr << "CharatcerJumpComponent with incomplete components." << std::endl;
 		return;
 	}
 
 	auto modelTransform = transformComponent->getModelTransform();
 	auto bottomPosition = modelTransform->getPos().y - 0.5 * modelTransform->getScale().y;
 	if (Screen::keyPressing[jumpKey] && bottomPosition == 0) {
-		fallSpeed += jumpSpeed;
+		physicsComponent->applyVelocity(glm::vec3(0, jumpSpeed, 0));
 	}
-
-	if (bottomPosition > 0) {
-		fallSpeed -= gravity * seconds;
-	}
-
-	auto moveDistance = glm::vec3(0, fallSpeed * seconds, 0);
-	if (moveDistance.y < 0 && bottomPosition < std::abs(moveDistance.y)) {
-		fallSpeed = 0;
-		moveDistance.y = -bottomPosition;
-	}
-	modelTransform->translate(glm::vec3(0, moveDistance.y, 0));
 }
