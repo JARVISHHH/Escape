@@ -4,7 +4,7 @@
 
 class CylinderComponent;
 
-class CollisionComponent : public GameComponent {
+class CollisionComponent : public std::enable_shared_from_this<CollisionComponent>, public GameComponent {
 public:
 	CollisionComponent();
 

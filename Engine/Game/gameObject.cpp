@@ -9,7 +9,7 @@ void GameObject::setGameWorld(std::shared_ptr<GameWorld> gameWorld)
 
 bool GameObject::addComponent(std::shared_ptr<GameComponent> component)
 {
-	component->setGameObject(std::shared_ptr<GameObject>(this));
+	component->setGameObject(shared_from_this());
 	auto componentTag = component->getTag();
 	if (components.find(componentTag) == components.end()) components[componentTag] = std::vector<std::shared_ptr<GameComponent>>();
 	components[componentTag].push_back(component);

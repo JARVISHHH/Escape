@@ -53,7 +53,7 @@ void GameWorld::windowResizeEvent(int width, int height)
 bool GameWorld::addGameSystem(std::shared_ptr<GameSystem> gameSystem)
 {
 	gameSystems[gameSystem->getTag()] = gameSystem;
-	gameSystem->setGameWorld(std::shared_ptr<GameWorld>(this));
+	gameSystem->setGameWorld(shared_from_this());
 	return true;
 }
 

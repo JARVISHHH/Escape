@@ -9,7 +9,7 @@
 class GameSystem;
 class GameObject;
 
-class GameWorld
+class GameWorld : public std::enable_shared_from_this<GameWorld>
 {
 public:
 	GameWorld(std::shared_ptr<Camera> camera);
@@ -34,11 +34,14 @@ public:
 	std::shared_ptr<Camera> getCamera();
 
 protected:
-	std::shared_ptr<Screen> screen;
+	//std::shared_ptr<Screen> screen;
 	std::unordered_map<std::string, std::shared_ptr<GameSystem>> gameSystems;
 	std::unordered_map<std::string, std::vector<std::shared_ptr<GameObject>>> gameObjects;
 
 	std::shared_ptr<Camera> camera;
+
+	bool finish = false;
+	bool win = false;
 };
 
 template<class T>

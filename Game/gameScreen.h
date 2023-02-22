@@ -23,4 +23,7 @@ public:
     std::vector<std::shared_ptr<GameObject>> createGrounds();
 
     std::shared_ptr<GameObject> createFalling();
+
+private:
+    int score = 0;
 };

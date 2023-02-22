@@ -1,14 +1,9 @@
 #include "cylinderComponent.h"
 #include <Engine/Game/components/transformComponent.h>
 
-CylinderComponent::CylinderComponent()
-{
-	self = std::shared_ptr<CylinderComponent>(this);
-}
-
 glm::vec3 CylinderComponent::checkCollision(std::shared_ptr<CollisionComponent> component)
 {
-	return -component->checkCollision(self);
+	return -component->checkCollision(std::static_pointer_cast<CylinderComponent>((shared_from_this())));
 }
 
 glm::vec3 calculateLineMTV(float topA, float bottomA, float topB, float bottomB) {

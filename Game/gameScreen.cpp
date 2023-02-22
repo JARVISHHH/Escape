@@ -43,7 +43,7 @@ void GameScreen::init()
 	std::shared_ptr<CameraSystem> cameraSystem = std::make_shared<CameraSystem>(camera, character);
 	std::shared_ptr<CollisionSystem> collisionSystem = std::make_shared<CollisionSystem>();
 
-	// Add systems to game world
+	//// Add systems to game world
 	gameWorld->addGameSystem(drawSystem);
 	gameWorld->addGameSystem(physicsSystem);
 	gameWorld->addGameSystem(characterControllerSystem);
@@ -57,7 +57,7 @@ void GameScreen::init()
 	drawSystem->addGameObject(fallingObject);
 	// Physics system
 	physicsSystem->addGameObject(character);
-	// Character controller system
+	//// Character controller system
 	characterControllerSystem->setCharatcer(character);
 	// Collision system
 	collisionSystem->addGameObject(character);
@@ -77,7 +77,7 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.25);
-	modelTransform->translate(glm::vec3(0, 0.5 / 4, 0));
+	modelTransform->translate(glm::vec3(0, 0.5, 0));
 	gameWorld->getCamera()->setPos(modelTransform->getPos());
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
@@ -92,7 +92,7 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	// Collision response component
 	std::shared_ptr<CharacterCollisionResponse> collisionResponseComponent = std::make_shared<CharacterCollisionResponse>();
 
-	// Add components to game objects
+	//// Add components to game objects
 	character->addComponent(transformComponent);
 	character->addComponent(drawComponent);
 	character->addComponent(physicsComponent);
@@ -155,8 +155,16 @@ std::shared_ptr<GameObject> GameScreen::createFalling()
 }
 
 void GameScreen::update(double seconds) {
-	if (keyPressing[GLFW_KEY_B]) app->activateScreen("menu");
-	gameWorld->update(seconds);
+	if (keyPressing[GLFW_KEY_B]) {
+		app->activateScreen("menu");
+		return;
+	}
+	if (keyPressing[GLFW_KEY_R]) {
+		init();
+		return;
+	}
+	if(gameWorld != nullptr)
+		gameWorld->update(seconds);
 }
 
 void GameScreen::draw() {
@@ -165,9 +173,11 @@ void GameScreen::draw() {
 	Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Phong
-	gameWorld->draw();
+	if (gameWorld != nullptr)
+		gameWorld->draw();
 
 	// Text
 	Global::graphics.bindShader("text");
-	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press B to go back.", glm::ivec2(0, 30), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
+	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press B to go back.", glm::ivec2(0, 30), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.3f, 0.1f, glm::vec3(1, 0, 1));
+	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Score: " + std::to_string(score), glm::ivec2(0, 450), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
 }

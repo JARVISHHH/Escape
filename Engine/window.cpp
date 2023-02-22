@@ -80,8 +80,9 @@ void Window::loop(){
     while (!glfwWindowShouldClose(m_GLFWwindow))
     {
         glfwPollEvents();
-        m_core->update(glfwGetTime() - previous);
-        previous = glfwGetTime();
+        auto current = glfwGetTime();
+        m_core->update(current - previous);
+        previous = current;
         m_core->draw();
         glfwSwapBuffers(m_GLFWwindow);
     }

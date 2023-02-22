@@ -21,12 +21,14 @@ void Application::activateScreen(std::string name) {
 	if (screens.find(name) == screens.end()) {
 		std::cerr << "Screen with name " << name << " does not exist." << std::endl;
 	}
+	screens[name]->windowResizeEvent(width, height);
 	activeScreen = screens[name];
-	activeScreen->windowResizeEvent(width, height);
 }
 
 void Application::update(double seconds) {
-	if (activeScreen != nullptr) activeScreen->update(seconds);
+	if (activeScreen != nullptr) {
+		activeScreen->update(seconds);
+	}
 }
 
 void Application::draw() {
