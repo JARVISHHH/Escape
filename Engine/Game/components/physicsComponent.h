@@ -11,6 +11,7 @@ public:
 	float getGravity();
 	glm::vec3 getVelocity();
 	void applyVelocity(glm::vec3 plusVelocity);
+	void setVelocity(glm::vec3 velocity);
 
 private:
 	float gravity = 10;

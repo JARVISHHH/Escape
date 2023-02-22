@@ -13,6 +13,8 @@
 #include <Engine/Game/components/physicsComponent.h>
 #include <Engine/Game/gameSystems/physicsSystem.h>
 
+#include "gameComponents/characterCollisionResponse.h"
+
 extern std::shared_ptr<App> app;
 
 GameScreen::GameScreen() 
@@ -88,7 +90,7 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	// Collision component
 	std::shared_ptr<CylinderComponent> cylinderComponent = std::make_shared<CylinderComponent>();
 	// Collision response component
-	std::shared_ptr<CollisionResponseComponent> collisionResponseComponent = std::make_shared<CollisionResponseComponent>();
+	std::shared_ptr<CharacterCollisionResponse> collisionResponseComponent = std::make_shared<CharacterCollisionResponse>();
 
 	// Add components to game objects
 	character->addComponent(transformComponent);
