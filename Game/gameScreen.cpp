@@ -66,13 +66,13 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 
 	// Create components
 	// Transform Component
-	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>("cylinder");
+	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.25);
 	modelTransform->translate(glm::vec3(0, 0.5 / 4, 0));
 	gameWorld->getCamera()->setPos(modelTransform->getPos());
 	// Draw component
-	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("monokuma");
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
 	// CharacterMoveComponent
 	std::shared_ptr<CharacterMoveComponent> characterMoveComponent = std::make_shared<CharacterMoveComponent>();
 	// CharacterJumpComponent
@@ -103,9 +103,9 @@ std::vector<std::shared_ptr<GameObject>> GameScreen::createGrounds()
 		for (int z = 0; z < zNum; z++) {
 			std::shared_ptr<GameObject> ground = std::make_shared<GameObject>();
 			// DrawComponent
-			ground->addComponent(std::make_shared<DrawComponent>("grass"));
+			ground->addComponent(std::make_shared<DrawComponent>("quad", "grass"));
 			// TransformComponent
-			std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>("quad");
+			std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 			auto modelTransform = transformComponent->getModelTransform();
 			modelTransform->translate(glm::vec3(x - xNum / 2, 0, z - zNum / 2));
 			ground->addComponent(transformComponent);
@@ -123,12 +123,12 @@ std::shared_ptr<GameObject> GameScreen::createFalling()
 
 	// Create components
 	// Transform Component
-	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>("cylinder");
+	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.25);
 	modelTransform->translate(glm::vec3(3, 0.5 / 4, 3));
 	// Draw component
-	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("monokuma");
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
 	// Collision component
 	std::shared_ptr<CylinderComponent> cylinderComponent = std::make_shared<CylinderComponent>();
 	// Collision response component
