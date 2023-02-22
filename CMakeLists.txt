@@ -135,7 +135,10 @@ add_executable(${PROJECT_NAME}
 
     Game/gameComponents/characterCollisionResponse.h
     Game/gameComponents/characterCollisionResponse.cpp
-    
+    Game/gameComponents/fallingCollisionResponse.h
+    Game/gameComponents/fallingCollisionResponse.cpp
+    Game/gameComponents/fallingPhysics.h
+    Game/gameComponents/fallingPhysics.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})

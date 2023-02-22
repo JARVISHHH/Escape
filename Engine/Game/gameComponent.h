@@ -9,6 +9,7 @@ public:
 
 	std::string getTag() const;
 	void setGameObject(std::shared_ptr<GameObject> gameObject);
+	std::shared_ptr<GameObject> getGameObject();
 
 protected:
 	std::shared_ptr<GameObject> gameObject;

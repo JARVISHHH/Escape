@@ -12,7 +12,7 @@ class GameObject;
 class GameWorld : public std::enable_shared_from_this<GameWorld>
 {
 public:
-	GameWorld(std::shared_ptr<Camera> camera);
+	GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> screen);
 
 	void update(double seconds);
 	void draw();
@@ -27,21 +27,25 @@ public:
 	template <class T> std::shared_ptr<T> getGameSystem(std::string tag);  // get a game system
 
 	// Game objects related
-	bool addGameObject(std::string tag, std::shared_ptr<GameObject> gameObject);  // Add an existed game object
-	bool removeGameObject(std::string tag, std::shared_ptr<GameObject> gameObject);  // Remove a game object
+	bool addGameObject(std::shared_ptr<GameObject> gameObject);  // Add an existed game object
+	bool removeGameObject(std::shared_ptr<GameObject> gameObject);  // Remove a game object
 	std::vector<std::shared_ptr<GameObject>> getGameObjects(std::string tag);  // Get a list of game object
 
 	std::shared_ptr<Camera> getCamera();
 
+	std::shared_ptr<Screen> getScreen();
+
+	//void setWin(bool win);
+
 protected:
-	//std::shared_ptr<Screen> screen;
+	std::shared_ptr<Screen> screen;
 	std::unordered_map<std::string, std::shared_ptr<GameSystem>> gameSystems;
 	std::unordered_map<std::string, std::vector<std::shared_ptr<GameObject>>> gameObjects;
 
 	std::shared_ptr<Camera> camera;
 
-	bool finish = false;
-	bool win = false;
+	//bool finish = false;
+	//bool win = false;
 };
 
 template<class T>

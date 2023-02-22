@@ -15,3 +15,8 @@ void GameComponent::setGameObject(std::shared_ptr<GameObject> gameObject)
 {
 	this->gameObject = gameObject;
 }
+
+std::shared_ptr<GameObject> GameComponent::getGameObject()
+{
+	return gameObject;
+}

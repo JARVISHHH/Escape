@@ -5,7 +5,7 @@
 std::shared_ptr<App> app = std::make_shared<App>();
 
 App::App(){
-
+	srand(time(NULL));
 }
 
 App::~App(){

@@ -8,7 +8,7 @@
 
 class GameWorld;
 
-class Screen
+class Screen : public std::enable_shared_from_this<Screen>
 {
 public:
     static std::unordered_map<int, bool> keyPressing;
@@ -27,4 +27,6 @@ public:
 
 protected:
     std::shared_ptr<GameWorld> gameWorld;
+
+    bool active = true;
 };

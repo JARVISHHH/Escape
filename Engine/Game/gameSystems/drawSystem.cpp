@@ -9,6 +9,7 @@ DrawSystem::DrawSystem() : GameSystem("draw")
 
 void DrawSystem::draw()
 {
+	updateGameObjects();
 	Global::graphics.bindShader("phong");
 	Global::graphics.setGlobalData(glm::vec3(0.5f));
 	Global::graphics.setCameraData(gameWorld->getCamera());
@@ -23,4 +24,11 @@ bool DrawSystem::addGameObject(std::shared_ptr<GameObject> gameObject)
 {
 	gameObjects.push_back(gameObject);
 	return true;
+}
+
+void DrawSystem::updateGameObjects()
+{
+	for (int i = gameObjects.size() - 1; i >= 0; i--)
+		if (!gameObjects[i]->getActiveStatus())
+			gameObjects.erase(gameObjects.begin() + i);
 }

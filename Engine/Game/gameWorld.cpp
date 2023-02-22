@@ -9,9 +9,10 @@
 #include <Engine/Game/gameSystems/physicsSystem.h>
 
 
-GameWorld::GameWorld(std::shared_ptr<Camera> camera)
+GameWorld::GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> screen)
 {
 	this->camera = camera;
+	this->screen = screen;
 }
 
 void GameWorld::update(double seconds)
@@ -63,16 +64,18 @@ bool GameWorld::removeGameSystem(std::string tag)
 	return true;
 }
 
-bool GameWorld::addGameObject(std::string tag, std::shared_ptr<GameObject> gameObject)
+bool GameWorld::addGameObject(std::shared_ptr<GameObject> gameObject)
 {
+	std::string tag = gameObject->getTag();
 	if (gameObjects.find(tag) == gameObjects.end()) gameObjects[tag] = std::vector<std::shared_ptr<GameObject>>();
 	gameObjects[tag].push_back(gameObject);
 	gameObject->setGameWorld(std::shared_ptr<GameWorld>(this));
 	return true;
 }
 
-bool GameWorld::removeGameObject(std::string tag, std::shared_ptr<GameObject> gameObject)
+bool GameWorld::removeGameObject(std::shared_ptr<GameObject> gameObject)
 {
+	std::string tag = gameObject->getTag();
 	if (gameObjects.find(tag) == gameObjects.end()) return true;
 	for (int i = 0; i < gameObjects[tag].size(); i++) {
 		if (gameObjects[tag][i] == gameObject)
@@ -90,3 +93,14 @@ std::shared_ptr<Camera> GameWorld::getCamera()
 {
 	return camera;
 }
+
+std::shared_ptr<Screen> GameWorld::getScreen()
+{
+	return screen;
+}
+
+//void GameWorld::setWin(bool win)
+//{
+//	finish = true;
+//	this->win = win;
+//}

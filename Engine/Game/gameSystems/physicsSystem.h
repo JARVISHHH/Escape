@@ -8,6 +8,7 @@ public:
 
 	void update(double seconds);
 	void addGameObject(std::shared_ptr<GameObject> gameObject);
+	void updateGameObjects();
 
 private:
 	std::vector<std::shared_ptr<GameObject>> gameObjects;

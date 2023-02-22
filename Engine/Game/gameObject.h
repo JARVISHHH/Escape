@@ -10,6 +10,11 @@ class GameComponent;
 class GameObject : public std::enable_shared_from_this<GameObject>
 {
 public:
+	GameObject(std::string tag);
+
+	std::string getTag();
+
+	std::shared_ptr<GameWorld> getGameWorld();
 	void setGameWorld(std::shared_ptr<GameWorld> gameWorld);
 
 	template <class T> bool addComponent();
@@ -20,9 +25,14 @@ public:
 
 	std::shared_ptr<Camera> getCamera();
 
+	void setActiveStatus(bool activeStatus);
+	bool getActiveStatus();
+
 protected:
+	std::string tag;
 	std::shared_ptr<GameWorld> gameWorld;
 	std::unordered_map<std::string, std::vector<std::shared_ptr<GameComponent>>> components;
+	bool activeStatus = true;
 };
 
 template<class T>

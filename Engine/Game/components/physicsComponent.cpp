@@ -18,7 +18,7 @@ void PhysicsComponent::update(double seconds)
 	}
 
 	auto moveDistance = velocity * (float)seconds;
-	if (moveDistance.y < 0 && bottomPosition < std::abs(moveDistance.y)) {
+	if (moveDistance.y < 0 && bottomPosition + moveDistance.y < 0) {
 		velocity.y = 0;
 		moveDistance.y = -bottomPosition;
 	}

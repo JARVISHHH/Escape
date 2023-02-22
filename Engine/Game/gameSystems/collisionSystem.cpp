@@ -17,6 +17,7 @@ void CollisionSystem::update(double seconds)
 
 void CollisionSystem::doCollision()
 {
+	updateComponentPairs();
 	for (int i = 0; i < componentPairs.size(); i++)
 		for (int j = 0; j < i; j++) {
 			auto collisionComponent1 = componentPairs[i].first;
@@ -43,4 +44,11 @@ void CollisionSystem::addGameObject(std::shared_ptr<GameObject> gameObject)
 	for (auto collisionComponent : collisionComponents) {
 		componentPairs.push_back({ collisionComponent, collisionResponseComponent });
 	}
+}
+
+void CollisionSystem::updateComponentPairs()
+{
+	for (int i = componentPairs.size() - 1; i >= 0; i--)
+		if (!componentPairs[i].first->getGameObject()->getActiveStatus())
+			componentPairs.erase(componentPairs.begin() + i);
 }

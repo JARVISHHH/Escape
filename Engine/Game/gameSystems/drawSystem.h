@@ -10,6 +10,8 @@ public:
 
 	bool addGameObject(std::shared_ptr<GameObject> gameObject);
 
+	void updateGameObjects();
+
 protected:
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 };

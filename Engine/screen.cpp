@@ -9,6 +9,7 @@ void Screen::init()
 }
 
 void Screen::update(double seconds) {
+	if (!active) return;
 	if (gameWorld != nullptr) gameWorld->update(seconds);
 }
 
@@ -22,6 +23,7 @@ void Screen::keyEvent(int key, int action) {
 }
 
 void Screen::mousePosEvent(double xpos, double ypos) {
+	if (!active) return;
 	if (gameWorld != nullptr) gameWorld->mousePosEvent(xpos, ypos);
 }
 

@@ -2,6 +2,21 @@
 
 #include "gameComponent.h"
 
+GameObject::GameObject(std::string tag)
+{
+	this->tag = tag;
+}
+
+std::string GameObject::getTag()
+{
+	return tag;
+}
+
+std::shared_ptr<GameWorld> GameObject::getGameWorld()
+{
+	return gameWorld;
+}
+
 void GameObject::setGameWorld(std::shared_ptr<GameWorld> gameWorld)
 {
 	this->gameWorld = gameWorld;
@@ -30,4 +45,14 @@ bool GameObject::removeComponent(std::string tag, std::shared_ptr<GameComponent>
 std::shared_ptr<Camera> GameObject::getCamera()
 {
 	return gameWorld->getCamera();
+}
+
+void GameObject::setActiveStatus(bool activeStatus)
+{
+	this->activeStatus = activeStatus;
+}
+
+bool GameObject::getActiveStatus()
+{
+	return activeStatus;
 }
