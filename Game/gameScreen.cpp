@@ -82,7 +82,7 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	modelTransform->translate(glm::vec3(0, 0.5, 0));
 	gameWorld->getCamera()->setPos(modelTransform->getPos());
 	// Draw component
-	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("ceiling", "monokuma");
 	// Physics component
 	std::shared_ptr<PhysicsComponent> physicsComponent = std::make_shared<PhysicsComponent>();
 	// CharacterMoveComponent

@@ -88,6 +88,7 @@ add_executable(${PROJECT_NAME}
     Graphics/GLWrappers/vbo.cpp
     Graphics/GLWrappers/vao.h
     Graphics/GLWrappers/vao.cpp
+    Graphics/tiny_obj_loader.h
 
     Game/app.h
     Game/app.cpp

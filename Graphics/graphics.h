@@ -31,9 +31,14 @@ public:
 
     // Shape-related methods
     std::shared_ptr<Shape> addShape(std::string shapeName, std::vector<float> data, VAOAttrib attribs);
+    std::vector<glm::vec3> addShape(std::string shapeName, std::string filepath);
     void removeShape(std::string shapeName);
     std::shared_ptr<Shape> getShape(std::string shapeName);
     void drawShape(std::shared_ptr<Shape> myShape, std::shared_ptr<ModelTransform> modelTransform, std::shared_ptr<Material> material = nullptr);
+    void drawShape(std::shared_ptr<Shape> myShape, glm::mat4 modelMatrix, std::shared_ptr<Material> material = nullptr);
+
+    // Obj-loading method
+    std::vector<float> getObjData(std::string filepath);
     
     // Material-related methods
     std::shared_ptr<Material> addMaterial(std::string materialName, glm::vec3 color, float shininess = 1.f);

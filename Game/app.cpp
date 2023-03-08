@@ -13,6 +13,8 @@ App::~App(){
 }
 
 void App::start() {
+	Global::graphics.addShape("ceiling", "./Resources/Meshes/ceiling.obj");
+
 	addScreen("menu", std::make_shared<MenuScreen>());
 	addScreen("game", std::make_shared<GameScreen>());
 	

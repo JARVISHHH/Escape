@@ -50,6 +50,10 @@ void Shader::setModelTransform(std::shared_ptr<ModelTransform> modelTransform){
     glUniformMatrix4fv(glGetUniformLocation(m_handle, "model"), 1, GL_FALSE, glm::value_ptr(modelTransform->getModelMatrix()[0]));
 }
 
+void Shader::setModelTransform(glm::mat4 modelMatrix){
+    glUniformMatrix4fv(glGetUniformLocation(m_handle, "model"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+}
+
 void Shader::setGlobalCoeffs(glm::vec3 coeffs){
     glUniform3f(glGetUniformLocation(m_handle, "coeffs"), coeffs.x, coeffs.y, coeffs.z);
 }
