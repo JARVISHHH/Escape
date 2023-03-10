@@ -134,6 +134,11 @@ add_executable(${PROJECT_NAME}
     Engine/Game/components/collisionComponents/cylinderComponent.h
     Engine/Game/components/collisionComponents/cylinderComponent.cpp
 
+    Engine/Mesh/vertex.h
+    Engine/Mesh/vertex.cpp
+    Engine/Mesh/triangle.h
+    Engine/Mesh/triangle.cpp
+
     Game/gameComponents/characterCollisionResponse.h
     Game/gameComponents/characterCollisionResponse.cpp
     Game/gameComponents/fallingCollisionResponse.h
