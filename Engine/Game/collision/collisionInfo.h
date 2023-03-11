@@ -6,7 +6,7 @@ struct CollisionInfo
 {
 	CollisionInfo() {}
 
-	CollisionInfo(float t, glm::vec3 normal, glm::vec3 contact)
+	CollisionInfo(float t, glm::vec4 normal, glm::vec4 contact)
 	{
 		this->t = t;
 		this->normal = normal;
@@ -14,6 +14,6 @@ struct CollisionInfo
 	}
 
 	float t = -1.0f;  // If < 1, there is no collision
-	glm::vec3 normal = glm::vec3(1, 0, 0);
-	glm::vec3 contact = glm::vec3(0, 0, 0);
+	glm::vec4 normal = glm::vec4(1, 0, 0, 0);
+	glm::vec4 contact = glm::vec4(0, 0, 0, 1);
 };

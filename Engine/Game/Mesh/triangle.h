@@ -14,6 +14,8 @@ public:
 	Triangle(std::shared_ptr<Vertex>* v);
 
 	glm::vec4 calculateFaceNormal();
+	bool isInside(glm::vec4 pos);
+	bool isInside(std::vector<glm::vec4>& sphereSpacePos, glm::vec4 pos);
 	CollisionInfo intersect(glm::mat4x4 transformMatrix, const Ray& ray);
 
 private:
