@@ -76,7 +76,10 @@ void Triangle::intersectEdges(const Ray& ray, CollisionInfo& collisionInfo)
 		if (temp > 0 && temp < std::pow(glm::length(D - C), 2)) {
 			if (collisionInfo.t < 0 || t < collisionInfo.t) {
 				collisionInfo.t = t;
-				collisionInfo.contact = ray.origin + t * ray.direction;
+				// TODO
+				float project = glm::dot(glm::vec3(ray.origin + t * ray.direction) - C, glm::normalize(D - C));
+				glm::vec3 contact = C + glm::normalize(D - C) * project;
+				collisionInfo.contact = glm::vec4(contact[0], contact[1], contact[2], contact[3]);
 			}
 		}
 	}
