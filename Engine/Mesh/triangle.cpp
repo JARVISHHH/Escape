@@ -50,9 +50,9 @@ bool Triangle::isInside(std::vector<glm::vec4>& sphereSpacePos, glm::vec4 pos)
 	return true;
 }
 
-void Triangle::intersectEdges(const Ray& ray, CollisionInfo& collisionInfo)
+void Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo)
 {
-	glm::vec3 A = glm::vec3(ray.origin), B = glm::vec3(ray.endPoint);
+	glm::vec3 A = glm::vec3(ray->origin), B = glm::vec3(ray->endPoint);
 	for (int i = 0; i < 3; i++) {
 		glm::vec3 C = glm::vec3(this->v[i]->getPosition()), D = glm::vec3(this->v[(i + 1) % 3]->getPosition());
 		float a = std::pow(glm::length(glm::cross(B - A, D - C)), 2);
@@ -71,27 +71,27 @@ void Triangle::intersectEdges(const Ray& ray, CollisionInfo& collisionInfo)
 		if (t < 0) continue;
 
 		// Check if in the line segment
-		glm::vec3 P = glm::vec3(ray.origin + t * ray.direction);
+		glm::vec3 P = glm::vec3(ray->origin + t * ray->direction);
 		auto temp = glm::dot(P - C, D - C);
 		if (temp > 0 && temp < std::pow(glm::length(D - C), 2)) {
-			if (collisionInfo.t < 0 || t < collisionInfo.t) {
-				collisionInfo.t = t;
+			if (collisionInfo->t < 0 || t < collisionInfo->t) {
+				collisionInfo->t = t;
 				// TODO
-				float project = glm::dot(glm::vec3(ray.origin + t * ray.direction) - C, glm::normalize(D - C));
+				float project = glm::dot(glm::vec3(ray->origin + t * ray->direction) - C, glm::normalize(D - C));
 				glm::vec3 contact = C + glm::normalize(D - C) * project;
-				collisionInfo.contact = glm::vec4(contact[0], contact[1], contact[2], contact[3]);
+				collisionInfo->contact = glm::vec4(contact[0], contact[1], contact[2], contact[3]);
 			}
 		}
 	}
 }
 
-void Triangle::intersectVertices(const Ray& ray, CollisionInfo& collisionInfo)
+void Triangle::intersectVertices(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo)
 {
 	for (int i = 0; i < 3; i++) {
 		glm::vec3 origin = glm::vec3(this->v[i]->getPosition());
 		float a = 1;
-		float b = 2 * glm::dot(glm::vec3(-ray.direction), origin - glm::vec3(ray.origin));
-		float c = std::pow(glm::length(origin - glm::vec3(ray.origin)), 2) - 1;
+		float b = 2 * glm::dot(glm::vec3(-ray->direction), origin - glm::vec3(ray->origin));
+		float c = std::pow(glm::length(origin - glm::vec3(ray->origin)), 2) - 1;
 		float delta = b * b - 4 * a * c;
 		if (delta < 0) continue;
 
@@ -102,16 +102,16 @@ void Triangle::intersectVertices(const Ray& ray, CollisionInfo& collisionInfo)
 		if (t2 >= 0) t = t < 0 ? t2 : std::min(t, t2);
 		if (t < 0) continue;
 
-		if (collisionInfo.t < 0 || t < collisionInfo.t) {
-			collisionInfo.t = t;
-			collisionInfo.contact = this->v[i]->getPosition();
+		if (collisionInfo->t < 0 || t < collisionInfo->t) {
+			collisionInfo->t = t;
+			collisionInfo->contact = this->v[i]->getPosition();
 		}
 	}
 }
 
-CollisionInfo Triangle::intersect(glm::mat4x4 transformMatrix, const Ray& ray)
+std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, std::shared_ptr<Ray> ray)
 {
-	auto res = CollisionInfo();
+	auto res = std::make_shared<CollisionInfo>();
 
 	// Transform the triangle to sphere space
 	for (int i = 0; i < 3; i++)
@@ -119,17 +119,17 @@ CollisionInfo Triangle::intersect(glm::mat4x4 transformMatrix, const Ray& ray)
 	calculateFaceNormal();
 
 	// Check if the ray has intersection within the plane
-	auto divisor = glm::dot(ray.direction, faceNormal);
+	auto divisor = glm::dot(ray->direction, faceNormal);
 	if (divisor > epsilon) {
 		// Get intersection t
-		res.t = glm::dot(this->v[0]->getPosition() - ray.origin, faceNormal) / divisor;
+		res->t = glm::dot(this->v[0]->getPosition() - ray->origin, faceNormal) / divisor;
 		// The triangle is in front of the ray
-		if (res.t >= 0) {
+		if (res->t >= 0) {
 			// Check Sphere-interior intersection
-			if (isInside(ray.origin + res.t * ray.direction)) {
-				Ray realRay(ray.origin - faceNormal, ray.direction);
-				res.t = glm::dot(this->v[0]->getPosition() - realRay.origin, faceNormal) / divisor;
-				res.contact = realRay.origin + res.t * realRay.direction;
+			if (isInside(ray->origin + res->t * ray->direction)) {
+				Ray realRay(ray->origin - faceNormal, ray->direction);
+				res->t = glm::dot(this->v[0]->getPosition() - realRay.origin, faceNormal) / divisor;
+				res->contact = realRay.origin + res->t * realRay.direction;
 			}
 			// Check the other 2 intersections
 			else {
@@ -148,8 +148,8 @@ CollisionInfo Triangle::intersect(glm::mat4x4 transformMatrix, const Ray& ray)
 	calculateFaceNormal();
 
 	// Fill CollisionInfo
-	res.normal = faceNormal;
-	res.contact = glm::inverse(transformMatrix) * res.contact;
+	res->normal = faceNormal;
+	res->contact = glm::inverse(transformMatrix) * res->contact;
 
 	return res;
 }

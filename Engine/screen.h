@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include "Graphics/global.h"
+#include <Engine/Mesh/triangle.h>
 
 #include <GLFW/glfw3.h>
 
@@ -15,6 +16,8 @@ public:
     static std::unordered_map<int, bool> mousePressing;
 
     virtual void init();
+    void addEnvironmentMesh(std::string name, std::string path);
+    std::vector<std::shared_ptr<Triangle>> getEnvironmentMesh(std::string name);
 
     virtual void update(double seconds);
     virtual void draw();
@@ -27,6 +30,7 @@ public:
 
 protected:
     std::shared_ptr<GameWorld> gameWorld;
+    std::unordered_map<std::string, std::vector<std::shared_ptr<Triangle>>> meshTriangles;
     int width = 640, height = 480;
     bool active = true;
 };

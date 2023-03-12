@@ -16,9 +16,9 @@ public:
 	glm::vec4 calculateFaceNormal();
 	bool isInside(glm::vec4 pos);
 	bool isInside(std::vector<glm::vec4>& sphereSpacePos, glm::vec4 pos);
-	void intersectEdges(const Ray& ray, CollisionInfo& collisionInfo);
-	void intersectVertices(const Ray& ray, CollisionInfo& collisionInfo);
-	CollisionInfo intersect(glm::mat4x4 transformMatrix, const Ray& ray);
+	void intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo);
+	void intersectVertices(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo);
+	std::shared_ptr<CollisionInfo> intersect(glm::mat4x4 transformMatrix, std::shared_ptr<Ray> ray);
 
 private:
 	std::vector<std::shared_ptr<Vertex>> v;

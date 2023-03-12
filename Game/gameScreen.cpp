@@ -13,11 +13,14 @@
 #include "gameComponents/characterCollisionResponse.h"
 #include <Game/gameComponents/fallingCollisionResponse.h>
 #include <Game/gameComponents/fallingPhysics.h>
+#include <Engine/Game/components/collisionComponents/environmentComponent.h>
 
 extern std::shared_ptr<App> app;
 
 GameScreen::GameScreen() 
 	: Screen(){
+
+	addEnvironmentMesh("ceiling", "./Resources/Meshes/ceiling.obj");
 
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");
@@ -31,7 +34,7 @@ void GameScreen::init()
 	// Create game object
 	std::shared_ptr<GameObject> character = createCharacter();
 	std::vector<std::shared_ptr<GameObject>> grounds = createGrounds();
-	std::vector<glm::vec3> positions = {};
+	std::shared_ptr<GameObject> environment = createEnvironment("ceiling", "monokuma");
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
@@ -40,7 +43,7 @@ void GameScreen::init()
 	std::shared_ptr<CameraSystem> cameraSystem = std::make_shared<CameraSystem>(camera, character);
 	collisionSystem = std::make_shared<CollisionSystem>();
 
-	//// Add systems to game world
+	// Add systems to game world
 	gameWorld->addGameSystem(drawSystem);
 	gameWorld->addGameSystem(physicsSystem);
 	gameWorld->addGameSystem(characterControllerSystem);
@@ -51,6 +54,7 @@ void GameScreen::init()
 	// Draw system
 	drawSystem->addGameObject(character);
 	for(auto ground: grounds) drawSystem->addGameObject(ground);
+	drawSystem->addGameObject(environment);
 	// Physics system
 	physicsSystem->addGameObject(character);
 	// Character controller system
@@ -82,7 +86,7 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	modelTransform->translate(glm::vec3(0, 0.5, 0));
 	gameWorld->getCamera()->setPos(modelTransform->getPos());
 	// Draw component
-	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("ceiling", "monokuma");
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
 	// Physics component
 	std::shared_ptr<PhysicsComponent> physicsComponent = std::make_shared<PhysicsComponent>();
 	// CharacterMoveComponent
@@ -157,6 +161,30 @@ std::shared_ptr<GameObject> GameScreen::createFalling(glm::vec3 pos)
 	fallingObject->addComponent(fallingPhysics);
 
 	return fallingObject;
+}
+
+std::shared_ptr<GameObject> GameScreen::createEnvironment(std::string shape, std::string material)
+{
+	std::shared_ptr<GameObject> environmentObject = std::make_shared<GameObject>("environment");
+
+	// Create components
+	// Transform Component
+	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
+	auto modelTransform = transformComponent->getModelTransform();
+	if (shape.compare("ceiling") == 0) {
+		modelTransform->scale(0.5);
+	}
+	// Draw component
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
+	// Collision component
+	std::shared_ptr<EnvironmentComponent> collisionComponent = std::make_shared<EnvironmentComponent>(getEnvironmentMesh(shape));
+
+	// Add components to game objects
+	environmentObject->addComponent(transformComponent);
+	environmentObject->addComponent(drawComponent);
+	environmentObject->addComponent(collisionComponent);
+
+	return environmentObject;
 }
 
 void GameScreen::update(double seconds) {

@@ -1,12 +1,29 @@
 #include "screen.h"
 #include <Engine/Game/gameWorld.h>
 
+
 std::unordered_map<int, bool> Screen::keyPressing;
 std::unordered_map<int, bool> Screen::mousePressing;
 
 void Screen::init()
 {
 	windowResizeEvent(width, height);
+}
+
+void Screen::addEnvironmentMesh(std::string name, std::string path)
+{
+	meshTriangles[name] = std::vector<std::shared_ptr<Triangle>>();
+	auto temp = Global::graphics.addShape(name, path);
+	for (int i = 0; i < temp.size(); i += 3) {
+		meshTriangles[name].push_back(std::make_shared<Triangle>(temp[i], temp[i + 1], temp[i + 2]));
+	}
+}
+
+std::vector<std::shared_ptr<Triangle>> Screen::getEnvironmentMesh(std::string name)
+{
+	if (meshTriangles.find(name) != meshTriangles.end()) return meshTriangles[name];
+	else std::cerr << "No mesh named " << name;
+	return std::vector<std::shared_ptr<Triangle>>();
 }
 
 void Screen::update(double seconds) {
