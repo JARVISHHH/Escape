@@ -13,15 +13,10 @@ void PhysicsSystem::update(double seconds)
 	updateGameObjects();
 	for (auto gameObject : gameObjects) {
 		auto physicsComponent = gameObject->getComponent<PhysicsComponent>("physics");
-		auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
-		transformComponent->setRay(false);
 
 		if (physicsComponent == nullptr) continue;
 
-		auto oldPos = transformComponent->getModelTransform()->getPos();
 		physicsComponent->update(seconds);
-		auto newPos = transformComponent->getModelTransform()->getPos();
-		transformComponent->setRay(true, oldPos, newPos);
 	}
 }
 

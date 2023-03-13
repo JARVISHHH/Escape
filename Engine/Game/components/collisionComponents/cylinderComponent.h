@@ -9,8 +9,7 @@ public:
 	glm::vec3 checkCollision(std::shared_ptr<CollisionComponent> component) override;
 	glm::vec3 checkCollision(std::shared_ptr<CylinderComponent> component) override;
 
-	std::shared_ptr<CollisionInfo> getEnvironmentClosestCollision(std::shared_ptr<Ray> ray) override;
-	std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> ellipsoidTriangleCollision() override;
+	glm::mat4x4 getTransformMatrix() override;
 
 
 protected:

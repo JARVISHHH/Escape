@@ -14,6 +14,7 @@ public:
 	Triangle(std::shared_ptr<Vertex>* v);
 
 	glm::vec4 calculateFaceNormal();
+	// All these positions and rays should be in sphere space
 	bool isInside(glm::vec4 pos);
 	bool isInside(std::vector<glm::vec4>& sphereSpacePos, glm::vec4 pos);
 	void intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo);

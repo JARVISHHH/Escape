@@ -4,6 +4,7 @@
 #include "Engine/Game/components/collisionComponents/collisionComponent.h"
 #include "Engine/Game/components/collisionResponseComponent.h"
 #include <Engine/Game/components/collisionComponents/environmentComponent.h>
+#include <Engine/Game/components/transformComponent.h>
 
 CollisionSystem::CollisionSystem()
 	: GameSystem("collision")
@@ -22,7 +23,10 @@ void CollisionSystem::doCollision()
 
 	// Check collision between environments
 	for (int i = 0; i < entityComponentPairs.size(); i++) {
-		entityComponentPairs[i].first->ellipsoidTriangleCollision();
+		entityComponentPairs[i].first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
+		auto collisionRes = entityComponentPairs[i].first->ellipsoidTriangleCollision(environmentComponents);
+		//if (collisionRes.first.size() > 0) std::cout << collisionRes.first.size() << std::endl;
+		notifyEnvironmentCollision(i, collisionRes.first, collisionRes.second);
 	}
 
 	// Update movable game objects
@@ -34,6 +38,16 @@ void CollisionSystem::doCollision()
 			if (glm::length(mtv) == 0) continue;  // No collision
 			notifyCollision(i, j, mtv);
 		}
+
+	for (int i = 0; i < entityComponentPairs.size(); i++) {
+		entityComponentPairs[i].first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
+	}
+}
+
+void CollisionSystem::notifyEnvironmentCollision(int index, std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
+{
+	if (entityComponentPairs[index].second != nullptr)
+		entityComponentPairs[index].second->doCollision(collisions, curPos);
 }
 
 void CollisionSystem::notifyCollision(int index1, int index2, glm::vec3 mtv)

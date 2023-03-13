@@ -76,10 +76,9 @@ void Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<Collisio
 		if (temp > 0 && temp < std::pow(glm::length(D - C), 2)) {
 			if (collisionInfo->t < 0 || t < collisionInfo->t) {
 				collisionInfo->t = t;
-				// TODO
 				float project = glm::dot(glm::vec3(ray->origin + t * ray->direction) - C, glm::normalize(D - C));
 				glm::vec3 contact = C + glm::normalize(D - C) * project;
-				collisionInfo->contact = glm::vec4(contact[0], contact[1], contact[2], contact[3]);
+				collisionInfo->contact = glm::vec4(contact[0], contact[1], contact[2], 1);
 			}
 		}
 	}
@@ -89,7 +88,7 @@ void Triangle::intersectVertices(std::shared_ptr<Ray> ray, std::shared_ptr<Colli
 {
 	for (int i = 0; i < 3; i++) {
 		glm::vec3 origin = glm::vec3(this->v[i]->getPosition());
-		float a = 1;
+		float a = std::pow(glm::length(ray->direction), 2);
 		float b = 2 * glm::dot(glm::vec3(-ray->direction), origin - glm::vec3(ray->origin));
 		float c = std::pow(glm::length(origin - glm::vec3(ray->origin)), 2) - 1;
 		float delta = b * b - 4 * a * c;
@@ -120,16 +119,14 @@ std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, 
 
 	// Check if the ray has intersection within the plane
 	auto divisor = glm::dot(ray->direction, faceNormal);
-	if (divisor > epsilon) {
+	if (std::abs(divisor) > epsilon) {
 		// Get intersection t
-		res->t = glm::dot(this->v[0]->getPosition() - ray->origin, faceNormal) / divisor;
+		res->t = glm::dot(this->v[0]->getPosition() - (ray->origin - faceNormal), faceNormal) / divisor;
 		// The triangle is in front of the ray
 		if (res->t >= 0) {
 			// Check Sphere-interior intersection
-			if (isInside(ray->origin + res->t * ray->direction)) {
-				Ray realRay(ray->origin - faceNormal, ray->direction);
-				res->t = glm::dot(this->v[0]->getPosition() - realRay.origin, faceNormal) / divisor;
-				res->contact = realRay.origin + res->t * realRay.direction;
+			if (isInside(ray->origin - faceNormal + res->t * ray->direction)) {
+				res->contact = ray->origin - faceNormal + res->t * ray->direction;
 			}
 			// Check the other 2 intersections
 			else {

@@ -35,22 +35,13 @@ glm::vec3 CylinderComponent::checkCollision(std::shared_ptr<CylinderComponent> c
 	return MTV;
 }
 
-std::shared_ptr<CollisionInfo> CylinderComponent::getEnvironmentClosestCollision(std::shared_ptr<Ray> ray)
+glm::mat4x4 CylinderComponent::getTransformMatrix()
 {
-
-	return std::make_shared<CollisionInfo>();
-}
-
-std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CylinderComponent::ellipsoidTriangleCollision()
-{
-	auto ray = gameObject->getComponent<TransformComponent>("transform")->getRay();
-	if(ray->active == false) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
-
-	auto curPos = ray->origin, nextPos = ray->endPoint;
-
-	for (int i = 0; i < 5; i++) {
-
-	}
-
-	return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
+	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
+	glm::mat4x4 transformMatrix = glm::inverse(transformComponent->getModelTransform()->getModelMatrix());
+	transformMatrix = glm::mat4x4(2, 0, 0, 0,
+								  0, 2, 0, 0,
+								  0, 0, 2, 0,
+								  0, 0, 0, 1) * transformMatrix;
+	return transformMatrix;
 }

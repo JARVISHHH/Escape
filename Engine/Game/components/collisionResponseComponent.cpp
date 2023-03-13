@@ -20,15 +20,36 @@ void CollisionResponseComponent::doCollision(std::shared_ptr<CollisionResponseCo
 	this->responseCollision(otherComponent, mtv);
 }
 
+void CollisionResponseComponent::doCollision(std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
+{
+	// resolve
+	this->resolveCollision(collisions, curPos);
+
+	// response
+	this->responseCollision(collisions, curPos);
+}
+
 void CollisionResponseComponent::resolveCollision(std::shared_ptr<CollisionResponseComponent> otherComponent, glm::vec3 mtv)
 {
 	if (isStatic) return;
 	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
-	if (otherComponent->isStatic) transformComponent->getModelTransform()->translate(mtv);
+	if (otherComponent == nullptr || otherComponent->isStatic) transformComponent->getModelTransform()->translate(mtv);
 	else transformComponent->getModelTransform()->translate(mtv / 2.0f);
 }
 
+void CollisionResponseComponent::resolveCollision(std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
+{
+	if (isStatic) return;
+	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
+	transformComponent->getModelTransform()->setPos(curPos);
+}
+
 void CollisionResponseComponent::responseCollision(std::shared_ptr<CollisionResponseComponent> otherComponent, glm::vec3 mtv)
+{
+
+}
+
+void CollisionResponseComponent::responseCollision(std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
 {
 
 }

@@ -12,6 +12,7 @@ public:
 
 	void update(double seconds);
 	void doCollision();
+	void notifyEnvironmentCollision(int index, std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos);
 	void notifyCollision(int index1, int index2, glm::vec3 mtv);
 
 	void addGameObject(std::shared_ptr<GameObject> gameObject);
