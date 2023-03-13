@@ -84,7 +84,8 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.25);
-	modelTransform->translate(glm::vec3(0, 0.5, 0));
+	modelTransform->translate(glm::vec3(0, 1, 0));
+	transformComponent->updateRay();
 	gameWorld->getCamera()->setPos(modelTransform->getPos());
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
@@ -174,7 +175,7 @@ std::shared_ptr<GameObject> GameScreen::createEnvironment(std::string shape, std
 	auto modelTransform = transformComponent->getModelTransform();
 	if (shape.compare("ceiling") == 0) {
 		modelTransform->scale(0.25);
-		//modelTransform->translate(glm::vec3(0, 0.25, 0));
+		modelTransform->translate(glm::vec3(0, 0.25, 0));
 	}
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);

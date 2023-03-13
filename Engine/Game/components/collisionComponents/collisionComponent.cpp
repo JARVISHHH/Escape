@@ -41,7 +41,6 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 		auto c = getEnvironmentClosestCollision(transformMatrix, std::make_shared<Ray>(curPos, nextPos), environmentComponents);
 		if(c->t >= 0) std::cout << c->t << std::endl;
 		if (c->t <= 1 && c->t >= 0) std::cout << "collide" << std::endl;
-		//if (!(c->t <= 1 && c->t >= 0)) std::cout << "no collide" << std::endl;
 		if (c->t < 0 || c->t > 1) return { collisions, nextPos };
 		curPos = doNudge(transformMatrix, curPos, c, environmentComponents);
 		auto d = nextPos - curPos;
