@@ -12,6 +12,7 @@
 class DrawComponent : public GameComponent {
 public:
 	DrawComponent();
+	DrawComponent(std::string shapeType);
 	DrawComponent(std::string shapeType, std::string materialName);
 
 	void draw();
@@ -20,6 +21,6 @@ public:
 	void setMaterial(std::string materialName);
 
 protected:
-	std::shared_ptr<Shape> shape;
-	std::shared_ptr<Material> material;
+	std::shared_ptr<Shape> shape = nullptr;
+	std::shared_ptr<Material> material = nullptr;
 };

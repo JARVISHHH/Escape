@@ -27,6 +27,8 @@ public:
 
     std::shared_ptr<GameObject> createFalling(glm::vec3 pos);
     std::shared_ptr<GameObject> createEnvironment(std::string shape, std::string material = "");
+    std::shared_ptr<GameObject> createBoard(glm::vec3 start, glm::vec3 end);
+    std::shared_ptr<GameObject> createGoal(glm::vec3 pos);
 
     void fallFalling();
 

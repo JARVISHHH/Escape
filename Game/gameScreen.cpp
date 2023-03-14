@@ -14,17 +14,21 @@
 #include <Game/gameComponents/fallingCollisionResponse.h>
 #include <Game/gameComponents/fallingPhysics.h>
 #include <Engine/Game/components/collisionComponents/environmentComponent.h>
+#include <Game/gameComponents/movingBoard.h>
+
+#include <corecrt_math_defines.h>
 
 extern std::shared_ptr<App> app;
 
 GameScreen::GameScreen() 
 	: Screen(){
 
-	addEnvironmentMesh("ceiling", "./Resources/Meshes/ceiling.obj");
-	addEnvironmentMesh("ceiling1", "./Resources/Meshes/ceiling1.obj");
+	addEnvironmentMesh("level", "./Resources/Meshes/level.obj");
+	addEnvironmentMesh("board", "./Resources/Meshes/board.obj");
 
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");
+	Global::graphics.addMaterial("monomi", "Resources/Images/monomi.png");
 }
 
 void GameScreen::init()
@@ -35,7 +39,9 @@ void GameScreen::init()
 	// Create game object
 	std::shared_ptr<GameObject> character = createCharacter();
 	//std::vector<std::shared_ptr<GameObject>> grounds = createGrounds();
-	std::shared_ptr<GameObject> environment = createEnvironment("ceiling", "monokuma");
+	std::shared_ptr<GameObject> environment = createEnvironment("level", "grass");
+	std::shared_ptr<GameObject> movingBoard = createBoard(glm::vec3(0, 3, -9), glm::vec3(0, 3, -15));
+	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(0, 0.5, -1));
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
@@ -56,16 +62,24 @@ void GameScreen::init()
 	drawSystem->addGameObject(character);
 	//for(auto ground: grounds) drawSystem->addGameObject(ground);
 	drawSystem->addGameObject(environment);
+	drawSystem->addGameObject(movingBoard);
+	drawSystem->addGameObject(goalObject);
 	// Physics system
 	physicsSystem->addGameObject(character);
+	physicsSystem->addGameObject(movingBoard);
 	// Character controller system
 	characterControllerSystem->setCharatcer(character);
 	// Collision system
 	collisionSystem->addGameObject(character);
 	collisionSystem->addEnvironmentObject(environment);
+	collisionSystem->addEnvironmentObject(movingBoard);
+	collisionSystem->addGameObject(goalObject);
 	// Game world
 	gameWorld->addGameObject(character);
 	//for(auto ground: grounds) gameWorld->addGameObject(ground);
+	gameWorld->addGameObject(environment);
+	gameWorld->addGameObject(movingBoard);
+	gameWorld->addGameObject(goalObject);
 
 	score = 0;
 	result = "";
@@ -128,6 +142,7 @@ std::vector<std::shared_ptr<GameObject>> GameScreen::createGrounds()
 			std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 			auto modelTransform = transformComponent->getModelTransform();
 			modelTransform->translate(glm::vec3(x - xNum / 2, 0, z - zNum / 2));
+			transformComponent->updateRay();
 			ground->addComponent(transformComponent);
 
 			grounds.push_back(ground);
@@ -147,6 +162,7 @@ std::shared_ptr<GameObject> GameScreen::createFalling(glm::vec3 pos)
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.25);
 	modelTransform->translate(pos);
+	transformComponent->updateRay();
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
 	// Collision component
@@ -178,9 +194,8 @@ std::shared_ptr<GameObject> GameScreen::createEnvironment(std::string shape, std
 		modelTransform->scale(0.25);
 		modelTransform->translate(glm::vec3(0, 0.5, 0));
 	}
-	else if (shape.compare("ceiling1") == 0) {
+	else if (shape.compare("level") == 0) {
 		modelTransform->scale(0.25);
-		modelTransform->translate(glm::vec3(1, 0, -2));
 	}
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
@@ -195,6 +210,59 @@ std::shared_ptr<GameObject> GameScreen::createEnvironment(std::string shape, std
 	return environmentObject;
 }
 
+std::shared_ptr<GameObject> GameScreen::createBoard(glm::vec3 start, glm::vec3 end)
+{
+	std::shared_ptr<GameObject> boardObject = std::make_shared<GameObject>("board");
+
+	// Create components
+	// Transform Component
+	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
+	auto modelTransform = transformComponent->getModelTransform();
+	modelTransform->rotate(M_PI / 2, glm::vec3(0, 1, 0));
+	modelTransform->scale(0.25);
+	modelTransform->translate(start);
+	// Draw component
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("board");
+	// Collision component
+	std::shared_ptr<EnvironmentComponent> collisionComponent = std::make_shared<EnvironmentComponent>(getEnvironmentMesh("board"));
+	// Physics component
+	std::shared_ptr<MovingBoard> movingBoard = std::make_shared<MovingBoard>(2.5, start + 1.5f * 0.25f * glm::normalize(end - start), end + 1.5f * 0.25f * glm::normalize(start - end));
+
+	// Add components to game objects
+	boardObject->addComponent(transformComponent);
+	boardObject->addComponent(drawComponent);
+	boardObject->addComponent(collisionComponent);
+	boardObject->addComponent(movingBoard);
+
+	return boardObject;
+}
+
+std::shared_ptr<GameObject> GameScreen::createGoal(glm::vec3 pos)
+{
+	std::shared_ptr<GameObject> goalObject = std::make_shared<GameObject>("goal");
+
+	// Create components
+	// Transform Component
+	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
+	auto modelTransform = transformComponent->getModelTransform();
+	modelTransform->scale(0.75);
+	modelTransform->translate(pos);
+	transformComponent->updateRay();
+	// Draw component
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monomi");
+	// Collision component
+	std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>();
+	std::shared_ptr<CollisionResponseComponent> collisionResponse = std::make_shared<CollisionResponseComponent>(true);
+
+	// Add components to game objects
+	goalObject->addComponent(transformComponent);
+	goalObject->addComponent(drawComponent);
+	goalObject->addComponent(collisionComponent);
+	goalObject->addComponent(collisionResponse);
+
+	return goalObject;
+}
+
 void GameScreen::update(double seconds) {
 	if (keyPressing[GLFW_KEY_B]) {
 		app->activateScreen("menu");
@@ -205,7 +273,7 @@ void GameScreen::update(double seconds) {
 		return;
 	}
 	if (!active) return;
-	time += seconds;
+	//time += seconds;
 	//if (time >= fallingNumber * 2) {
 	//	fallFalling();
 	//	fallingNumber++;
@@ -217,7 +285,7 @@ void GameScreen::update(double seconds) {
 
 void GameScreen::draw() {
 	// Set background color
-	Global::graphics.setClearColor(glm::vec3(0.0f, 0.0f, 1.0f));
+	Global::graphics.setClearColor(glm::vec3(0.0f, 0.2f, 0.8f));
 	Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Phong
@@ -228,8 +296,8 @@ void GameScreen::draw() {
 	Global::graphics.bindShader("text");
 	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press B to go back.", glm::ivec2(0, 30), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.3f, 0.1f, glm::vec3(1, 0, 1));
 	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), result, glm::ivec2(50, 300), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 2.5f, 0.1f, glm::vec3(1, 0, 1));
-	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Score: " + std::to_string(score), glm::ivec2(0, 440), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
-	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Coming in time: " + std::to_string(std::max(0.0f, maxTime - time)) + "s", glm::ivec2(0, 470), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
+	//Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Score: " + std::to_string(score), glm::ivec2(0, 440), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
+	//Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Coming in time: " + std::to_string(std::max(0.0f, maxTime - time)) + "s", glm::ivec2(0, 470), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
 }
 
 void GameScreen::fallFalling()
@@ -238,7 +306,7 @@ void GameScreen::fallFalling()
 	do {
 		x = rand() % 8 - 4, z = rand() % 8 - 4;
 	} while (x == 0 && z == 0);
-	auto fallingObject = createFalling(glm::vec3(x, 10, z));
+	auto fallingObject = createFalling(glm::vec3(x, 5, z));
 	drawSystem->addGameObject(fallingObject);
 	physicsSystem->addGameObject(fallingObject);
 	collisionSystem->addGameObject(fallingObject);

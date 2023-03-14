@@ -35,7 +35,7 @@ public:
 
 	std::shared_ptr<Screen> getScreen();
 
-	//void setWin(bool win);
+	void setWin(bool win);
 
 protected:
 	std::shared_ptr<Screen> screen;
@@ -44,8 +44,8 @@ protected:
 
 	std::shared_ptr<Camera> camera;
 
-	//bool finish = false;
-	//bool win = false;
+	bool finish = false;
+	bool win = false;
 };
 
 template<class T>

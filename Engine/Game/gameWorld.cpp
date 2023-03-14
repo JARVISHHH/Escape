@@ -99,8 +99,8 @@ std::shared_ptr<Screen> GameWorld::getScreen()
 	return screen;
 }
 
-//void GameWorld::setWin(bool win)
-//{
-//	finish = true;
-//	this->win = win;
-//}
+void GameWorld::setWin(bool win)
+{
+	finish = true;
+	this->win = win;
+}

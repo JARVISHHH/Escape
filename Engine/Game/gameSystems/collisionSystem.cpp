@@ -21,13 +21,6 @@ void CollisionSystem::doCollision()
 {
 	updateEntityComponentPairs();
 
-	// Check collision between environments
-	for (int i = 0; i < entityComponentPairs.size(); i++) {
-		entityComponentPairs[i].first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
-		auto collisionRes = entityComponentPairs[i].first->ellipsoidTriangleCollision(environmentComponents);
-		notifyEnvironmentCollision(i, collisionRes.first, collisionRes.second);
-	}
-
 	// Update movable game objects
 	for (int i = 0; i < entityComponentPairs.size(); i++)
 		for (int j = 0; j < i; j++) {
@@ -37,6 +30,13 @@ void CollisionSystem::doCollision()
 			if (glm::length(mtv) == 0) continue;  // No collision
 			notifyCollision(i, j, mtv);
 		}
+
+	// Check collision between environments
+	for (int i = 0; i < entityComponentPairs.size(); i++) {
+		entityComponentPairs[i].first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
+		auto collisionRes = entityComponentPairs[i].first->ellipsoidTriangleCollision(environmentComponents);
+		notifyEnvironmentCollision(i, collisionRes.first, collisionRes.second);
+	}
 
 	for (int i = 0; i < entityComponentPairs.size(); i++) {
 		entityComponentPairs[i].first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();

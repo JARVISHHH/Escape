@@ -7,10 +7,15 @@ DrawComponent::DrawComponent() : GameComponent("draw")
 
 }
 
+DrawComponent::DrawComponent(std::string shapeType) : GameComponent("draw")
+{
+	shape = Global::graphics.getShape(shapeType);
+}
+
 DrawComponent::DrawComponent(std::string shapeType, std::string materialName) : GameComponent("draw")
 {
 	shape = Global::graphics.getShape(shapeType);
-	material = Global::graphics.getMaterial(materialName);
+	if(materialName.compare("") != 0) material = Global::graphics.getMaterial(materialName);
 }
 
 void DrawComponent::draw()
@@ -27,5 +32,5 @@ void DrawComponent::setShape(std::string shapeType)
 
 void DrawComponent::setMaterial(std::string materialName)
 {
-	material = Global::graphics.getMaterial(materialName);
+	if (materialName.compare("") != 0) material = Global::graphics.getMaterial(materialName);
 }
