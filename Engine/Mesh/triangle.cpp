@@ -131,7 +131,6 @@ std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, 
 			if (isInside(ray->origin - faceNormal + res->t * ray->direction)) {
 				res->contact = ray->origin - faceNormal + res->t * ray->direction;
 				res->center = res->contact + faceNormal;
-				if (res->t < 1 && res->t > 0) std::cout << "interior" << std::endl;
 			}
 			// Check the other 2 intersections
 			else {

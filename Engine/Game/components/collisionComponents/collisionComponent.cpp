@@ -36,8 +36,6 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 	for (int i = 0; i < 3; i++) {
 		auto c = getEnvironmentClosestCollision(transformMatrix, std::make_shared<Ray>(curPos, nextPos), environmentComponents);
 		if (c->t < 0 || c->t > 1) return { collisions, nextPos };
-		//curPos = c->center;
-		//nextPos = curPos;
 		curPos = doNudge(transformMatrix, curPos, c, environmentComponents);
 		auto d = nextPos - curPos;
 		auto dCorrected = d - glm::dot(d, c->normal) * c->normal;
@@ -52,7 +50,6 @@ glm::vec4 CollisionComponent::doNudge(glm::mat4x4& transformMatrix, glm::vec4 cu
 {
 	auto nudge = collision->normal;
 	auto nudgedPos = collision->center + nudge * 0.01f;
-	//std::cout << "collision contact : " << nudgedPos[0] << " " << nudgedPos[1] << " " << nudgedPos[2] << std::endl;
 	for (int i = 0; i < 3; i++) {
 		auto nudgeCollision = getEnvironmentClosestCollision(transformMatrix, std::make_shared<Ray>(curPos, nudgedPos), environmentComponents);
 		if (nudgeCollision->t < 0 || nudgeCollision->t > 1) break;

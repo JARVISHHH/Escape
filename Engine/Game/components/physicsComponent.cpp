@@ -14,15 +14,8 @@ void PhysicsComponent::update(double seconds)
 
 	velocity -= glm::vec3(0, gravity * seconds, 0);
 
-	if (transformComponent->isOnGround() && velocity.y < 0) {
-		velocity.y = 0;
-	}
-
 	auto moveDistance = velocity * (float)seconds;
-	//if (moveDistance.y < 0 && bottomPosition + moveDistance.y < 0) {
-	//	velocity.y = 0;
-	//	moveDistance.y = -bottomPosition;
-	//}
+
 	modelTransform->translate(glm::vec3(0, moveDistance.y, 0));
 }
 

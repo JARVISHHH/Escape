@@ -1,5 +1,6 @@
 #include "collisionResponseComponent.h"
 #include <Engine/Game/components/transformComponent.h>
+#include <Engine/Game/components/physicsComponent.h>
 
 CollisionResponseComponent::CollisionResponseComponent()
 	: GameComponent("collisionResponse")
@@ -39,7 +40,7 @@ void CollisionResponseComponent::resolveCollision(std::shared_ptr<CollisionRespo
 
 void CollisionResponseComponent::resolveCollision(std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
 {
-	if (isStatic) return;
+	if (isStatic || collisions.size() <= 0) return;
 	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
 	transformComponent->getModelTransform()->setPos(curPos);
 }
@@ -52,8 +53,11 @@ void CollisionResponseComponent::responseCollision(std::shared_ptr<CollisionResp
 void CollisionResponseComponent::responseCollision(std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
 {
 	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
-	transformComponent->setOnGround(false);
+	auto physicsComponent = gameObject->getComponent<PhysicsComponent>("physics");
 	for (auto collision : collisions)
-		if (collision->normal.y > 0)
+		if (collision->normal.y > 0) 
+		{
 			transformComponent->setOnGround(true);
+			if (physicsComponent != nullptr) physicsComponent->setVelocity(glm::vec3(physicsComponent->getVelocity().x, 0.0f, physicsComponent->getVelocity().z));
+		}
 }
