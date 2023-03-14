@@ -54,6 +54,7 @@ void CollisionResponseComponent::responseCollision(std::vector<std::shared_ptr<C
 {
 	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
 	auto physicsComponent = gameObject->getComponent<PhysicsComponent>("physics");
+	transformComponent->setOnGround(false);
 	for (auto collision : collisions)
 		if (collision->normal.y > 0) 
 		{
