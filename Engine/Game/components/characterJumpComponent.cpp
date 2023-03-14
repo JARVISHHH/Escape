@@ -19,8 +19,8 @@ void CharacterJumpComponent::update(double seconds)
 	}
 
 	auto modelTransform = transformComponent->getModelTransform();
-	auto bottomPosition = modelTransform->getPos().y - 0.5 * modelTransform->getScale().y;
-	if (Screen::keyPressing[jumpKey] && bottomPosition == 0) {
+	if (Screen::keyPressing[jumpKey]) {
+		transformComponent->setOnGround(false);
 		physicsComponent->applyVelocity(glm::vec3(0, jumpSpeed, 0));
 	}
 }

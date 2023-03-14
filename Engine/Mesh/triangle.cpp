@@ -1,4 +1,5 @@
 #include "triangle.h"
+#include <iostream>
 
 const float epsilon = 0.00001f;
 
@@ -54,7 +55,7 @@ void Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<Collisio
 {
 	glm::vec3 A = glm::vec3(ray->origin), B = glm::vec3(ray->endPoint);
 	for (int i = 0; i < 3; i++) {
-		glm::vec3 C = glm::vec3(this->v[i]->getPosition()), D = glm::vec3(this->v[(i + 1) % 3]->getPosition());
+		glm::vec3 D = glm::vec3(this->v[i]->getPosition()), C = glm::vec3(this->v[(i + 1) % 3]->getPosition());
 		float a = std::pow(glm::length(glm::cross(B - A, D - C)), 2);
 		float b = 2 * glm::dot(glm::cross(B - A, D - C), glm::cross(A - C, D - C));
 		float c = std::pow(glm::length(glm::cross(A - C, D - C)), 2) - std::pow(glm::length(D - C), 2);
@@ -68,7 +69,7 @@ void Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<Collisio
 		float t = -1;
 		if (t1 >= 0) t = t < 0 ? t1 : std::min(t, t1);
 		if (t2 >= 0) t = t < 0 ? t2 : std::min(t, t2);
-		if (t < 0) continue;
+		if (t < 0 || t > 1) continue;
 
 		// Check if in the line segment
 		glm::vec3 P = glm::vec3(ray->origin + t * ray->direction);
@@ -79,6 +80,7 @@ void Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<Collisio
 				float project = glm::dot(glm::vec3(ray->origin + t * ray->direction) - C, glm::normalize(D - C));
 				glm::vec3 contact = C + glm::normalize(D - C) * project;
 				collisionInfo->contact = glm::vec4(contact[0], contact[1], contact[2], 1);
+				collisionInfo->center = glm::vec4(P[0], P[1], P[2], 1);
 			}
 		}
 	}
@@ -104,17 +106,18 @@ void Triangle::intersectVertices(std::shared_ptr<Ray> ray, std::shared_ptr<Colli
 		if (collisionInfo->t < 0 || t < collisionInfo->t) {
 			collisionInfo->t = t;
 			collisionInfo->contact = this->v[i]->getPosition();
+			collisionInfo->center = collisionInfo->contact + ray->origin - (this->v[i]->getPosition() - t * ray->direction);
 		}
 	}
 }
 
-std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, std::shared_ptr<Ray> ray)
+std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, glm::mat4x4 triangleTransformMatrix, std::shared_ptr<Ray> ray)
 {
 	auto res = std::make_shared<CollisionInfo>();
 
 	// Transform the triangle to sphere space
 	for (int i = 0; i < 3; i++)
-		v[i]->setPosition(transformMatrix * v[i]->getPosition());
+		v[i]->setPosition(triangleTransformMatrix * v[i]->getPosition());
 	calculateFaceNormal();
 
 	// Check if the ray has intersection within the plane
@@ -127,12 +130,15 @@ std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, 
 			// Check Sphere-interior intersection
 			if (isInside(ray->origin - faceNormal + res->t * ray->direction)) {
 				res->contact = ray->origin - faceNormal + res->t * ray->direction;
+				res->center = res->contact + faceNormal;
+				if (res->t < 1 && res->t > 0) std::cout << "interior" << std::endl;
 			}
 			// Check the other 2 intersections
 			else {
+				res->t = -1;
+
 				// Check Sphere-edge intersection
 				intersectEdges(ray, res);
-
 				// Check Sphere-Vertex intersection
 				intersectVertices(ray, res);
 			}
@@ -141,12 +147,13 @@ std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, 
 
 	// Transform the triangle back to world space
 	for(int i = 0; i < 3; i++)
-		v[i]->setPosition(glm::inverse(transformMatrix) * v[i]->getPosition());
+		v[i]->setPosition(glm::inverse(triangleTransformMatrix) * v[i]->getPosition());
 	calculateFaceNormal();
 
 	// Fill CollisionInfo
 	res->normal = faceNormal;
 	res->contact = glm::inverse(transformMatrix) * res->contact;
+	res->center = glm::inverse(transformMatrix) * res->center;
 
 	return res;
 }

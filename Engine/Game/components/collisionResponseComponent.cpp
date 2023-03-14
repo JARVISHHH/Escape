@@ -51,5 +51,9 @@ void CollisionResponseComponent::responseCollision(std::shared_ptr<CollisionResp
 
 void CollisionResponseComponent::responseCollision(std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
 {
-
+	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
+	transformComponent->setOnGround(false);
+	for (auto collision : collisions)
+		if (collision->normal.y > 0)
+			transformComponent->setOnGround(true);
 }

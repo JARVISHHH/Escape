@@ -11,17 +11,18 @@ void PhysicsComponent::update(double seconds)
 {
 	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
 	auto modelTransform = transformComponent->getModelTransform();
-	auto bottomPosition = modelTransform->getPos().y - 0.5 * modelTransform->getScale().y;
 
-	if (bottomPosition > 0) {
-		velocity -= glm::vec3(0, gravity * seconds, 0);
+	velocity -= glm::vec3(0, gravity * seconds, 0);
+
+	if (transformComponent->isOnGround() && velocity.y < 0) {
+		velocity.y = 0;
 	}
 
 	auto moveDistance = velocity * (float)seconds;
-	if (moveDistance.y < 0 && bottomPosition + moveDistance.y < 0) {
-		velocity.y = 0;
-		moveDistance.y = -bottomPosition;
-	}
+	//if (moveDistance.y < 0 && bottomPosition + moveDistance.y < 0) {
+	//	velocity.y = 0;
+	//	moveDistance.y = -bottomPosition;
+	//}
 	modelTransform->translate(glm::vec3(0, moveDistance.y, 0));
 }
 

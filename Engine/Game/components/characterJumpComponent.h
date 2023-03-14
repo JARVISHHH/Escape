@@ -12,5 +12,5 @@ public:
 private:
 	int jumpKey = GLFW_KEY_SPACE;
 	float gravity = 10;
-	float jumpSpeed = 5;
+	float jumpSpeed = 1;
 };
