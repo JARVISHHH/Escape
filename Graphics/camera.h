@@ -7,7 +7,7 @@ class Camera
 {
 public:
     Camera(int width = 640, int height = 480,
-    glm::vec3 pos = glm::vec3(0, 0, 0), glm::vec3 look = glm::vec3(0, 0, 1), 
+    glm::vec3 pos = glm::vec3(0, 0, 0), glm::vec3 look = glm::vec3(0, 0, -1), 
     glm::vec3 up = glm::vec3(0, 1, 0), float fov = 1.f, 
     float nearPlane = 0.1f, float farPlane = 100.f);
     ~Camera();

@@ -41,7 +41,7 @@ void GameScreen::init()
 	//std::vector<std::shared_ptr<GameObject>> grounds = createGrounds();
 	std::shared_ptr<GameObject> environment = createEnvironment("level", "grass");
 	std::shared_ptr<GameObject> movingBoard = createBoard(glm::vec3(0, 3, -9), glm::vec3(0, 3, -15));
-	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(0, 0.5, -1));
+	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(0, 3, -20));
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
@@ -245,7 +245,7 @@ std::shared_ptr<GameObject> GameScreen::createGoal(glm::vec3 pos)
 	// Transform Component
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
-	modelTransform->scale(0.75);
+	modelTransform->scale(0.25);
 	modelTransform->translate(pos);
 	transformComponent->updateRay();
 	// Draw component
@@ -278,7 +278,7 @@ void GameScreen::update(double seconds) {
 	//	fallFalling();
 	//	fallingNumber++;
 	//}
-	//checkResult();
+	checkResult();
 	if(gameWorld != nullptr)
 		gameWorld->update(seconds);
 }
@@ -294,7 +294,7 @@ void GameScreen::draw() {
 
 	// Text
 	Global::graphics.bindShader("text");
-	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press B to go back.", glm::ivec2(0, 30), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.3f, 0.1f, glm::vec3(1, 0, 1));
+	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press B to go back. Press R to restart.", glm::ivec2(0, 30), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.3f, 0.1f, glm::vec3(1, 0, 1));
 	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), result, glm::ivec2(50, 300), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 2.5f, 0.1f, glm::vec3(1, 0, 1));
 	//Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Score: " + std::to_string(score), glm::ivec2(0, 440), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
 	//Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Coming in time: " + std::to_string(std::max(0.0f, maxTime - time)) + "s", glm::ivec2(0, 470), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
@@ -320,14 +320,19 @@ void GameScreen::addScore()
 
 void GameScreen::checkResult()
 {
-	if (score >= 3) {
+	if (gameWorld->isFinish() && gameWorld->istWin()) {
 		active = false;
 		result = "You win!";
 		return;
 	}
-	if (time > maxTime) {
-		active = false;
-		result = "You lose!";
-		return;
-	}
+	//if (score >= 3) {
+	//	active = false;
+	//	result = "You win!";
+	//	return;
+	//}
+	//if (time > maxTime) {
+	//	active = false;
+	//	result = "You lose!";
+	//	return;
+	//}
 }

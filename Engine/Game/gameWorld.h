@@ -36,6 +36,8 @@ public:
 	std::shared_ptr<Screen> getScreen();
 
 	void setWin(bool win);
+	bool isFinish() { return finish; }
+	bool istWin() { return win; }
 
 protected:
 	std::shared_ptr<Screen> screen;
