@@ -25,7 +25,6 @@ void CollisionSystem::doCollision()
 	for (int i = 0; i < entityComponentPairs.size(); i++) {
 		entityComponentPairs[i].first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
 		auto collisionRes = entityComponentPairs[i].first->ellipsoidTriangleCollision(environmentComponents);
-		//if(collisionRes.first.size() > 0) std::cout << "collide" << std::endl;
 		notifyEnvironmentCollision(i, collisionRes.first, collisionRes.second);
 	}
 

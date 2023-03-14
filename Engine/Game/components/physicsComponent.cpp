@@ -16,8 +16,6 @@ void PhysicsComponent::update(double seconds)
 
 	auto moveDistance = velocity * (float)seconds;
 
-	std::cout << moveDistance.y << std::endl;
-
 	modelTransform->translate(glm::vec3(0, moveDistance.y, 0));
 }
 

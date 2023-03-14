@@ -36,7 +36,6 @@ void GameScreen::init()
 	std::shared_ptr<GameObject> character = createCharacter();
 	//std::vector<std::shared_ptr<GameObject>> grounds = createGrounds();
 	std::shared_ptr<GameObject> environment = createEnvironment("ceiling", "monokuma");
-	std::shared_ptr<GameObject> environment1 = createEnvironment("ceiling1", "monokuma");
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
@@ -57,7 +56,6 @@ void GameScreen::init()
 	drawSystem->addGameObject(character);
 	//for(auto ground: grounds) drawSystem->addGameObject(ground);
 	drawSystem->addGameObject(environment);
-	drawSystem->addGameObject(environment1);
 	// Physics system
 	physicsSystem->addGameObject(character);
 	// Character controller system
@@ -65,7 +63,6 @@ void GameScreen::init()
 	// Collision system
 	collisionSystem->addGameObject(character);
 	collisionSystem->addEnvironmentObject(environment);
-	collisionSystem->addEnvironmentObject(environment1);
 	// Game world
 	gameWorld->addGameObject(character);
 	//for(auto ground: grounds) gameWorld->addGameObject(ground);
@@ -87,12 +84,12 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	// Transform Component
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
-	modelTransform->scale(1);
+	modelTransform->scale(0.25);
 	modelTransform->translate(glm::vec3(0, 1, 0));
 	transformComponent->updateRay();
 	gameWorld->getCamera()->setPos(modelTransform->getPos());
 	// Draw component
-	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("sphere", "monokuma");
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
 	// Physics component
 	std::shared_ptr<PhysicsComponent> physicsComponent = std::make_shared<PhysicsComponent>();
 	// CharacterMoveComponent
@@ -183,7 +180,7 @@ std::shared_ptr<GameObject> GameScreen::createEnvironment(std::string shape, std
 	}
 	else if (shape.compare("ceiling1") == 0) {
 		modelTransform->scale(0.25);
-		modelTransform->translate(glm::vec3(0, 0, -2));
+		modelTransform->translate(glm::vec3(1, 0, -2));
 	}
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
@@ -241,7 +238,7 @@ void GameScreen::fallFalling()
 	do {
 		x = rand() % 8 - 4, z = rand() % 8 - 4;
 	} while (x == 0 && z == 0);
-	auto fallingObject = createFalling(glm::vec3(x, 6, z));
+	auto fallingObject = createFalling(glm::vec3(x, 10, z));
 	drawSystem->addGameObject(fallingObject);
 	physicsSystem->addGameObject(fallingObject);
 	collisionSystem->addGameObject(fallingObject);

@@ -70,8 +70,9 @@ bool Triangle::intersectInterior(std::shared_ptr<Ray> ray, std::shared_ptr<Colli
 	return false;
 }
 
-void Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo)
+bool Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo)
 {
+	bool closer = false;
 	glm::vec3 A = glm::vec3(ray->origin), B = glm::vec3(ray->endPoint);
 	for (int i = 0; i < 3; i++) {
 		glm::vec3 C = glm::vec3(this->v[i]->getPosition()), D = glm::vec3(this->v[(i + 1) % 3]->getPosition());
@@ -95,6 +96,7 @@ void Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<Collisio
 		auto temp = glm::dot(P - C, D - C);
 		if (temp > 0 && temp < std::pow(glm::length(D - C), 2)) {
 			if (collisionInfo->t < 0 || t < collisionInfo->t) {
+				closer = true;
 				collisionInfo->t = t;
 				float project = glm::dot(P - C, glm::normalize(D - C));
 				glm::vec3 contact = C + glm::normalize(D - C) * project;
@@ -103,10 +105,13 @@ void Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<Collisio
 			}
 		}
 	}
+	
+	return closer;
 }
 
-void Triangle::intersectVertices(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo)
+bool Triangle::intersectVertices(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo)
 {
+	bool closer = false;
 	for (int i = 0; i < 3; i++) {
 		glm::vec3 origin = glm::vec3(this->v[i]->getPosition());
 		float a = std::pow(glm::length(ray->direction), 2);
@@ -123,11 +128,14 @@ void Triangle::intersectVertices(std::shared_ptr<Ray> ray, std::shared_ptr<Colli
 		if (t < 0) continue;
 
 		if (collisionInfo->t < 0 || t < collisionInfo->t) {
+			closer = true;
 			collisionInfo->t = t;
 			collisionInfo->contact = this->v[i]->getPosition();
 			collisionInfo->center = collisionInfo->contact + ray->origin - (this->v[i]->getPosition() - t * ray->direction);
 		}
 	}
+	
+	return closer;
 }
 
 std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, glm::mat4x4 triangleTransformMatrix, std::shared_ptr<Ray> ray)
@@ -139,42 +147,46 @@ std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, 
 		v[i]->setPosition(transformMatrix * triangleTransformMatrix * v[i]->getPosition());
 	calculateFaceNormal();
 
-	if (!intersectInterior(ray, res)) {
-		res->t = -1;
-		// Check Sphere-edge intersection
-		intersectEdges(ray, res);
-		if (res->t >= 0) {
-			for (int i = 0; i < 3; i++)
-				v[i]->setPosition(glm::inverse(triangleTransformMatrix) * glm::inverse(transformMatrix) * v[i]->getPosition());
-			calculateFaceNormal();
+	// Sphere-interior collision
+	if (intersectInterior(ray, res)) {
+		// Transform the triangle back to world space
+		for (int i = 0; i < 3; i++)
+			v[i]->setPosition(glm::inverse(transformMatrix) * v[i]->getPosition());
+		calculateFaceNormal();
 
+		// Fill CollisionInfo
+		res->normal = faceNormal;
+		res->contact = glm::inverse(transformMatrix) * res->contact;
+		res->center = glm::inverse(transformMatrix) * res->center;
+
+		// Transform the triangle back to triangles space
+		for (int i = 0; i < 3; i++)
+			v[i]->setPosition(glm::inverse(triangleTransformMatrix) * v[i]->getPosition());
+		calculateFaceNormal();
+
+		return res;
+	}
+	else 
+	{
+		res->t = -1;
+		// Sphere-edges collision
+		if (intersectEdges(ray, res)) {
 			res->contact = glm::inverse(transformMatrix) * res->contact;
 			res->center = glm::inverse(transformMatrix) * res->center;
 			res->normal = glm::normalize(res->center - res->contact);
-
-			std::cout << "edges " << res->t << std::endl;
-
-			return res;
 		}
-		// Check Sphere-Vertex intersection
-		//intersectVertices(ray, res);
-		//std::cout << "others" << std::endl;
+		// Sphere-vertices collision
+		if (intersectVertices(ray, res)) {
+			res->contact = glm::inverse(transformMatrix) * res->contact;
+			res->center = glm::inverse(transformMatrix) * res->center;
+			res->normal = glm::normalize(res->center - res->contact);
+		}
+
+		// Transform the triangle back to triangles space
+		for (int i = 0; i < 3; i++)
+			v[i]->setPosition(glm::inverse(triangleTransformMatrix) * glm::inverse(transformMatrix) * v[i]->getPosition());
+		calculateFaceNormal();
+
+		return res;
 	}
-
-	// Transform the triangle back to world space
-	for(int i = 0; i < 3; i++)
-		v[i]->setPosition(glm::inverse(transformMatrix) * v[i]->getPosition());
-	calculateFaceNormal();
-
-	// Fill CollisionInfo
-	res->normal = faceNormal;
-	res->contact = glm::inverse(transformMatrix) * res->contact;
-	res->center = glm::inverse(transformMatrix) * res->center;
-
-	// Transform the triangle back to triangles space
-	for (int i = 0; i < 3; i++)
-		v[i]->setPosition(glm::inverse(triangleTransformMatrix) * v[i]->getPosition());
-	calculateFaceNormal();
-
-	return res;
 }
