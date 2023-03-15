@@ -25,6 +25,8 @@ GameScreen::GameScreen()
 
 	addEnvironmentMesh("level", "./Resources/Meshes/level.obj");
 	addEnvironmentMesh("board", "./Resources/Meshes/board.obj");
+	addEnvironmentMesh("square", "./Resources/Meshes/square.obj");
+	addEnvironmentMesh("square1", "./Resources/Meshes/square1.obj");
 
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");
@@ -39,7 +41,9 @@ void GameScreen::init()
 	// Create game object
 	std::shared_ptr<GameObject> character = createCharacter();
 	//std::vector<std::shared_ptr<GameObject>> grounds = createGrounds();
-	std::shared_ptr<GameObject> environment = createEnvironment("level", "grass");
+	//std::shared_ptr<GameObject> environment = createEnvironment("level", "grass");
+	std::shared_ptr<GameObject> environment = createEnvironment("square", "grass");
+	std::shared_ptr<GameObject> environment1 = createEnvironment("square1", "grass");
 	std::shared_ptr<GameObject> movingBoard = createBoard(glm::vec3(0, 3, -9), glm::vec3(0, 3, -15));
 	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(0, 3, -20));
 
@@ -62,6 +66,7 @@ void GameScreen::init()
 	drawSystem->addGameObject(character);
 	//for(auto ground: grounds) drawSystem->addGameObject(ground);
 	drawSystem->addGameObject(environment);
+	drawSystem->addGameObject(environment1);
 	drawSystem->addGameObject(movingBoard);
 	drawSystem->addGameObject(goalObject);
 	// Physics system
@@ -72,12 +77,14 @@ void GameScreen::init()
 	// Collision system
 	collisionSystem->addGameObject(character);
 	collisionSystem->addEnvironmentObject(environment);
+	collisionSystem->addEnvironmentObject(environment1);
 	collisionSystem->addEnvironmentObject(movingBoard);
 	collisionSystem->addGameObject(goalObject);
 	// Game world
 	gameWorld->addGameObject(character);
 	//for(auto ground: grounds) gameWorld->addGameObject(ground);
 	gameWorld->addGameObject(environment);
+	gameWorld->addGameObject(environment1);
 	gameWorld->addGameObject(movingBoard);
 	gameWorld->addGameObject(goalObject);
 
@@ -98,7 +105,7 @@ std::shared_ptr<GameObject> GameScreen::createCharacter()
 	// Transform Component
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
-	modelTransform->scale(0.25);
+	modelTransform->scale(1);
 	modelTransform->translate(glm::vec3(0, 1, 0));
 	transformComponent->updateRay();
 	gameWorld->getCamera()->setPos(modelTransform->getPos());
@@ -196,6 +203,12 @@ std::shared_ptr<GameObject> GameScreen::createEnvironment(std::string shape, std
 	}
 	else if (shape.compare("level") == 0) {
 		modelTransform->scale(0.25);
+	}
+	else if (shape.compare("square") == 0) {
+
+	}
+	else if (shape.compare("square1") == 0) {
+		modelTransform->translate(glm::vec3(-5, -1, 0));
 	}
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
