@@ -22,14 +22,14 @@ void CollisionSystem::doCollision()
 	updateEntityComponentPairs();
 
 	// Update movable game objects
-	//for (int i = 0; i < entityComponentPairs.size(); i++)
-	//	for (int j = 0; j < i; j++) {
-	//		auto collisionComponent1 = entityComponentPairs[i].first;
-	//		auto collisionComponent2 = entityComponentPairs[j].first;
-	//		glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
-	//		if (glm::length(mtv) == 0) continue;  // No collision
-	//		notifyCollision(i, j, mtv);
-	//	}
+	for (int i = 0; i < entityComponentPairs.size(); i++)
+		for (int j = 0; j < i; j++) {
+			auto collisionComponent1 = entityComponentPairs[i].first;
+			auto collisionComponent2 = entityComponentPairs[j].first;
+			glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
+			if (glm::length(mtv) == 0) continue;  // No collision
+			notifyCollision(i, j, mtv);
+		}
 
 	// Check collision between environments
 	for (int i = 0; i < entityComponentPairs.size(); i++) {

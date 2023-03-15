@@ -11,5 +11,5 @@ public:
 
 private:
 	int moveKeys[4] = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D };
-	float speed = 1.5;
+	float speed = 3;
 };
