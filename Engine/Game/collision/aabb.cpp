@@ -1,21 +1,20 @@
 #include "aabb.h"
 #include <Engine/Game/components/transformComponent.h>
 
-AABB::AABB(std::shared_ptr<EnvironmentComponent> environmentComponent)
+AABB::AABB::AABB(std::shared_ptr<EnvironmentComponent> environmentComponent, std::shared_ptr<Triangle> triangle)
 {
+	this->triangle = triangle;
 	this->environmentComponent = environmentComponent;
 	auto triangleTransformMatrix = environmentComponent->getGameObject()->getComponent<TransformComponent>("transform")->getModelTransform()->getModelMatrix();
 
 	maxPoint = triangleTransformMatrix * environmentComponent->getTriangles()[0]->getV()[0]->getPosition();
 	minPoint = maxPoint;
 
-	for (const auto& triangle : environmentComponent->getTriangles()) {
-		for (const auto& vertex : triangle->getV()) {
-			auto vertexPos = triangleTransformMatrix * vertex->getPosition();
-			for (int i = 0; i < 3; i++) {
-				maxPoint[i] = std::max(maxPoint[i], vertexPos[i]);
-				minPoint[i] = std::min(minPoint[i], vertexPos[i]);
-			}
+	for (const auto& vertex : triangle->getV()) {
+		auto vertexPos = triangleTransformMatrix * vertex->getPosition();
+		for (int i = 0; i < 3; i++) {
+			maxPoint[i] = std::max(maxPoint[i], vertexPos[i]);
+			minPoint[i] = std::min(minPoint[i], vertexPos[i]);
 		}
 	}
 

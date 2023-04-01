@@ -21,7 +21,7 @@ public:
         return aabb1->minPoint.z < aabb2->minPoint.z;
     }
 
-    AABB(std::shared_ptr<EnvironmentComponent> environmentComponent);
+    AABB(std::shared_ptr<EnvironmentComponent> environmentComponent, std::shared_ptr<Triangle> triangle);
     AABB(glm::vec4 maxPoint, glm::vec4 minPoint);
 
     glm::vec4 getCenter() {return center;}
@@ -30,6 +30,7 @@ public:
 
 private:
     std::shared_ptr<EnvironmentComponent> environmentComponent;
+    std::shared_ptr<Triangle> triangle;
 
     glm::vec4 center;
     glm::vec4 maxPoint;

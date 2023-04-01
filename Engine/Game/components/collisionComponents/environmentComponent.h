@@ -14,9 +14,9 @@ public:
 	void buildBoundingBox();
 	std::shared_ptr<CollisionInfo> getClosestCollision(glm::mat4x4 transformMatrix, std::shared_ptr<Ray> ray);
 	const std::vector<std::shared_ptr<Triangle>>& getTriangles();
-	std::shared_ptr<AABB> getBoundingBox() { return boundingBox; }
+	std::vector<std::shared_ptr<AABB>>& getBoundingBox() { return aabbs; }
 
 private:
 	std::vector<std::shared_ptr<Triangle>> triangles;
-	std::shared_ptr<AABB> boundingBox;
+	std::vector<std::shared_ptr<AABB>> aabbs;
 };

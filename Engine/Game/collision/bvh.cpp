@@ -4,10 +4,13 @@
 
 BVH::BVH(std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents)
 {
-	aabbs.clear();
-	aabbs.resize(environmentComponents.size());
+	int aabbsSize = 0;
 	for (const auto& environmentComponent : environmentComponents)
-		aabbs.push_back(environmentComponent->getBoundingBox());
+		aabbsSize += environmentComponent->getBoundingBox().size();
+	aabbs.clear();
+	aabbs.reserve(aabbsSize);
+	for (const auto& environmentComponent : environmentComponents)
+		aabbs.insert(aabbs.end(), environmentComponent->getBoundingBox().begin(), environmentComponent->getBoundingBox().end());
 }
 
 std::shared_ptr<Node> BVH::buildRoot()
