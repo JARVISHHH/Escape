@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Game/gameSystem.h"
+#include <Engine/Game/collision/bvh.h>
 
 class CollisionComponent;
 class CollisionResponseComponent;
@@ -20,8 +21,11 @@ public:
 
 	void updateEntityComponentPairs();
 
+	void buildBVH();
+
 protected:
 	typedef std::pair<std::shared_ptr<CollisionComponent>, std::shared_ptr<CollisionResponseComponent>> entityComponentPair;
 	std::vector<entityComponentPair> entityComponentPairs;
 	std::vector<std::shared_ptr<EnvironmentComponent>> environmentComponents;
+	std::shared_ptr<BVH> bvh;
 };

@@ -61,7 +61,7 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 glm::vec4 CollisionComponent::doNudge(glm::mat4x4& transformMatrix, glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents)
 {
 	auto nudge = collision->normal;
-	auto nudgedPos = collision->center + nudge * 0.005f;
+	auto nudgedPos = collision->center + nudge * 0.001f;
 	for (int i = 0; i < 3; i++) {
 		//std::cout << "nudge check" << std::endl;
 		auto nudgeCollision = getEnvironmentClosestCollision(transformMatrix, std::make_shared<Ray>(curPos, nudgedPos), environmentComponents);
@@ -73,7 +73,7 @@ glm::vec4 CollisionComponent::doNudge(glm::mat4x4& transformMatrix, glm::vec4 cu
 		//std::cout << "nudge" << std::endl;
 		if (glm::length(nudgeCollision->normal - nudge) < EPSILON || glm::length(nudgeCollision->normal + nudge) < EPSILON) nudge = -nudgeCollision->normal;
 		else nudge = nudgeCollision->normal;
-		nudgedPos = nudgeCollision->center + nudge * 0.005f;
+		nudgedPos = nudgeCollision->center + nudge * 0.001f;
 	}
 
 	return curPos;

@@ -71,6 +71,7 @@ void CollisionSystem::addEnvironmentObject(std::shared_ptr<GameObject> gameEnvir
 {
 	auto environmentComponent = gameEnvironment->getComponent<EnvironmentComponent>("environment");
 	if (environmentComponent == nullptr) return;
+	environmentComponent->buildBoundingBox();
 	environmentComponents.push_back(environmentComponent);
 }
 
@@ -79,4 +80,10 @@ void CollisionSystem::updateEntityComponentPairs()
 	for (int i = entityComponentPairs.size() - 1; i >= 0; i--)
 		if (!entityComponentPairs[i].first->getGameObject()->getActiveStatus())
 			entityComponentPairs.erase(entityComponentPairs.begin() + i);
+}
+
+void CollisionSystem::buildBVH()
+{
+	bvh = std::make_shared<BVH>(environmentComponents);
+	bvh->buildTree();
 }

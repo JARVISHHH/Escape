@@ -105,7 +105,6 @@ add_executable(${PROJECT_NAME}
     Engine/Game/gameSystem.cpp
     Engine/Game/gameWorld.h
     Engine/Game/gameWorld.cpp
-    
 
     Engine/Game/gameSystems/drawSystem.h
     Engine/Game/gameSystems/drawSystem.cpp
@@ -136,6 +135,15 @@ add_executable(${PROJECT_NAME}
     Engine/Game/components/collisionComponents/cylinderComponent.cpp
     Engine/Game/components/collisionComponents/environmentComponent.h
     Engine/Game/components/collisionComponents/environmentComponent.cpp
+
+    Engine/Game/collision/ray.h
+    Engine/Game/collision/collisioninfo.h
+    Engine/Game/collision/aabb.h
+    Engine/Game/collision/aabb.cpp
+    Engine/Game/collision/bvh.h
+    Engine/Game/collision/bvh.cpp
+    Engine/Game/collision/node.h
+    Engine/Game/collision/node.cpp
 
     Engine/Mesh/vertex.h
     Engine/Mesh/vertex.cpp

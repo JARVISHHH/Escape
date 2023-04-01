@@ -13,6 +13,8 @@ public:
 	Triangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3);
 	Triangle(std::shared_ptr<Vertex>* v);
 
+	const std::vector<std::shared_ptr<Vertex>> getV() { return v; }
+
 	glm::vec4 calculateFaceNormal();
 	// All these positions and rays should be in sphere space
 	bool isInside(glm::vec4 pos);

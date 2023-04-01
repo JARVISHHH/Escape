@@ -6,11 +6,17 @@
 
 #include "Engine/Game/gameComponent.h"
 
-class EnvironmentComponent : public GameComponent {
+class AABB;
+
+class EnvironmentComponent : public GameComponent, public std::enable_shared_from_this<EnvironmentComponent> {
 public:
 	EnvironmentComponent(std::vector<std::shared_ptr<Triangle>> triangles);
+	void buildBoundingBox();
 	std::shared_ptr<CollisionInfo> getClosestCollision(glm::mat4x4 transformMatrix, std::shared_ptr<Ray> ray);
+	const std::vector<std::shared_ptr<Triangle>>& getTriangles();
+	std::shared_ptr<AABB> getBoundingBox() { return boundingBox; }
 
 private:
 	std::vector<std::shared_ptr<Triangle>> triangles;
+	std::shared_ptr<AABB> boundingBox;
 };

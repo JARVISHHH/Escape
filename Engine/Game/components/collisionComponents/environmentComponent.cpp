@@ -1,10 +1,15 @@
 #include "environmentComponent.h"
 #include <Engine/Game/components/transformComponent.h>
+#include <Engine/Game/collision/aabb.h>
 
 EnvironmentComponent::EnvironmentComponent(std::vector<std::shared_ptr<Triangle>> triangles)
 	:GameComponent("environment"), triangles(triangles)
 {
+}
 
+void EnvironmentComponent::buildBoundingBox()
+{
+	boundingBox = std::make_shared<AABB>(shared_from_this());
 }
 
 std::shared_ptr<CollisionInfo> EnvironmentComponent::getClosestCollision(glm::mat4x4 transformMatrix, std::shared_ptr<Ray> ray)
@@ -18,4 +23,9 @@ std::shared_ptr<CollisionInfo> EnvironmentComponent::getClosestCollision(glm::ma
 	}
 
 	return res;
+}
+
+const std::vector<std::shared_ptr<Triangle>>& EnvironmentComponent::getTriangles()
+{
+	return triangles;
 }
