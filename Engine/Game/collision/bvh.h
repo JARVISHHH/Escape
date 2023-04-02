@@ -12,7 +12,7 @@ public:
 	void buildTree();
 
 	// Collide
-	std::shared_ptr<CollisionInfo> getClosestCollision(glm::mat4x4 transformMatrix, std::shared_ptr<Ray> ray, std::shared_ptr<Ray> sphereSpaceRay);
+	std::shared_ptr<CollisionInfo> getClosestCollision(glm::mat4x4 transformMatrix, std::shared_ptr<AABB> movingAABB, std::shared_ptr<Ray> sphereSpaceRay);
 
 private:
 	std::shared_ptr<Node> root;

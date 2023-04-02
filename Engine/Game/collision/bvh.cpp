@@ -32,7 +32,7 @@ std::shared_ptr<Node> BVH::buildRoot()
 
 void BVH::splitNode(std::shared_ptr<Node> parent, std::vector<std::shared_ptr<AABB>> curAABBs)
 {
-	if (curAABBs.size() < 3) {
+	if (curAABBs.size() <= 24) {
 		parent->aabbs = curAABBs;
 		return;
 	}
@@ -47,7 +47,7 @@ void BVH::splitNode(std::shared_ptr<Node> parent, std::vector<std::shared_ptr<AA
 	glm::vec4 maxPoint, minPoint;
 
 	// Build left node
-	maxPoint = leftAABBs[0]->getMaxPoint(), minPoint = rightAABBs[0]->getMinPoint();
+	maxPoint = leftAABBs[0]->getMaxPoint(), minPoint = leftAABBs[0]->getMinPoint();
 	for (const auto& aabb : leftAABBs) {
 		for (int i = 0; i < 3; i++) {
 			maxPoint[i] = std::max(maxPoint[i], aabb->getMaxPoint()[i]);
@@ -80,7 +80,7 @@ void BVH::buildTree()
 	std::cout << "Build BVH" << std::endl;
 }
 
-std::shared_ptr<CollisionInfo> BVH::getClosestCollision(glm::mat4x4 transformMatrix, std::shared_ptr<Ray> ray, std::shared_ptr<Ray> sphereSpaceRay)
+std::shared_ptr<CollisionInfo> BVH::getClosestCollision(glm::mat4x4 transformMatrix, std::shared_ptr<AABB> movingAABB, std::shared_ptr<Ray> sphereSpaceRay)
 {
-	return root->getCollision(transformMatrix, ray, sphereSpaceRay);
+	return root->getCollision(transformMatrix, movingAABB, sphereSpaceRay);
 }

@@ -10,6 +10,7 @@ public:
 	glm::vec3 checkCollision(std::shared_ptr<CylinderComponent> component) override;
 
 	glm::mat4x4 getTransformMatrix() override;
+	std::shared_ptr<AABB> getAABB(glm::vec4 nextPos) override;
 
 
 protected:

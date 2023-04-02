@@ -1,7 +1,7 @@
 #include "collisionComponent.h"
 #include <Engine/Game/components/transformComponent.h>
 
-const float EPSILON = 0.0005;
+const float EPSILON = 0.0000005;
 
 CollisionComponent::CollisionComponent()
 	:GameComponent("collision")
@@ -26,8 +26,11 @@ std::shared_ptr<CollisionInfo> CollisionComponent::getEnvironmentClosestCollisio
 std::shared_ptr<CollisionInfo> CollisionComponent::getEnvironmentClosestCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray, std::shared_ptr<BVH> bvh)
 {
 	auto res = std::make_shared<CollisionInfo>();
+
+	auto movingAABB = getAABB(ray->endPoint);
 	auto sphereSpaceRay = std::make_shared<Ray>(transformMatrix * ray->origin, transformMatrix * ray->endPoint);
-	auto thisCollision = bvh->getClosestCollision(transformMatrix, ray, sphereSpaceRay);
+	
+	auto thisCollision = bvh->getClosestCollision(transformMatrix, movingAABB, sphereSpaceRay);
 	if (thisCollision != nullptr && thisCollision->t >= 0 && (thisCollision->t < res->t || res->t < 0)) res = thisCollision;
 
 	return res;
