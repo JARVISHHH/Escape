@@ -79,3 +79,8 @@ void BVH::buildTree()
 	splitNode(root, aabbs);
 	std::cout << "Build BVH" << std::endl;
 }
+
+std::shared_ptr<CollisionInfo> BVH::getClosestCollision(glm::mat4x4 transformMatrix, std::shared_ptr<Ray> ray, std::shared_ptr<Ray> sphereSpaceRay)
+{
+	return root->getCollision(transformMatrix, ray, sphereSpaceRay);
+}

@@ -12,7 +12,7 @@ class EnvironmentComponent : public GameComponent, public std::enable_shared_fro
 public:
 	EnvironmentComponent(std::vector<std::shared_ptr<Triangle>> triangles);
 	void buildBoundingBox();
-	std::shared_ptr<CollisionInfo> getClosestCollision(glm::mat4x4 transformMatrix, std::shared_ptr<Ray> ray);
+	std::shared_ptr<CollisionInfo> getClosestCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray);
 	const std::vector<std::shared_ptr<Triangle>>& getTriangles();
 	std::vector<std::shared_ptr<AABB>>& getBoundingBox() { return aabbs; }
 

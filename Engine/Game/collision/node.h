@@ -14,5 +14,5 @@ public:
 	std::shared_ptr<Node> right = nullptr;
 	std::vector<std::shared_ptr<AABB>> aabbs;
 
-	void checkIntersect();
+	std::shared_ptr<CollisionInfo> getCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray, std::shared_ptr<Ray> sphereSpaceRay);
 };

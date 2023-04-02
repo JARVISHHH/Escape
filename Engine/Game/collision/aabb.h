@@ -28,6 +28,9 @@ public:
     glm::vec4 getMaxPoint() { return maxPoint; }
     glm::vec4 getMinPoint() { return minPoint; }
 
+    float checkCollision(std::shared_ptr<Ray> ray);
+    std::shared_ptr<CollisionInfo> getCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray);
+
 private:
     std::shared_ptr<EnvironmentComponent> environmentComponent;
     std::shared_ptr<Triangle> triangle;

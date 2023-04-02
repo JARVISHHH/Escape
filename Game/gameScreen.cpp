@@ -80,6 +80,7 @@ void GameScreen::init()
 	//collisionSystem->addEnvironmentObject(environment1);
 	collisionSystem->addEnvironmentObject(movingBoard);
 	collisionSystem->addGameObject(goalObject);
+	collisionSystem->buildBVH();
 	// Game world
 	gameWorld->addGameObject(character);
 	//for(auto ground: grounds) gameWorld->addGameObject(ground);
