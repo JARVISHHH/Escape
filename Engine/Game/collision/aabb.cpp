@@ -1,6 +1,10 @@
 #include "aabb.h"
 #include <Engine/Game/components/transformComponent.h>
 
+AABB::AABB()
+{
+}
+
 AABB::AABB::AABB(std::shared_ptr<EnvironmentComponent> environmentComponent, std::shared_ptr<Triangle> triangle)
 {
 	this->triangle = triangle;

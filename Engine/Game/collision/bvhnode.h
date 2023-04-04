@@ -4,14 +4,14 @@
 
 #include "aabb.h"
 
-class Node {
+class BVHNode {
 public:
-	Node() {};
-	Node(std::shared_ptr<AABB> aabb) { boundingBox = aabb; }
+	BVHNode() {};
+	BVHNode(std::shared_ptr<AABB> aabb) { boundingBox = aabb; }
 
 	std::shared_ptr<AABB> boundingBox;
-	std::shared_ptr<Node> left = nullptr;
-	std::shared_ptr<Node> right = nullptr;
+	std::shared_ptr<BVHNode> left = nullptr;
+	std::shared_ptr<BVHNode> right = nullptr;
 	std::vector<std::shared_ptr<AABB>> aabbs;
 
 	std::shared_ptr<CollisionInfo> getCollision(glm::mat4x4& transformMatrix, std::shared_ptr<AABB> movingAABB, std::shared_ptr<Ray> sphereSpaceRay);

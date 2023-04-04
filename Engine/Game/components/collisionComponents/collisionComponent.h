@@ -13,6 +13,7 @@ public:
 	virtual glm::vec3 checkCollision(std::shared_ptr<CollisionComponent> component) = 0;
 	virtual glm::vec3 checkCollision(std::shared_ptr<CylinderComponent> component) = 0;
 	virtual glm::mat4x4 getTransformMatrix() = 0;
+	virtual std::shared_ptr<AABB> getAABB() = 0;
 	virtual std::shared_ptr<AABB> getAABB(glm::vec4 nextPos) = 0;
 
 	std::shared_ptr<CollisionInfo> getEnvironmentClosestCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents);

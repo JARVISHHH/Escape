@@ -13,11 +13,11 @@ BVH::BVH(std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponen
 		aabbs.insert(aabbs.end(), environmentComponent->getBoundingBox().begin(), environmentComponent->getBoundingBox().end());
 }
 
-std::shared_ptr<Node> BVH::buildRoot()
+std::shared_ptr<BVHNode> BVH::buildRoot()
 {
 	if (aabbs.size() == 0) return nullptr;
 
-	std::shared_ptr<Node> root = std::make_shared<Node>();
+	std::shared_ptr<BVHNode> root = std::make_shared<BVHNode>();
 	glm::vec4 maxPoint = aabbs[0]->getMaxPoint(), minPoint = aabbs[0]->getMinPoint();
 	for (const auto& aabb : aabbs) {
 		for (int i = 0; i < 3; i++) {
@@ -30,7 +30,7 @@ std::shared_ptr<Node> BVH::buildRoot()
 	return root;
 }
 
-void BVH::splitNode(std::shared_ptr<Node> parent, std::vector<std::shared_ptr<AABB>> curAABBs)
+void BVH::splitNode(std::shared_ptr<BVHNode> parent, std::vector<std::shared_ptr<AABB>> curAABBs)
 {
 	if (curAABBs.size() <= 24) {
 		parent->aabbs = curAABBs;
@@ -66,7 +66,7 @@ void BVH::splitNode(std::shared_ptr<Node> parent, std::vector<std::shared_ptr<AA
 	}
 	std::shared_ptr<AABB> rightBoundingBox = std::make_shared<AABB>(maxPoint, minPoint);
 
-	auto left = std::make_shared<Node>(leftBoundingBox), right = std::make_shared<Node>(rightBoundingBox);
+	auto left = std::make_shared<BVHNode>(leftBoundingBox), right = std::make_shared<BVHNode>(rightBoundingBox);
 	splitNode(left, leftAABBs);
 	splitNode(right, rightAABBs);
 	parent->left = left;

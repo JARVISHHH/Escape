@@ -46,6 +46,36 @@ glm::mat4x4 CylinderComponent::getTransformMatrix()
 	return transformMatrix;
 }
 
+std::shared_ptr<AABB> CylinderComponent::getAABB()
+{
+	std::vector<glm::vec4> points(8);
+	points[0] = { 0.5, 0.5, 0.5, 1 };
+	points[1] = { -0.5, 0.5, 0.5, 1 };
+	points[2] = { -0.5, 0.5, -0.5, 1 };
+	points[3] = { 0.5, 0.5, -0.5, 1 };
+	points[4] = { 0.5, -0.5, 0.5, 1 };
+	points[5] = { -0.5, -0.5, 0.5, 1 };
+	points[6] = { -0.5, -0.5, -0.5, 1 };
+	points[7] = { 0.5, -0.5, -0.5, 1 };
+
+	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
+	auto curPos3 = transformComponent->getModelTransform()->getPos();
+	auto curPos = glm::vec4(curPos3[0], curPos3[1], curPos3[2], 1);
+	for (int i = 0; i < 8; i++) {
+		points[i] = transformComponent->getModelTransform()->getModelMatrix() * points[i];
+	}
+
+	auto maxPoint = points[0], minPoint = points[0];
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 3; j++) {
+			maxPoint[j] = std::max(maxPoint[j], points[i][j]);
+			minPoint[j] = std::min(minPoint[j], points[i][j]);
+		}
+	}
+
+	return std::make_shared<AABB>(maxPoint, minPoint);
+}
+
 std::shared_ptr<AABB> CylinderComponent::getAABB(glm::vec4 nextPos)
 {
 	std::vector<glm::vec4> points(8);

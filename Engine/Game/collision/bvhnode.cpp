@@ -1,6 +1,6 @@
-#include "node.h"
+#include "bvhnode.h"
 
-std::shared_ptr<CollisionInfo> Node::getCollision(glm::mat4x4& transformMatrix, std::shared_ptr<AABB> movingAABB, std::shared_ptr<Ray> sphereSpaceRay)
+std::shared_ptr<CollisionInfo> BVHNode::getCollision(glm::mat4x4& transformMatrix, std::shared_ptr<AABB> movingAABB, std::shared_ptr<Ray> sphereSpaceRay)
 {
 	if (!boundingBox->checkCollision(movingAABB)) return nullptr;
 	auto res = std::make_shared<CollisionInfo>();

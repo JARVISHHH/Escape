@@ -41,12 +41,12 @@ void GameScreen::init()
 	// Create game object
 	std::shared_ptr<GameObject> character = createCharacter();
 	//std::vector<std::shared_ptr<GameObject>> grounds = createGrounds();
-	//std::shared_ptr<GameObject> environment = createEnvironment("level", "grass");
-	std::shared_ptr<GameObject> environment = createEnvironment("bvh_test", "grass");
+	std::shared_ptr<GameObject> environment = createEnvironment("level", "grass");
+	//std::shared_ptr<GameObject> environment = createEnvironment("bvh_test", "grass");
 	//std::shared_ptr<GameObject> environment = createEnvironment("square", "grass");
 	//std::shared_ptr<GameObject> environment1 = createEnvironment("square1", "grass");
 	//std::shared_ptr<GameObject> movingBoard = createBoard(glm::vec3(0, 3, -9), glm::vec3(0, 3, -15));
-	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(0, 3, -20));
+	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(0, 0.5, 2));
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
@@ -89,6 +89,18 @@ void GameScreen::init()
 	//gameWorld->addGameObject(environment1);
 	//gameWorld->addGameObject(movingBoard);
 	gameWorld->addGameObject(goalObject);
+
+	// Hierarchical grid test
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			for (int k = 0; k < 3; k++) {
+				std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(-i, -k * 0.5 - 0.5, -j));
+				drawSystem->addGameObject(goalObject);
+				collisionSystem->addGameObject(goalObject);
+				gameWorld->addGameObject(goalObject);
+			}
+		}
+	}
 
 	score = 0;
 	result = "";
@@ -340,7 +352,7 @@ void GameScreen::addScore()
 void GameScreen::checkResult()
 {
 	if (gameWorld->isFinish() && gameWorld->istWin()) {
-		active = false;
+		//active = false;
 		result = "You win!";
 		return;
 	}

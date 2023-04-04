@@ -142,8 +142,12 @@ add_executable(${PROJECT_NAME}
     Engine/Game/collision/aabb.cpp
     Engine/Game/collision/bvh.h
     Engine/Game/collision/bvh.cpp
-    Engine/Game/collision/node.h
-    Engine/Game/collision/node.cpp
+    Engine/Game/collision/bvhnode.h
+    Engine/Game/collision/bvhnode.cpp
+    Engine/Game/collision/hierarchicalGrid.h
+    Engine/Game/collision/hierarchicalGrid.cpp
+    Engine/Game/collision/gridnode.h
+    Engine/Game/collision/gridnode.cpp
 
     Engine/Mesh/vertex.h
     Engine/Mesh/vertex.cpp

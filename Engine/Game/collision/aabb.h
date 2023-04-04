@@ -21,6 +21,7 @@ public:
         return aabb1->minPoint.z < aabb2->minPoint.z;
     }
 
+    AABB();
     AABB(std::shared_ptr<EnvironmentComponent> environmentComponent, std::shared_ptr<Triangle> triangle);
     AABB(glm::vec4 maxPoint, glm::vec4 minPoint);
 
@@ -28,8 +29,8 @@ public:
     glm::vec4 getMaxPoint() { return maxPoint; }
     glm::vec4 getMinPoint() { return minPoint; }
 
-    void setMaxPoint(glm::vec4 maxPoint) { this->maxPoint = maxPoint; }
-    void setMinPoint(glm::vec4 minPoint) { this->minPoint = minPoint; }
+    void setMaxPoint(glm::vec4 maxPoint) { this->maxPoint = maxPoint; this->center = (this->maxPoint + this->minPoint) / 2.0f; }
+    void setMinPoint(glm::vec4 minPoint) { this->minPoint = minPoint; this->center = (this->maxPoint + this->minPoint) / 2.0f;}
 
     bool checkCollision(std::shared_ptr<AABB> movingAABB);
     std::shared_ptr<CollisionInfo> getCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray);

@@ -7,7 +7,7 @@
 #include <Engine/Game/components/transformComponent.h>
 
 CollisionSystem::CollisionSystem()
-	: GameSystem("collision")
+	: GameSystem("collision"), hierarchicalGrid(std::make_shared<HierarchicalGrid>(4))
 {
 
 }
@@ -21,22 +21,36 @@ void CollisionSystem::doCollision()
 {
 	updateEntityComponentPairs();
 
-	// Update movable game objects
-	for (int i = 0; i < entityComponentPairs.size(); i++)
-		for (int j = 0; j < i; j++) {
-			auto collisionComponent1 = entityComponentPairs[i].first;
-			auto collisionComponent2 = entityComponentPairs[j].first;
-			glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
-			if (glm::length(mtv) == 0) continue;  // No collision
-			notifyCollision(i, j, mtv);
-		}
+	bool doAccelerate = true;
 
 	// Check collision between environments
 	for (int i = 0; i < entityComponentPairs.size(); i++) {
 		entityComponentPairs[i].first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
+		std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> collisionRes;
+		if(!doAccelerate) collisionRes = entityComponentPairs[i].first->ellipsoidTriangleCollision(environmentComponents);
+		else collisionRes = entityComponentPairs[i].first->ellipsoidTriangleCollision(bvh);
 		//auto collisionRes = entityComponentPairs[i].first->ellipsoidTriangleCollision(environmentComponents);
-		auto collisionRes = entityComponentPairs[i].first->ellipsoidTriangleCollision(bvh);
+		//auto collisionRes = entityComponentPairs[i].first->ellipsoidTriangleCollision(bvh);
 		notifyEnvironmentCollision(i, collisionRes.first, collisionRes.second);
+	}
+
+	// Update movable game objects
+	if (!doAccelerate) {
+		int sum = 0;
+		for (int i = 0; i < entityComponentPairs.size(); i++)
+			for (int j = 0; j < i; j++) {
+				sum++;
+				auto collisionComponent1 = entityComponentPairs[i].first;
+				auto collisionComponent2 = entityComponentPairs[j].first;
+				glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
+				if (glm::length(mtv) == 0) continue;  // No collision
+				notifyCollision(i, j, mtv);
+			}
+		std::cout << "collision: " << sum << std::endl;
+	}
+	else {
+		hierarchicalGrid->build(entityComponentPairs);
+		hierarchicalGrid->collide();
 	}
 
 	for (int i = 0; i < entityComponentPairs.size(); i++) {

@@ -2,6 +2,7 @@
 
 #include "Engine/Game/gameSystem.h"
 #include <Engine/Game/collision/bvh.h>
+#include <Engine/Game/collision/hierarchicalGrid.h>
 
 class CollisionComponent;
 class CollisionResponseComponent;
@@ -28,4 +29,5 @@ protected:
 	std::vector<entityComponentPair> entityComponentPairs;
 	std::vector<std::shared_ptr<EnvironmentComponent>> environmentComponents;
 	std::shared_ptr<BVH> bvh;
+	std::shared_ptr<HierarchicalGrid> hierarchicalGrid;
 };
