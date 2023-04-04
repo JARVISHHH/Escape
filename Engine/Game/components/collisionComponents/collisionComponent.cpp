@@ -27,7 +27,7 @@ std::shared_ptr<CollisionInfo> CollisionComponent::getEnvironmentClosestCollisio
 {
 	auto res = std::make_shared<CollisionInfo>();
 
-	auto movingAABB = getAABB(ray->endPoint);
+	auto movingAABB = getAABB(ray);
 	auto sphereSpaceRay = std::make_shared<Ray>(transformMatrix * ray->origin, transformMatrix * ray->endPoint);
 	
 	auto thisCollision = bvh->getClosestCollision(transformMatrix, movingAABB, sphereSpaceRay);

@@ -46,7 +46,7 @@ void CollisionSystem::doCollision()
 				if (glm::length(mtv) == 0) continue;  // No collision
 				notifyCollision(i, j, mtv);
 			}
-		std::cout << "collision: " << sum << std::endl;
+		//std::cout << "collision: " << sum << std::endl;
 	}
 	else {
 		hierarchicalGrid->build(entityComponentPairs);

@@ -76,9 +76,10 @@ std::shared_ptr<AABB> CylinderComponent::getAABB()
 	return std::make_shared<AABB>(maxPoint, minPoint);
 }
 
-std::shared_ptr<AABB> CylinderComponent::getAABB(glm::vec4 nextPos)
+std::shared_ptr<AABB> CylinderComponent::getAABB(std::shared_ptr<Ray> ray)
 {
 	std::vector<glm::vec4> points(8);
+	std::vector<glm::vec4> worldPoints(16);
 	points[0] = { 0.5, 0.5, 0.5, 1 };
 	points[1] = { -0.5, 0.5, 0.5, 1 };
 	points[2] = { -0.5, 0.5, -0.5, 1 };
@@ -92,14 +93,17 @@ std::shared_ptr<AABB> CylinderComponent::getAABB(glm::vec4 nextPos)
 	auto curPos3 = transformComponent->getModelTransform()->getPos();
 	auto curPos = glm::vec4(curPos3[0], curPos3[1], curPos3[2], 1);
 	for (int i = 0; i < 8; i++) {
-		points[i] = transformComponent->getModelTransform()->getModelMatrix() * points[i] + nextPos - curPos;
+		worldPoints[i] = transformComponent->getModelTransform()->getModelMatrix() * points[i] + ray->endPoint - curPos;
+	}
+	for (int i = 8; i < 16; i++) {
+		worldPoints[i] = transformComponent->getModelTransform()->getModelMatrix() * points[i - 8] + ray->origin - curPos;
 	}
 
-	auto maxPoint = points[0], minPoint = points[0];
-	for (int i = 0; i < 8; i++) {
+	auto maxPoint = worldPoints[0], minPoint = worldPoints[0];
+	for (int i = 0; i < 16; i++) {
 		for (int j = 0; j < 3; j++) {
-			maxPoint[j] = std::max(maxPoint[j], points[i][j]);
-			minPoint[j] = std::min(minPoint[j], points[i][j]);
+			maxPoint[j] = std::max(maxPoint[j], worldPoints[i][j]);
+			minPoint[j] = std::min(minPoint[j], worldPoints[i][j]);
 		}
 	}
 

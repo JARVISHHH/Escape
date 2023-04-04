@@ -107,7 +107,7 @@ void HierarchicalGrid::collide()
 	for (int i = 1; i < nodesNum; i++) {
 		collide(nodes[i], nodes[i]);
 	}
-	std::cout << "collision: " << sum << std::endl;
+	//std::cout << "collision: " << sum << std::endl;
 }
 
 void HierarchicalGrid::collide(std::shared_ptr<GridNode> node, std::shared_ptr<GridNode> nextNode)
