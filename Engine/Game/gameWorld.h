@@ -8,6 +8,7 @@
 
 class GameSystem;
 class GameObject;
+class AABB;
 
 class GameWorld : public std::enable_shared_from_this<GameWorld>
 {
@@ -35,7 +36,10 @@ public:
 
 	std::shared_ptr<Screen> getScreen();
 
-	void setWin(bool win);
+	std::shared_ptr<AABB> getAABB();
+
+	void setWin(bool win) { this->win = win; }
+	void setFinish(bool finish) { this->finish = finish; }
 	bool isFinish() { return finish; }
 	bool istWin() { return win; }
 
@@ -45,6 +49,8 @@ protected:
 	std::unordered_map<std::string, std::vector<std::shared_ptr<GameObject>>> gameObjects;
 
 	std::shared_ptr<Camera> camera;
+
+	std::shared_ptr<AABB> aabb = std::make_shared<AABB>(glm::vec4(20, 10, 20, 1), glm::vec4(-20, -1, -20, 1));
 
 	bool finish = false;
 	bool win = false;

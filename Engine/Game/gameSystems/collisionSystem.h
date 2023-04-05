@@ -10,7 +10,7 @@ class EnvironmentComponent;
 
 class CollisionSystem : public GameSystem {
 public:
-	CollisionSystem();
+	CollisionSystem(int level, std::shared_ptr<GameWorld> gameWorld);
 
 	void update(double seconds);
 	void doCollision();
@@ -23,10 +23,11 @@ public:
 	void updateEntityComponentPairs();
 
 	void buildBVH();
+	void buildHG();
 
 protected:
 	typedef std::pair<std::shared_ptr<CollisionComponent>, std::shared_ptr<CollisionResponseComponent>> entityComponentPair;
-	std::vector<entityComponentPair> entityComponentPairs;
+	std::vector<std::shared_ptr<entityComponentPair>> entityComponentPairs;
 	std::vector<std::shared_ptr<EnvironmentComponent>> environmentComponents;
 	std::shared_ptr<BVH> bvh;
 	std::shared_ptr<HierarchicalGrid> hierarchicalGrid;

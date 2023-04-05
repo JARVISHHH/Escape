@@ -7,6 +7,7 @@
 #include <Engine/Game/gameSystems/cameraSystem.h>
 #include <Engine/Game/gameSystems/collisionSystem.h>
 #include <Engine/Game/gameSystems/physicsSystem.h>
+#include <Engine/Game/collision/hierarchicalGrid.h>
 
 
 GameWorld::GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> screen)
@@ -99,8 +100,7 @@ std::shared_ptr<Screen> GameWorld::getScreen()
 	return screen;
 }
 
-void GameWorld::setWin(bool win)
+std::shared_ptr<AABB> GameWorld::getAABB()
 {
-	finish = true;
-	this->win = win;
+	return aabb;
 }

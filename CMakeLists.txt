@@ -90,13 +90,6 @@ add_executable(${PROJECT_NAME}
     Graphics/GLWrappers/vao.cpp
     Graphics/tiny_obj_loader.h
 
-    Game/app.h
-    Game/app.cpp
-    Game/menuScreen.h
-    Game/menuScreen.cpp
-    Game/gameScreen.h
-    Game/gameScreen.cpp
-
     Engine/Game/gameComponent.h
     Engine/Game/gameComponent.cpp
     Engine/Game/gameObject.h
@@ -153,6 +146,20 @@ add_executable(${PROJECT_NAME}
     Engine/Mesh/vertex.cpp
     Engine/Mesh/triangle.h
     Engine/Mesh/triangle.cpp
+
+    Game/app.h
+    Game/app.cpp
+    Game/menuScreen.h
+    Game/menuScreen.cpp
+    Game/gameScreen.h
+    Game/gameScreen.cpp
+
+    Game/components.h
+
+    Game/prefabs/character.h
+    Game/prefabs/environment.h
+    Game/prefabs/goal.h
+    Game/prefabs/enemy.h
 
     Game/gameComponents/characterCollisionResponse.h
     Game/gameComponents/characterCollisionResponse.cpp

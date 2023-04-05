@@ -4,7 +4,9 @@
 #include <Engine/Game/components/collisionComponents/environmentComponent.h>
 #include <Engine/Game/collision/bvh.h>
 
+
 class CylinderComponent;
+class GridNode;
 
 class CollisionComponent : public std::enable_shared_from_this<CollisionComponent>, public GameComponent {
 public:
@@ -24,4 +26,6 @@ public:
 
 	glm::vec4 doNudge(glm::mat4x4& transformMatrix, glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents);
 	glm::vec4 doNudge(glm::mat4x4& transformMatrix, glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::shared_ptr<BVH> bvh);
+
+	std::shared_ptr<GridNode> gridNode = nullptr;
 };

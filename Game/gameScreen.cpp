@@ -16,6 +16,11 @@
 #include <Engine/Game/components/collisionComponents/environmentComponent.h>
 #include <Game/gameComponents/movingBoard.h>
 
+#include <Game/prefabs/character.h>
+#include <Game/prefabs/environment.h>
+#include <Game/prefabs/goal.h>
+#include <Game/prefabs/enemy.h>
+
 #include <corecrt_math_defines.h>
 
 extern std::shared_ptr<App> app;
@@ -26,6 +31,9 @@ GameScreen::GameScreen()
 	addEnvironmentMesh("level", "./Resources/Meshes/level.obj");
 	addEnvironmentMesh("board", "./Resources/Meshes/board.obj");
 	addEnvironmentMesh("bvh_test", "./Resources/Meshes/bvh_test.obj");
+	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
+	addEnvironmentMesh("building", "./Resources/Meshes/building.obj");
+	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
 	//addEnvironmentMesh("square1", "./Resources/Meshes/square1.obj");
 
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
@@ -39,21 +47,18 @@ void GameScreen::init()
 	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this());
 
 	// Create game object
-	std::shared_ptr<GameObject> character = createCharacter();
+	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
 	//std::vector<std::shared_ptr<GameObject>> grounds = createGrounds();
-	std::shared_ptr<GameObject> environment = createEnvironment("level", "grass");
+	std::shared_ptr<GameObject> plane = createEnvironment(shared_from_this(), "plane", "grass");
 	//std::shared_ptr<GameObject> environment = createEnvironment("bvh_test", "grass");
-	//std::shared_ptr<GameObject> environment = createEnvironment("square", "grass");
-	//std::shared_ptr<GameObject> environment1 = createEnvironment("square1", "grass");
-	//std::shared_ptr<GameObject> movingBoard = createBoard(glm::vec3(0, 3, -9), glm::vec3(0, 3, -15));
-	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(0, 0.5, 2));
+	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(rand() % 38 - 19, 0.25, rand() % 38 - 19));
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
 	physicsSystem = std::make_shared<PhysicsSystem>();
 	std::shared_ptr<CharacterControllerSystem> characterControllerSystem = std::make_shared<CharacterControllerSystem>();
 	std::shared_ptr<CameraSystem> cameraSystem = std::make_shared<CameraSystem>(camera, character);
-	collisionSystem = std::make_shared<CollisionSystem>();
+	collisionSystem = std::make_shared<CollisionSystem>(6, gameWorld);
 
 	// Add systems to game world
 	gameWorld->addGameSystem(drawSystem);
@@ -63,44 +68,61 @@ void GameScreen::init()
 	gameWorld->addGameSystem(collisionSystem);
 
 	// Add game objects to systems and game world
-	// Draw system
 	drawSystem->addGameObject(character);
-	//for(auto ground: grounds) drawSystem->addGameObject(ground);
-	drawSystem->addGameObject(environment);
-	//drawSystem->addGameObject(environment1);
-	//drawSystem->addGameObject(movingBoard);
-	drawSystem->addGameObject(goalObject);
-	// Physics system
 	physicsSystem->addGameObject(character);
-	//physicsSystem->addGameObject(movingBoard);
-	// Character controller system
 	characterControllerSystem->setCharatcer(character);
-	// Collision system
 	collisionSystem->addGameObject(character);
-	collisionSystem->addEnvironmentObject(environment);
-	//collisionSystem->addEnvironmentObject(environment1);
-	//collisionSystem->addEnvironmentObject(movingBoard);
-	collisionSystem->addGameObject(goalObject);
-	collisionSystem->buildBVH();
-	// Game world
 	gameWorld->addGameObject(character);
-	//for(auto ground: grounds) gameWorld->addGameObject(ground);
-	gameWorld->addGameObject(environment);
-	//gameWorld->addGameObject(environment1);
-	//gameWorld->addGameObject(movingBoard);
+	
+	drawSystem->addGameObject(plane);
+	collisionSystem->addEnvironmentObject(plane);
+	gameWorld->addGameObject(plane);
+
+	drawSystem->addGameObject(goalObject);	
+	collisionSystem->addGameObject(goalObject);
 	gameWorld->addGameObject(goalObject);
 
-	// Hierarchical grid test
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			for (int k = 0; k < 3; k++) {
-				std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(-i, -k * 0.5 - 0.5, -j));
-				drawSystem->addGameObject(goalObject);
-				collisionSystem->addGameObject(goalObject);
-				gameWorld->addGameObject(goalObject);
+	for(float x = -19.5; x <= 19.5; x += 1)
+	{
+		auto modelTranform = std::make_shared<ModelTransform>();
+		std::vector<float> Zs = { -21, 21 };
+		for (auto z : Zs) {
+			{
+				glm::vec3 pos(x, 0, z);
+				modelTranform->clear();
+				modelTranform->translate(pos);
+				std::shared_ptr<GameObject> wallObject = createEnvironment(shared_from_this(), "wall", "", modelTranform);
+				drawSystem->addGameObject(wallObject);
+				collisionSystem->addEnvironmentObject(wallObject);
+				gameWorld->addGameObject(wallObject);
+			}
+			{
+				glm::vec3 pos(z, 0, x);
+				modelTranform->clear();
+				modelTranform->rotate(M_PI / 2, glm::vec3(0, 1, 0));
+				modelTranform->translate(pos);
+				std::shared_ptr<GameObject> wallObject = createEnvironment(shared_from_this(), "wall", "", modelTranform);
+				drawSystem->addGameObject(wallObject);
+				collisionSystem->addEnvironmentObject(wallObject);
+				gameWorld->addGameObject(wallObject);
 			}
 		}
 	}
+
+	// Hierarchical grid test
+	for (int i = 1; i < 21; i += 2) {
+		for (int j = 1; j < 21; j += 2) {
+			for (int k = 0; k < 2; k++) {
+				std::shared_ptr<GameObject> enemyObject = createEnemy("cylinder", "monokuma", glm::vec3(i - 10, k + 0.25, j - 10));
+				drawSystem->addGameObject(enemyObject);
+				collisionSystem->addGameObject(enemyObject);
+				gameWorld->addGameObject(enemyObject);
+			}
+		}
+	}
+
+	collisionSystem->buildBVH();
+	collisionSystem->buildHG();
 
 	score = 0;
 	result = "";
@@ -109,43 +131,6 @@ void GameScreen::init()
 	active = true;
 
 	Screen::init();
-}
-
-std::shared_ptr<GameObject> GameScreen::createCharacter()
-{
-	std::shared_ptr<GameObject> character = std::make_shared<GameObject>("character");
-
-	// Create components
-	// Transform Component
-	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
-	auto modelTransform = transformComponent->getModelTransform();
-	modelTransform->scale(0.25);
-	modelTransform->translate(glm::vec3(0, 3, 0));
-	transformComponent->updateRay();
-	gameWorld->getCamera()->setPos(modelTransform->getPos());
-	// Draw component
-	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
-	// Physics component
-	std::shared_ptr<PhysicsComponent> physicsComponent = std::make_shared<PhysicsComponent>();
-	// CharacterMoveComponent
-	std::shared_ptr<CharacterMoveComponent> characterMoveComponent = std::make_shared<CharacterMoveComponent>();
-	// CharacterJumpComponent
-	std::shared_ptr<CharacterJumpComponent> characterJumpComponent = std::make_shared<CharacterJumpComponent>();
-	// Collision component
-	std::shared_ptr<CylinderComponent> cylinderComponent = std::make_shared<CylinderComponent>();
-	// Collision response component
-	std::shared_ptr<CharacterCollisionResponse> collisionResponseComponent = std::make_shared<CharacterCollisionResponse>();
-
-	//// Add components to game objects
-	character->addComponent(transformComponent);
-	character->addComponent(drawComponent);
-	character->addComponent(physicsComponent);
-	character->addComponent(characterMoveComponent);
-	character->addComponent(characterJumpComponent);
-	character->addComponent(cylinderComponent);
-	character->addComponent(collisionResponseComponent);
-
-	return character;
 }
 
 std::vector<std::shared_ptr<GameObject>> GameScreen::createGrounds()
@@ -203,44 +188,6 @@ std::shared_ptr<GameObject> GameScreen::createFalling(glm::vec3 pos)
 	return fallingObject;
 }
 
-std::shared_ptr<GameObject> GameScreen::createEnvironment(std::string shape, std::string material)
-{
-	std::shared_ptr<GameObject> environmentObject = std::make_shared<GameObject>("environment");
-
-	// Create components
-	// Transform Component
-	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
-	auto modelTransform = transformComponent->getModelTransform();
-	if (shape.compare("ceiling") == 0) {
-		modelTransform->scale(0.25);
-		modelTransform->translate(glm::vec3(0, 0.5, 0));
-	}
-	else if (shape.compare("level") == 0) {
-		modelTransform->scale(0.25);
-		//modelTransform->scale(1.2);
-	}
-	else if (shape.compare("bvh_test") == 0) {
-		modelTransform->scale(0.25);
-	}
-	else if (shape.compare("square") == 0) {
-
-	}
-	else if (shape.compare("square1") == 0) {
-		modelTransform->translate(glm::vec3(-5, -0.5, 0));
-	}
-	// Draw component
-	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
-	// Collision component
-	std::shared_ptr<EnvironmentComponent> collisionComponent = std::make_shared<EnvironmentComponent>(getEnvironmentMesh(shape));
-
-	// Add components to game objects
-	environmentObject->addComponent(transformComponent);
-	environmentObject->addComponent(drawComponent);
-	environmentObject->addComponent(collisionComponent);
-
-	return environmentObject;
-}
-
 std::shared_ptr<GameObject> GameScreen::createBoard(glm::vec3 start, glm::vec3 end)
 {
 	std::shared_ptr<GameObject> boardObject = std::make_shared<GameObject>("board");
@@ -266,32 +213,6 @@ std::shared_ptr<GameObject> GameScreen::createBoard(glm::vec3 start, glm::vec3 e
 	boardObject->addComponent(movingBoard);
 
 	return boardObject;
-}
-
-std::shared_ptr<GameObject> GameScreen::createGoal(glm::vec3 pos)
-{
-	std::shared_ptr<GameObject> goalObject = std::make_shared<GameObject>("goal");
-
-	// Create components
-	// Transform Component
-	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
-	auto modelTransform = transformComponent->getModelTransform();
-	modelTransform->scale(0.25);
-	modelTransform->translate(pos);
-	transformComponent->updateRay();
-	// Draw component
-	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monomi");
-	// Collision component
-	std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>();
-	std::shared_ptr<CollisionResponseComponent> collisionResponse = std::make_shared<CollisionResponseComponent>(true);
-
-	// Add components to game objects
-	goalObject->addComponent(transformComponent);
-	goalObject->addComponent(drawComponent);
-	goalObject->addComponent(collisionComponent);
-	goalObject->addComponent(collisionResponse);
-
-	return goalObject;
 }
 
 void GameScreen::update(double seconds) {
@@ -351,9 +272,10 @@ void GameScreen::addScore()
 
 void GameScreen::checkResult()
 {
-	if (gameWorld->isFinish() && gameWorld->istWin()) {
-		//active = false;
-		result = "You win!";
+	if (gameWorld->isFinish()) {
+		active = false;
+		if(gameWorld->istWin()) result = "You win!";
+		else result = "You lose!";
 		return;
 	}
 	//if (score >= 3) {

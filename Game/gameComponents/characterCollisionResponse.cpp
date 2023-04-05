@@ -12,6 +12,10 @@ void CharacterCollisionResponse::responseCollision(std::shared_ptr<CollisionResp
 
 	if (otherComponent->getGameObject()->getTag().compare("goal") == 0) {
 		gameObject->getGameWorld()->setWin(true);
-		std::cout << "Get goal" << std::endl;
+		gameObject->getGameWorld()->setFinish(true);
+	}
+	else if (otherComponent->getGameObject()->getTag().compare("enemy") == 0) {
+		gameObject->getGameWorld()->setWin(false);
+		gameObject->getGameWorld()->setFinish(true);
 	}
 }

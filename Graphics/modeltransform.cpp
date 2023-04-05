@@ -78,3 +78,10 @@ void ModelTransform::clear(){
     m_scale = glm::vec3(1, 1, 1);
     m_rotation = glm::mat4(1);
 }
+
+void ModelTransform::copy(std::shared_ptr<ModelTransform> modelTranform)
+{
+    m_pos = modelTranform->getPos();
+    m_scale = modelTranform->getScale();
+    m_rotation = modelTranform->getRotation();
+}

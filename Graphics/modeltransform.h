@@ -3,6 +3,8 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
+#include <memory>
+
 class ModelTransform{
 public:
     ModelTransform();
@@ -23,6 +25,8 @@ public:
     glm::mat4 getRotation();
     glm::mat4 getModelMatrix();
     void clear();
+
+    void copy(std::shared_ptr<ModelTransform> modelTranform);
 
 private:
     glm::vec3 m_pos;

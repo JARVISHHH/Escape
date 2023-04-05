@@ -19,8 +19,6 @@ std::shared_ptr<Ray> TransformComponent::getRay()
 
 void TransformComponent::updateRay() {
 	ray->update(ray->endPoint, modelTransform->getPos());
-	//std::cout << "start: " << ray->origin[0] << " " << ray->origin[1] << " " << ray->origin[2] << " " << ray->origin[3] << std::endl;
-	//std::cout << "end: " << ray->endPoint[0] << " " << ray->endPoint[1] << " " << ray->endPoint[2] << " " << ray->endPoint[3] << std::endl;
 }
 
 void TransformComponent::setRay(glm::vec3 origin, glm::vec3 endPoint)
