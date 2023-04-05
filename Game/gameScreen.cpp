@@ -30,11 +30,10 @@ GameScreen::GameScreen()
 
 	addEnvironmentMesh("level", "./Resources/Meshes/level.obj");
 	addEnvironmentMesh("board", "./Resources/Meshes/board.obj");
-	addEnvironmentMesh("bvh_test", "./Resources/Meshes/bvh_test.obj");
+	addEnvironmentMesh("bvh_test", "./Resources/Meshes/test.obj");
 	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
 	addEnvironmentMesh("building", "./Resources/Meshes/building.obj");
 	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
-	//addEnvironmentMesh("square1", "./Resources/Meshes/square1.obj");
 
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");
@@ -50,7 +49,6 @@ void GameScreen::init()
 
 	// Create game object
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
-	//std::shared_ptr<GameObject> environment = createEnvironment("bvh_test", "grass");
 	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(rand() % 38 - 19, 0.25, rand() % 38 - 19));
 
 	// Create systems
@@ -78,16 +76,27 @@ void GameScreen::init()
 	collisionSystem->addGameObject(goalObject);
 	gameWorld->addGameObject(goalObject);
 
+	bool bvhTest = false;
+
+	if (bvhTest) {
+		std::shared_ptr<GameObject> environment = createEnvironment(shared_from_this(), "bvh_test", "grass");
+		drawSystem->addGameObject(environment);
+		collisionSystem->addEnvironmentObject(environment);
+		gameWorld->addGameObject(environment);
+	}
+
 	// Grounds
-	for (int i = 0; i < 40; i++) {
-		for (int j = 0; j < 40; j++) {
-			auto modelTranform = std::make_shared<ModelTransform>();
-			modelTranform->scale(1/40.0f);
-			modelTranform->translate(glm::vec3(i - 20 + 0.5, 0, j - 20 + 0.5));
-			std::shared_ptr<GameObject> plane = createEnvironment(shared_from_this(), "plane", "grass", modelTranform);
-			drawSystem->addGameObject(plane);
-			collisionSystem->addEnvironmentObject(plane);
-			gameWorld->addGameObject(plane);
+	if (!bvhTest) {
+		for (int i = 0; i < 40; i++) {
+			for (int j = 0; j < 40; j++) {
+				auto modelTranform = std::make_shared<ModelTransform>();
+				modelTranform->scale(1 / 40.0f);
+				modelTranform->translate(glm::vec3(i - 20 + 0.5, 0, j - 20 + 0.5));
+				std::shared_ptr<GameObject> plane = createEnvironment(shared_from_this(), "plane", "grass", modelTranform);
+				drawSystem->addGameObject(plane);
+				collisionSystem->addEnvironmentObject(plane);
+				gameWorld->addGameObject(plane);
+			}
 		}
 	}
 
@@ -119,14 +128,16 @@ void GameScreen::init()
 		}
 	}
 
-	// Hierarchical grid test
-	for (float x = -19; x <= 19; x += 3) {
-		for (float z = -19; z <= 19; z += 3) {
-			for (float y = 0; y < 2; y += 1) {
-				std::shared_ptr<GameObject> enemyObject = createEnemy("cylinder", "monokuma", glm::vec3(x, y, z));
-				drawSystem->addGameObject(enemyObject);
-				collisionSystem->addGameObject(enemyObject);
-				gameWorld->addGameObject(enemyObject);
+	if (!bvhTest) {
+		// Hierarchical grid test
+		for (float x = -19; x <= 19; x += 3) {
+			for (float z = -19; z <= 19; z += 3) {
+				for (float y = 0; y < 2; y += 1) {
+					std::shared_ptr<GameObject> enemyObject = createEnemy("cylinder", "monokuma", glm::vec3(x, y, z));
+					drawSystem->addGameObject(enemyObject);
+					collisionSystem->addGameObject(enemyObject);
+					gameWorld->addGameObject(enemyObject);
+				}
 			}
 		}
 	}

@@ -78,10 +78,6 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 
 	if (glm::length(ray->direction) < EPSILON) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
 
-	//std::cout << std::endl;
-	//std::cout << "start from: " << ray->origin[0] << " " << ray->origin[1] << " " << ray->origin[2] << std::endl;
-	//std::cout << "end to: " << ray->endPoint[0] << " " << ray->endPoint[1] << " " << ray->endPoint[2] << std::endl;
-
 	std::vector<std::shared_ptr<CollisionInfo>> collisions;
 	glm::mat4x4 transformMatrix = getTransformMatrix();
 	glm::mat4x4 inverseMatrix = glm::inverse(transformMatrix);
@@ -89,14 +85,9 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 
 	for (int i = 0; i < 3; i++) {
 		auto c = getEnvironmentClosestCollision(transformMatrix, std::make_shared<Ray>(curPos, nextPos), bvh);
-		//std::cout << "iteration: " << i << std::endl;
-		//if(c->t > 0) std::cout << "normal: " << c->normal[0] << " " << c->normal[1] << " " << c->normal[2] << std::endl;
-		//std::cout << "t: " << c->t << std::endl;
 		if (c->t < 0 || c->t > 1) {
-			//std::cout << "iteration: " << i << " after collision : " << nextPos[0] << " " << nextPos[1] << " " << nextPos[2] << std::endl;
 			return { collisions, nextPos };
 		}
-		//curPos = c->center;
 		curPos = doNudge(transformMatrix, curPos, c, bvh);
 		auto d = nextPos - curPos;
 		auto dCorrected = d - glm::dot(d, c->normal) * c->normal;

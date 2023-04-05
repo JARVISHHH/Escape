@@ -11,7 +11,7 @@ AABB::AABB::AABB(std::shared_ptr<EnvironmentComponent> environmentComponent, std
 	this->environmentComponent = environmentComponent;
 	auto triangleTransformMatrix = environmentComponent->getGameObject()->getComponent<TransformComponent>("transform")->getModelTransform()->getModelMatrix();
 
-	maxPoint = triangleTransformMatrix * environmentComponent->getTriangles()[0]->getV()[0]->getPosition();
+	maxPoint = triangleTransformMatrix * triangle->getV()[0]->getPosition();
 	minPoint = maxPoint;
 
 	for (const auto& vertex : triangle->getV()) {

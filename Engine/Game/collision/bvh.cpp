@@ -32,7 +32,7 @@ std::shared_ptr<BVHNode> BVH::buildRoot()
 
 void BVH::splitNode(std::shared_ptr<BVHNode> parent, std::vector<std::shared_ptr<AABB>> curAABBs)
 {
-	if (curAABBs.size() <= 24) {
+	if (curAABBs.size() <= 3) {
 		parent->aabbs = curAABBs;
 		return;
 	}
