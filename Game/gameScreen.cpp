@@ -110,10 +110,10 @@ void GameScreen::init()
 	}
 
 	// Hierarchical grid test
-	for (int i = 1; i < 21; i += 2) {
-		for (int j = 1; j < 21; j += 2) {
-			for (int k = 0; k < 2; k++) {
-				std::shared_ptr<GameObject> enemyObject = createEnemy("cylinder", "monokuma", glm::vec3(i - 10, k + 0.25, j - 10));
+	for (float x = -19; x <= 19; x += 3) {
+		for (float z = -19; z <= 19; z += 3) {
+			for (float y = 0; y < 2; y += 1) {
+				std::shared_ptr<GameObject> enemyObject = createEnemy("cylinder", "monokuma", glm::vec3(x, y, z));
 				drawSystem->addGameObject(enemyObject);
 				collisionSystem->addGameObject(enemyObject);
 				gameWorld->addGameObject(enemyObject);
