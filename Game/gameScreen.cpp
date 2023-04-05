@@ -130,8 +130,8 @@ void GameScreen::init()
 
 	if (!bvhTest) {
 		// Hierarchical grid test
-		for (float x = -19; x <= 19; x += 3) {
-			for (float z = -19; z <= 19; z += 3) {
+		for (float x = -19; x <= 19; x += 4) {
+			for (float z = -19; z <= 19; z += 4) {
 				for (float y = 0; y < 2; y += 1) {
 					std::shared_ptr<GameObject> enemyObject = createEnemy("cylinder", "monokuma", glm::vec3(x, y, z));
 					drawSystem->addGameObject(enemyObject);

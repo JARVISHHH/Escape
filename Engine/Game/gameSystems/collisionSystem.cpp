@@ -58,10 +58,6 @@ void CollisionSystem::doCollision()
 	for (int i = 0; i < entityComponentPairs.size(); i++) {
 		entityComponentPairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
 	}
-
-	for (int i = 0; i < entityComponentPairs.size(); i++) {
-		entityComponentPairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
-	}
 }
 
 void CollisionSystem::notifyEnvironmentCollision(int index, std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
