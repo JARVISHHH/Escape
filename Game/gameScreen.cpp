@@ -39,6 +39,8 @@ GameScreen::GameScreen()
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");
 	Global::graphics.addMaterial("monomi", "Resources/Images/monomi.png");
+	Global::graphics.addMaterial("learn", "Resources/Images/learn.jpg");
+	Global::graphics.addMaterial("wall", "Resources/Images/wall.jpg");
 }
 
 void GameScreen::init()
@@ -99,7 +101,7 @@ void GameScreen::init()
 				glm::vec3 pos(x, 0, z);
 				modelTranform->clear();
 				modelTranform->translate(pos);
-				std::shared_ptr<GameObject> wallObject = createEnvironment(shared_from_this(), "wall", "", modelTranform);
+				std::shared_ptr<GameObject> wallObject = createEnvironment(shared_from_this(), "wall", "wall", modelTranform);
 				drawSystem->addGameObject(wallObject);
 				collisionSystem->addEnvironmentObject(wallObject);
 				gameWorld->addGameObject(wallObject);
@@ -109,7 +111,7 @@ void GameScreen::init()
 				modelTranform->clear();
 				modelTranform->rotate(M_PI / 2, glm::vec3(0, 1, 0));
 				modelTranform->translate(pos);
-				std::shared_ptr<GameObject> wallObject = createEnvironment(shared_from_this(), "wall", "", modelTranform);
+				std::shared_ptr<GameObject> wallObject = createEnvironment(shared_from_this(), "wall", "wall", modelTranform);
 				drawSystem->addGameObject(wallObject);
 				collisionSystem->addEnvironmentObject(wallObject);
 				gameWorld->addGameObject(wallObject);
