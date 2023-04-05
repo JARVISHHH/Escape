@@ -48,8 +48,6 @@ void GameScreen::init()
 
 	// Create game object
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
-	//std::vector<std::shared_ptr<GameObject>> grounds = createGrounds();
-	std::shared_ptr<GameObject> plane = createEnvironment(shared_from_this(), "plane", "grass");
 	//std::shared_ptr<GameObject> environment = createEnvironment("bvh_test", "grass");
 	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(rand() % 38 - 19, 0.25, rand() % 38 - 19));
 
@@ -73,15 +71,25 @@ void GameScreen::init()
 	characterControllerSystem->setCharatcer(character);
 	collisionSystem->addGameObject(character);
 	gameWorld->addGameObject(character);
-	
-	drawSystem->addGameObject(plane);
-	collisionSystem->addEnvironmentObject(plane);
-	gameWorld->addGameObject(plane);
 
 	drawSystem->addGameObject(goalObject);	
 	collisionSystem->addGameObject(goalObject);
 	gameWorld->addGameObject(goalObject);
 
+	// Grounds
+	for (int i = 0; i < 40; i++) {
+		for (int j = 0; j < 40; j++) {
+			auto modelTranform = std::make_shared<ModelTransform>();
+			modelTranform->scale(1/40.0f);
+			modelTranform->translate(glm::vec3(i - 20 + 0.5, 0, j - 20 + 0.5));
+			std::shared_ptr<GameObject> plane = createEnvironment(shared_from_this(), "plane", "grass", modelTranform);
+			drawSystem->addGameObject(plane);
+			collisionSystem->addEnvironmentObject(plane);
+			gameWorld->addGameObject(plane);
+		}
+	}
+
+	// Walls
 	for(float x = -19.5; x <= 19.5; x += 1)
 	{
 		auto modelTranform = std::make_shared<ModelTransform>();

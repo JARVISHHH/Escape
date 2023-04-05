@@ -21,7 +21,7 @@ void CollisionSystem::doCollision()
 {
 	updateEntityComponentPairs();
 
-	bool doAccelerate = false;
+	bool doAccelerate = true;
 
 	// Update movable game objects
 	if (!doAccelerate) {
