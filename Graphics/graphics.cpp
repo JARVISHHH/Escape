@@ -77,7 +77,7 @@ std::shared_ptr<Shape> Graphics::addShape(std::string shapeName, std::vector<flo
     m_shapes.insert({shapeName, std::make_shared<Shape>(std::make_shared<VAO>(std::make_shared<VBO>(data), attribs))});
     return m_shapes.at(shapeName);
 }
-std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string filepath){
+std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string filepath, bool hasUV){
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
@@ -87,9 +87,18 @@ std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string fil
         throw std::runtime_error(warn + err);
     }
 
-    std::vector<float> drawData;
-    std::vector<glm::vec3> collisionData;
+    int numTriangles = 0;
+    for(size_t s = 0; s < shapes.size(); s++){
+        numTriangles += shapes[s].mesh.num_face_vertices.size();
+    }
 
+    std::vector<float> drawData;
+    drawData.resize(numTriangles * 3 * 8);
+    std::vector<glm::vec3> collisionData;
+    collisionData.resize(numTriangles * 3);
+
+    int i = 0;
+    int j = 0;
     for(size_t s = 0; s < shapes.size(); s++) {
         size_t index_offset = 0;
         for(size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
@@ -99,19 +108,25 @@ std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string fil
                 tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
 
                 // Add position
-                drawData.push_back(attrib.vertices[3*idx.vertex_index]);
-                drawData.push_back(attrib.vertices[3*idx.vertex_index + 1]);
-                drawData.push_back(attrib.vertices[3*idx.vertex_index + 2]);
+                drawData[i] = attrib.vertices[3*idx.vertex_index];
+                drawData[i + 1] = attrib.vertices[3*idx.vertex_index + 1];
+                drawData[i + 2] = attrib.vertices[3*idx.vertex_index + 2];
                 // Add normal
-                drawData.push_back(attrib.normals[3*idx.normal_index]);
-                drawData.push_back(attrib.normals[3*idx.normal_index + 1]);
-                drawData.push_back(attrib.normals[3*idx.normal_index + 2]);
+                drawData[i + 3] = attrib.normals[3*idx.normal_index];
+                drawData[i + 4] = attrib.normals[3*idx.normal_index + 1];
+                drawData[i + 5] = attrib.normals[3*idx.normal_index + 2];
                 // Add uv
-                drawData.push_back(attrib.texcoords[2*idx.texcoord_index]);
-                drawData.push_back(attrib.texcoords[2*idx.texcoord_index + 1]);
+                drawData[i + 6] = 0;
+                drawData[i + 7] = 0;
+                if(hasUV){
+                    drawData[i + 6] = attrib.texcoords[2*idx.texcoord_index];
+                    drawData[i + 7] = attrib.texcoords[2*idx.texcoord_index + 1];
+                }
 
                 // Add collision position data
-                collisionData.push_back(glm::vec3(attrib.vertices[3*idx.vertex_index], attrib.vertices[3*idx.vertex_index + 1], attrib.vertices[3*idx.vertex_index + 2]));
+                collisionData[j] = glm::vec3(attrib.vertices[3*idx.vertex_index], attrib.vertices[3*idx.vertex_index + 1], attrib.vertices[3*idx.vertex_index + 2]);
+                i += 8;
+                j += 1;
             }
 
             index_offset += fv;
@@ -121,6 +136,43 @@ std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string fil
     m_shapes.insert({shapeName, std::make_shared<Shape>(std::make_shared<VAO>(std::make_shared<VBO>(drawData), VAOAttrib::POS | VAOAttrib::NORM | VAOAttrib::UV))});
 
     return collisionData;
+}
+
+std::pair<std::vector<glm::vec3>, std::vector<glm::ivec3>> Graphics::getNavmeshData(std::string filepath){
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string warn, err;
+
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filepath.c_str())) {
+        throw std::runtime_error(warn + err);
+    }
+
+    int numTriangles = 0;
+    for(size_t s = 0; s < shapes.size(); s++){
+        numTriangles += shapes[s].mesh.num_face_vertices.size();
+    }
+
+    std::vector<glm::vec3> positions;
+    std::vector<glm::ivec3> faces;
+
+    for(int i = 0; i<attrib.vertices.size(); i+=3){
+        positions.push_back(glm::vec3(attrib.vertices[i], attrib.vertices[i+1], attrib.vertices[i+2]));
+    }
+
+
+    int i = 0;
+    int j = 0;
+    for(size_t s = 0; s < shapes.size(); s++) {
+        for(size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
+            tinyobj::index_t idx1 = shapes[s].mesh.indices[3* f];
+            tinyobj::index_t idx2 = shapes[s].mesh.indices[3* f + 1];
+            tinyobj::index_t idx3 = shapes[s].mesh.indices[3* f + 2];
+            faces.push_back(glm::ivec3(idx1.vertex_index, idx2.vertex_index, idx3.vertex_index));
+        }
+    }
+
+    return std::make_pair(positions, faces);
 }
 
 void Graphics::removeShape(std::string shapeName){

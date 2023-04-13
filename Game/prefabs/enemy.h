@@ -10,7 +10,7 @@ std::shared_ptr<GameObject> createEnemy(std::string shape, std::string material,
 	// Transform Component
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
-	modelTransform->scale(0.25);
+	modelTransform->scale(0.5);
 	modelTransform->translate(pos);
 	transformComponent->updateRay();
 	// Draw component
