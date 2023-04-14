@@ -147,6 +147,13 @@ add_executable(${PROJECT_NAME}
     Engine/Mesh/triangle.h
     Engine/Mesh/triangle.cpp
 
+    Engine/Game/ai/navmesh/navmesh.h
+    Engine/Game/ai/navmesh/navmesh.cpp
+    Engine/Game/ai/navmesh/navmeshnode.h
+    Engine/Game/ai/navmesh/navmeshnode.cpp
+    Engine/Game/ai/navmesh/navmeshedge.h
+    Engine/Game/ai/navmesh/navmeshedge.cpp
+
     Game/app.h
     Game/app.cpp
     Game/menuScreen.h

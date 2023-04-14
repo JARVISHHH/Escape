@@ -2,7 +2,7 @@
 
 #include <Game/components.h>
 
-std::shared_ptr<GameObject> createEnvironment(std::shared_ptr<Screen> screen, std::string shape, std::string material, std::shared_ptr<ModelTransform> transform = nullptr)
+std::shared_ptr<GameObject> createEnvironment(std::shared_ptr<Screen> screen, std::string shape, std::string material = "", std::shared_ptr<ModelTransform> transform = nullptr)
 {
 	std::shared_ptr<GameObject> environmentObject = std::make_shared<GameObject>("environment");
 

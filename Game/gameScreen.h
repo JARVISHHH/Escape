@@ -11,6 +11,7 @@
 #include "Engine/Game/gameSystems/drawSystem.h"
 #include <Engine/Game/gameSystems/collisionSystem.h>
 #include <Engine/Game/gameSystems/physicsSystem.h>
+#include <Engine/Game/ai/navmesh/navmesh.h>
 
 class GameScreen : public Screen {
 
@@ -21,14 +22,6 @@ public:
 
     void update(double seconds) override;
     void draw() override;
-
-    std::vector<std::shared_ptr<GameObject>> createGrounds();
-
-    std::shared_ptr<GameObject> createFalling(glm::vec3 pos);
-    std::shared_ptr<GameObject> createBoard(glm::vec3 start, glm::vec3 end);
-
-    void fallFalling();
-
     void addScore();
 
     void checkResult();
@@ -37,6 +30,8 @@ private:
     std::shared_ptr<DrawSystem> drawSystem;
     std::shared_ptr<PhysicsSystem> physicsSystem;
     std::shared_ptr<CollisionSystem> collisionSystem;
+
+    std::shared_ptr<NavMesh> navMesh;
 
     int score = 0;
     std::string result = "";
