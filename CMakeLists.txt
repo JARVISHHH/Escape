@@ -120,6 +120,8 @@ add_executable(${PROJECT_NAME}
     Engine/Game/components/characterJumpComponent.cpp
     Engine/Game/components/physicsComponent.h
     Engine/Game/components/physicsComponent.cpp
+    Engine/Game/components/pathFindingComponent.h
+    Engine/Game/components/pathFindingComponent.cpp
     Engine/Game/components/collisionResponseComponent.h
     Engine/Game/components/collisionResponseComponent.cpp
     Engine/Game/components/collisionComponents/collisionComponent.h

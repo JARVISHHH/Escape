@@ -1,7 +1,5 @@
 #include "navmesh.h"
 
-#include <unordered_map>
-
 #include <Engine/Game/ai/navmesh/navmeshedge.h>
 #include <Engine/Game/ai/navmesh/navmeshnode.h>
 #include <Graphics/global.h>
@@ -40,6 +38,8 @@ void NavMesh::bake()
 			for (const auto& otherNode : edge->connectedNodes) {
 				otherNode->connectedNodes.push_back(node);
 				node->connectedNodes.push_back(otherNode);
+				commonEdges[node][otherNode] = edge;
+				commonEdges[otherNode][node] = edge;
 			}
 			edge->connectedNodes.push_back(node);
 			node->connectedEdges.push_back(edge);
@@ -51,4 +51,169 @@ void NavMesh::bake()
 	}
 
 	std::cout << "Baked NavMesh" << std::endl;
+}
+
+void NavMesh::pathFinding(glm::vec3 start, glm::vec3 end) {
+	// Get start and end positions
+	std::shared_ptr<NavMeshNode> startNode, endNode;
+	glm::vec3 direction = { 0, -1, 0 };
+	float tStart = rayCast(start, direction, startNode), tEnd = rayCast(end, direction, endNode);
+	if (tStart < 0 || tEnd < 0) {
+		std::cerr << "Pathfinding failed: ray cast failed!" << std::endl;
+		return;
+	}
+	glm::vec3 startPos = start + tStart * direction, endPos = end + tEnd * direction;
+
+	auto path = aStar(startPos, endPos, startNode, endNode);
+
+}
+
+float NavMesh::getEuclidianDistance(std::shared_ptr<NavMeshNode> node, glm::vec3 target) {
+	return glm::length(node->center - target);
+}
+
+float NavMesh::getEuclidianDistance(std::shared_ptr<NavMeshEdge> edge, glm::vec3 target) {
+	glm::vec3 edgeCenter = (vertexPositions[edge->vertexIndex1] - vertexPositions[edge->vertexIndex2]) / 2.0f;
+	return glm::length(edgeCenter - target);
+}
+
+float NavMesh::getEuclidianDistance(std::shared_ptr<NavMeshNode> node1, std::shared_ptr<NavMeshNode> node2) {
+	std::shared_ptr<NavMeshEdge> commonEdge = commonEdges[node1][node2];
+	if (commonEdge == nullptr) {
+		std::cerr << "Common edge searching failed!" << std::endl;
+	}
+	glm::vec3 edgeCenter = (vertexPositions[commonEdge->vertexIndex1] - vertexPositions[commonEdge->vertexIndex2]) / 2.0f;
+	return glm::length(node1->center - node2->center);
+}
+
+float NavMesh::getEuclidianDistance(std::shared_ptr<NavMeshEdge> edge1, std::shared_ptr<NavMeshEdge> edge2) {
+	glm::vec3 edgeCenter1 = (vertexPositions[edge1->vertexIndex1] - vertexPositions[edge1->vertexIndex2]) / 2.0f;
+	glm::vec3 edgeCenter2 = (vertexPositions[edge2->vertexIndex1] - vertexPositions[edge2->vertexIndex2]) / 2.0f;
+	return glm::length(edgeCenter1 - edgeCenter2);
+}
+
+//std::vector<std::shared_ptr<NavMeshNode>> NavMesh::aStar(glm::vec3 startPos, glm::vec3 endPos, std::shared_ptr<NavMeshNode> startNode, std::shared_ptr<NavMeshNode> endNode)
+//{
+//	std::unordered_map<std::shared_ptr<NavMeshNode>, float> lowestCost;
+//	std::unordered_map<std::shared_ptr<NavMeshNode>, std::shared_ptr<NavMeshNode>> lastNode;
+//	std::unordered_set<std::shared_ptr<NavMeshNode>> closedList;
+//	std::priority_queue<std::pair<float, std::shared_ptr<NavMeshNode>>> openList;
+//
+//	bool getEnd = (startNode == endNode);
+//	openList.push({getEuclidianDistance(startNode, startPos) + getEuclidianDistance(startNode, endPos), startNode});
+//	while (!openList.empty()) {
+//		auto cost = openList.top().first;
+//		auto currentNode = openList.top().second;
+//		openList.pop();
+//		if (currentNode == endNode) {
+//			getEnd = true;
+//			break;
+//		}
+//		if (closedList.find(currentNode) != closedList.end()) continue;  // In closed list
+//		closedList.insert(currentNode);
+//		auto costH = getEuclidianDistance(currentNode, endPos);
+//		for (const auto& connectedNode : currentNode->connectedNodes) {
+//			if (closedList.find(connectedNode) != closedList.end()) continue;  // In closed list
+//			float newCost = cost - costH + getEuclidianDistance(currentNode, connectedNode) + getEuclidianDistance(connectedNode, endPos);
+//			if (lowestCost.find(connectedNode) == lowestCost.end() || lowestCost[connectedNode] > newCost) {
+//				lowestCost[connectedNode] = newCost;
+//				lastNode[connectedNode] = currentNode;
+//			}
+//		}
+//	}
+//	
+//	std::vector<std::shared_ptr<NavMeshNode>> path;
+//
+//	if (!getEnd) {
+//		std::cerr << "A* failed: heap is empty before getting to the end!" << std::endl;
+//		return path;
+//	}
+//
+//	// Get shortest path
+//	auto currentNode = endNode;
+//	while (currentNode != startNode) {
+//		path.push_back(currentNode);
+//		currentNode = lastNode[currentNode];
+//	}
+//	path.push_back(startNode);
+//	std::reverse(path.begin(), path.end());
+//
+//	return path;
+//}
+
+std::vector<std::shared_ptr<NavMeshEdge>> NavMesh::aStar(glm::vec3 startPos, glm::vec3 endPos, std::shared_ptr<NavMeshNode> startNode, std::shared_ptr<NavMeshNode> endNode)
+{
+	std::unordered_map<std::shared_ptr<NavMeshEdge>, float> lowestCost;
+	std::unordered_map<std::shared_ptr<NavMeshEdge>, std::shared_ptr<NavMeshEdge>> lastEdge;
+	std::unordered_map<std::shared_ptr<NavMeshEdge>, std::shared_ptr<NavMeshNode>> enteringNode;
+	std::unordered_set<std::shared_ptr<NavMeshEdge>> closedList;
+	std::priority_queue<std::pair<float, std::shared_ptr<NavMeshEdge>>> openList;
+
+	bool getEnd = (startNode == endNode);
+	for (const auto& edge : startNode->connectedEdges) {
+		openList.push({getEuclidianDistance(edge, startPos) + getEuclidianDistance(edge, endPos), edge});
+		std::shared_ptr<NavMeshNode> nextNode;
+		if (edge->connectedNodes[0] == startNode) nextNode = edge->connectedNodes[1];
+		else nextNode = edge->connectedNodes[0];
+		enteringNode[edge] = nextNode;
+	}
+	std::shared_ptr<NavMeshEdge> endEdge;
+	while (!getEnd && !openList.empty()) {
+		auto cost = openList.top().first;
+		auto currentEdge = openList.top().second;
+		openList.pop();
+		if (enteringNode[currentEdge] == endNode) {
+			getEnd = true;
+			endEdge = currentEdge;
+			break;
+		}
+		if (closedList.find(currentEdge) != closedList.end()) continue;  // In closed list
+		closedList.insert(currentEdge);
+		auto costH = getEuclidianDistance(currentEdge, endPos);
+		for (const auto& connectedNode : enteringNode[currentEdge]->connectedNodes) {
+			const auto& connectedEdge = commonEdges[connectedNode][enteringNode[currentEdge]];
+			if (closedList.find(connectedEdge) != closedList.end()) continue;  // In closed list
+			float newCost = cost - costH + getEuclidianDistance(connectedEdge, currentEdge) + getEuclidianDistance(connectedEdge, endPos);
+			if (lowestCost.find(connectedEdge) == lowestCost.end() || lowestCost[connectedEdge] > newCost) {
+				lowestCost[connectedEdge] = newCost;
+				lastEdge[connectedEdge] = currentEdge;
+				enteringNode[connectedEdge] = connectedNode;
+			}
+		}
+	}
+
+	std::vector<std::shared_ptr<NavMeshEdge>> path;
+
+	if (!getEnd) {
+		std::cerr << "A* failed: heap is empty before getting to the end!" << std::endl;
+		return path;
+	}
+
+	// Get shortest path
+	auto currentEdge = endEdge;
+	while (currentEdge->connectedNodes[0] != startNode && currentEdge->connectedNodes[1] != startNode) {
+		path.push_back(currentEdge);
+		currentEdge = lastEdge[currentEdge];
+	}
+	std::reverse(path.begin(), path.end());
+
+	return path;
+}
+
+float NavMesh::rayCast(glm::vec3& origin, glm::vec3 direction, std::shared_ptr<NavMeshNode>& castedNode)
+{
+	direction = glm::normalize(direction);
+
+	float res = -1;
+
+	for (const auto& node : nodes) {
+		if (glm::dot(direction, node->normal)) continue;
+		float t = glm::dot(vertexPositions[node->positionIndex[0]] - origin, node->normal) / glm::dot(direction, node->normal);
+		if (t >= 0 && (res < 0 || res > t)) {
+			res = t;
+			castedNode = node;
+		}
+	}
+
+	return res;
 }
