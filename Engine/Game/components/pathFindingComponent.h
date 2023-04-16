@@ -16,7 +16,7 @@ public:
 
 	void setNavMesh(std::shared_ptr<NavMesh> navMesh) { this->navMesh = navMesh; }
 
-	float speed = 0.5;
+	float speed = 2;
 
 private:
 	std::shared_ptr<TransformComponent> transformComponent = nullptr;

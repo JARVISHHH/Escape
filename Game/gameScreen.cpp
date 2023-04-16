@@ -35,7 +35,7 @@ GameScreen::GameScreen()
 	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
 	addEnvironmentMesh("building", "./Resources/Meshes/building.obj");
 	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
-	addEnvironmentMesh("test", "./Resources/Meshes/environment3.obj");
+	addEnvironmentMesh("test", "./Resources/Meshes/environment3nav.obj");
 
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");

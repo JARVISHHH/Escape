@@ -47,6 +47,6 @@ void PathfindingComponent::setDestination(glm::vec3 targetPosition)
 	if (glm::length(targetPosition - targetPos) < 0.00001) return;
 	targetPos = targetPosition;
 	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
-	path = navMesh->pathFinding(transformComponent->getModelTransform()->getPos(), targetPosition);
+	path = navMesh->pathFinding(transformComponent->getModelTransform()->getPos() + glm::vec3(0, 1, 0), targetPosition);
 	currentIndex = 0;
 }

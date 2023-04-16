@@ -18,6 +18,7 @@ public:
 	std::vector<glm::vec3> pathFinding(glm::vec3 start, glm::vec3 end);
 
 	std::vector<glm::vec3> aStar(glm::vec3 startPos, glm::vec3 endPos, std::shared_ptr<NavMeshNode> startNode, std::shared_ptr<NavMeshNode> endNode);
+	bool insideTriangle(glm::vec3 pos, std::shared_ptr<NavMeshNode> node);
 	float rayCast(glm::vec3& start, glm::vec3 direction, std::shared_ptr<NavMeshNode>& castedNode);
 
 	float getEuclidianDistance(std::shared_ptr<NavMeshNode> node, glm::vec3 target);
