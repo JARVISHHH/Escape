@@ -7,6 +7,15 @@ GameObject::GameObject(std::string tag)
 	this->tag = tag;
 }
 
+void GameObject::start()
+{
+	for (auto it = components.begin(); it != components.end(); it++) {
+		for (const auto& component : it->second) {
+			component->start();
+		}
+	}
+}
+
 std::string GameObject::getTag()
 {
 	return tag;

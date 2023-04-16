@@ -6,7 +6,7 @@ class PhysicsComponent : public GameComponent {
 public:
 	PhysicsComponent();
 
-	virtual void update(double seconds);
+	void update(double seconds) override;
 
 	float getGravity();
 	glm::vec3 getVelocity();

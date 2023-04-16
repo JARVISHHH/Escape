@@ -2,11 +2,13 @@
 
 #include "gameSystem.h"
 #include "gameObject.h"
+#include "gameComponent.h"
 #include <Engine/Game/gameSystems/drawSystem.h>
 #include <Engine/Game/gameSystems/characterControllerSystem.h>
 #include <Engine/Game/gameSystems/cameraSystem.h>
 #include <Engine/Game/gameSystems/collisionSystem.h>
 #include <Engine/Game/gameSystems/physicsSystem.h>
+#include <Engine/Game/gameSystems/tickSystem.h>
 #include <Engine/Game/collision/hierarchicalGrid.h>
 
 
@@ -16,12 +18,23 @@ GameWorld::GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> scr
 	this->screen = screen;
 }
 
+void GameWorld::start()
+{
+	for (auto it = gameObjects.begin(); it != gameObjects.end(); it++) {
+		for (const auto& gameObject : it->second) {
+			gameObject->start();
+		}
+	}
+}
+
 void GameWorld::update(double seconds)
 {
 	auto characterControllerSystem = getGameSystem<CharacterControllerSystem>("characterController");
 	if (characterControllerSystem != nullptr) characterControllerSystem->update(seconds);
 	auto physicsSystem = getGameSystem<PhysicsSystem>("physics");
 	if (physicsSystem != nullptr) physicsSystem->update(seconds);
+	auto tickSystem = getGameSystem<TickSystem>("tick");
+	if (tickSystem != nullptr) tickSystem->update(seconds);
 	auto collisionSystem = getGameSystem<CollisionSystem>("collision");
 	if (collisionSystem != nullptr) collisionSystem->update(seconds);
 	auto cameraSystem = getGameSystem<CameraSystem>("camera");

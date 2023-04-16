@@ -51,21 +51,34 @@ void NavMesh::bake()
 	}
 
 	std::cout << "Baked NavMesh" << std::endl;
+	std::cout << "nodes: " << nodes.size() << std::endl;
+	std::cout << "edges: " << edges.size() << std::endl;
 }
 
-void NavMesh::pathFinding(glm::vec3 start, glm::vec3 end) {
+std::vector<glm::vec3> NavMesh::pathFinding(glm::vec3 start, glm::vec3 end) {
 	// Get start and end positions
 	std::shared_ptr<NavMeshNode> startNode, endNode;
 	glm::vec3 direction = { 0, -1, 0 };
+	std::cout << "original start: " << start[0] << " " << start[1] << " " << start[2] << std::endl;
+	std::cout << "original end: " << end[0] << " " << end[1] << " " << end[2] << std::endl;
 	float tStart = rayCast(start, direction, startNode), tEnd = rayCast(end, direction, endNode);
 	if (tStart < 0 || tEnd < 0) {
-		std::cerr << "Pathfinding failed: ray cast failed!" << std::endl;
-		return;
+		if(tStart < 0) std::cerr << "Pathfinding failed: start ray cast failed!" << std::endl;
+		if (tEnd < 0) std::cerr << "Pathfinding failed: end ray cast failed!" << std::endl;
+		return {};
 	}
 	glm::vec3 startPos = start + tStart * direction, endPos = end + tEnd * direction;
 
+	std::cout << "start: " << startPos[0] << " " << startPos[1] << " " << startPos[2] << std::endl;
+	std::cout << "end: " << endPos[0] << " " << endPos[1] << " " << endPos[2] << std::endl;
+
 	auto path = aStar(startPos, endPos, startNode, endNode);
 
+	for (int i = 0; i < path.size(); i++) {
+		std::cout << i << ": " << path[i][0] << " " << path[i][1] << " " << path[i][2] << std::endl;
+	}
+
+	return path;
 }
 
 float NavMesh::getEuclidianDistance(std::shared_ptr<NavMeshNode> node, glm::vec3 target) {
@@ -141,7 +154,7 @@ float NavMesh::getEuclidianDistance(std::shared_ptr<NavMeshEdge> edge1, std::sha
 //	return path;
 //}
 
-std::vector<std::shared_ptr<NavMeshEdge>> NavMesh::aStar(glm::vec3 startPos, glm::vec3 endPos, std::shared_ptr<NavMeshNode> startNode, std::shared_ptr<NavMeshNode> endNode)
+std::vector<glm::vec3> NavMesh::aStar(glm::vec3 startPos, glm::vec3 endPos, std::shared_ptr<NavMeshNode> startNode, std::shared_ptr<NavMeshNode> endNode)
 {
 	std::unordered_map<std::shared_ptr<NavMeshEdge>, float> lowestCost;
 	std::unordered_map<std::shared_ptr<NavMeshEdge>, std::shared_ptr<NavMeshEdge>> lastEdge;
@@ -149,9 +162,20 @@ std::vector<std::shared_ptr<NavMeshEdge>> NavMesh::aStar(glm::vec3 startPos, glm
 	std::unordered_set<std::shared_ptr<NavMeshEdge>> closedList;
 	std::priority_queue<std::pair<float, std::shared_ptr<NavMeshEdge>>> openList;
 
+	std::vector<glm::vec3> path = {};
+
 	bool getEnd = (startNode == endNode);
+	
+	if (getEnd) {
+		std::cout << "get end" << std::endl;
+		path.push_back(endPos);
+		return path;
+	}
+
 	for (const auto& edge : startNode->connectedEdges) {
+		if (!edge->isInterior) continue;
 		openList.push({getEuclidianDistance(edge, startPos) + getEuclidianDistance(edge, endPos), edge});
+		lastEdge[edge] = edge;
 		std::shared_ptr<NavMeshNode> nextNode;
 		if (edge->connectedNodes[0] == startNode) nextNode = edge->connectedNodes[1];
 		else nextNode = edge->connectedNodes[0];
@@ -182,19 +206,19 @@ std::vector<std::shared_ptr<NavMeshEdge>> NavMesh::aStar(glm::vec3 startPos, glm
 		}
 	}
 
-	std::vector<std::shared_ptr<NavMeshEdge>> path;
-
 	if (!getEnd) {
 		std::cerr << "A* failed: heap is empty before getting to the end!" << std::endl;
 		return path;
 	}
 
 	// Get shortest path
+	path.push_back(endPos);
 	auto currentEdge = endEdge;
-	while (currentEdge->connectedNodes[0] != startNode && currentEdge->connectedNodes[1] != startNode) {
-		path.push_back(currentEdge);
+	while (lastEdge[currentEdge] != currentEdge) {
+		path.push_back((vertexPositions[currentEdge->vertexIndex1] - vertexPositions[currentEdge->vertexIndex2]) / 2.0f);
 		currentEdge = lastEdge[currentEdge];
 	}
+	path.push_back((vertexPositions[currentEdge->vertexIndex1] - vertexPositions[currentEdge->vertexIndex2]) / 2.0f);
 	std::reverse(path.begin(), path.end());
 
 	return path;
@@ -202,12 +226,10 @@ std::vector<std::shared_ptr<NavMeshEdge>> NavMesh::aStar(glm::vec3 startPos, glm
 
 float NavMesh::rayCast(glm::vec3& origin, glm::vec3 direction, std::shared_ptr<NavMeshNode>& castedNode)
 {
-	direction = glm::normalize(direction);
-
 	float res = -1;
 
 	for (const auto& node : nodes) {
-		if (glm::dot(direction, node->normal)) continue;
+		if (glm::dot(direction, node->normal) == 0) continue;
 		float t = glm::dot(vertexPositions[node->positionIndex[0]] - origin, node->normal) / glm::dot(direction, node->normal);
 		if (t >= 0 && (res < 0 || res > t)) {
 			res = t;

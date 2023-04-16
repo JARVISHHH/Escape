@@ -11,7 +11,7 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.25);
-	modelTransform->translate(glm::vec3(0, 3, 0));
+	modelTransform->translate(glm::vec3(0, 2, 0));
 	transformComponent->updateRay();
 	gameWorld->getCamera()->setPos(modelTransform->getPos());
 	// Draw component

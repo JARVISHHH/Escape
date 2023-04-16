@@ -10,3 +10,4 @@
 #include <Engine/Game/components/drawComponent.h>
 #include <Engine/Game/components/physicsComponent.h>
 #include <Engine/Game/components/transformComponent.h>
+#include <Engine/Game/components/pathFindingComponent.h>

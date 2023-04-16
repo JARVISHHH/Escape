@@ -9,6 +9,7 @@
 #include <Engine/Game/components/collisionComponents/cylinderComponent.h>
 #include <Engine/Game/components/collisionResponseComponent.h>
 #include <Engine/Game/components/physicsComponent.h>
+#include <Engine/Game/gameSystems/tickSystem.h>
 
 #include "gameComponents/characterCollisionResponse.h"
 #include <Game/gameComponents/fallingCollisionResponse.h>
@@ -36,9 +37,6 @@ GameScreen::GameScreen()
 	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
 	addEnvironmentMesh("test", "./Resources/Meshes/environment3.obj");
 
-	navMesh = std::make_shared<NavMesh>("./Resources/Meshes/environment3nav.obj");
-	navMesh->bake();
-
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");
 	Global::graphics.addMaterial("monomi", "Resources/Images/monomi.png");
@@ -50,12 +48,16 @@ void GameScreen::init()
 {
 	auto camera = std::make_shared<Camera>();
 	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this());
+	
+	// Create NavMesh
+	navMesh = std::make_shared<NavMesh>("./Resources/Meshes/environment3nav.obj");
+	navMesh->bake();
 
 	// Create game object
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
 	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(rand() % 38 - 19, 0.25, rand() % 38 - 19));
 	std::shared_ptr<GameObject> environment = createEnvironment(shared_from_this(), "test");
-	
+	std::shared_ptr<GameObject> enemy = createEnemy("cylinder", "monokuma", glm::vec3(0, 3, 0), navMesh);
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
@@ -63,6 +65,7 @@ void GameScreen::init()
 	std::shared_ptr<CharacterControllerSystem> characterControllerSystem = std::make_shared<CharacterControllerSystem>();
 	std::shared_ptr<CameraSystem> cameraSystem = std::make_shared<CameraSystem>(camera, character);
 	collisionSystem = std::make_shared<CollisionSystem>(6, gameWorld);
+	std::shared_ptr<TickSystem> tickSystem = std::make_shared<TickSystem>();
 
 	// Add systems to game world
 	gameWorld->addGameSystem(drawSystem);
@@ -70,6 +73,7 @@ void GameScreen::init()
 	gameWorld->addGameSystem(characterControllerSystem);
 	gameWorld->addGameSystem(cameraSystem);
 	gameWorld->addGameSystem(collisionSystem);
+	gameWorld->addGameSystem(tickSystem);
 
 	// Add game objects to systems and game world
 	drawSystem->addGameObject(character);
@@ -86,14 +90,16 @@ void GameScreen::init()
 	collisionSystem->addEnvironmentObject(environment);
 	gameWorld->addGameObject(environment);
 
-
-	std::shared_ptr<GameObject> enemyObject = createEnemy("cylinder", "monokuma", glm::vec3(0, 2, 3));
-	drawSystem->addGameObject(enemyObject);
-	collisionSystem->addGameObject(enemyObject);
-	gameWorld->addGameObject(enemyObject);
+	drawSystem->addGameObject(enemy);
+	tickSystem->addComponent(enemy->getComponent<EnemyMovement>("enemyMovement"));
+	tickSystem->addComponent(enemy->getComponent<PathfindingComponent>("pathfinding"));
+	collisionSystem->addGameObject(enemy);
+	gameWorld->addGameObject(enemy);
 
 	collisionSystem->buildBVH();
 	collisionSystem->buildHG();
+
+	gameWorld->start();
 
 	score = 0;
 	result = "";

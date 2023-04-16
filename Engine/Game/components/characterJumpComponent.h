@@ -7,7 +7,7 @@ class CharacterJumpComponent : public GameComponent
 public:
 	CharacterJumpComponent();
 
-	void update(double seconds);
+	void update(double seconds) override;
 
 private:
 	int jumpKey = GLFW_KEY_SPACE;

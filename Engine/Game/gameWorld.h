@@ -8,6 +8,7 @@
 
 class GameSystem;
 class GameObject;
+class GameComponent;
 class AABB;
 
 class GameWorld : public std::enable_shared_from_this<GameWorld>
@@ -15,6 +16,7 @@ class GameWorld : public std::enable_shared_from_this<GameWorld>
 public:
 	GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> screen);
 
+	void start();
 	void update(double seconds);
 	void draw();
 	void mousePosEvent(double xpos, double ypos);

@@ -6,6 +6,14 @@ GameComponent::GameComponent(std::string tag)
 
 }
 
+void GameComponent::start()
+{
+}
+
+void GameComponent::update(double seconds)
+{
+}
+
 std::string GameComponent::getTag() const
 {
 	return tag;

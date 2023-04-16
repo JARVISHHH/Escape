@@ -109,6 +109,8 @@ add_executable(${PROJECT_NAME}
     Engine/Game/gameSystems/collisionSystem.cpp
     Engine/Game/gameSystems/physicsSystem.h
     Engine/Game/gameSystems/physicsSystem.cpp
+    Engine/Game/gameSystems/tickSystem.h
+    Engine/Game/gameSystems/tickSystem.cpp
 
     Engine/Game/components/drawComponent.h
     Engine/Game/components/drawComponent.cpp
@@ -178,6 +180,8 @@ add_executable(${PROJECT_NAME}
     Game/gameComponents/fallingPhysics.cpp
     Game/gameComponents/movingBoard.h
     Game/gameComponents/movingBoard.cpp
+    Game/gameComponents/enemyMovement.h
+    Game/gameComponents/enemyMovement.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})

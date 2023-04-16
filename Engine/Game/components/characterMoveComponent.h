@@ -7,7 +7,7 @@ class CharacterMoveComponent : public GameComponent
 public:
 	CharacterMoveComponent();
 
-	void update(double seconds);
+	void update(double seconds) override;
 
 private:
 	int moveKeys[4] = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D };

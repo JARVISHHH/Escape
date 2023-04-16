@@ -13,7 +13,6 @@ std::shared_ptr<GameObject> createEnvironment(std::shared_ptr<Screen> screen, st
 	if (transform != nullptr) modelTransform->copy(transform);
 	if (shape.compare("level") == 0) {
 		modelTransform->scale(0.25);
-		//modelTransform->scale(1.2);
 	}
 	else if (shape.compare("bvh_test") == 0) {
 		modelTransform->scale(0.25);
