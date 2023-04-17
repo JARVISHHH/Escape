@@ -16,7 +16,9 @@ void TrackAction::start()
 		auto targetObjects = behaviorComponent->getGameObject()->getGameWorld()->getGameObjects(targetTag);
 		if (targetObjects.size() > 0) targetTransform = targetObjects[0]->getComponent<TransformComponent>("transform");
 	}
-	pathfindingComponent = behaviorComponent->getGameObject()->getComponent<PathfindingComponent>("pathfinding");
+	pathfindingComponent = std::static_pointer_cast<PathfindingComponent>(behaviorComponent->blackBoard["test1"]);
+	//pathfindingComponent = behaviorComponent->getGameObject()->getComponent<PathfindingComponent>("pathfinding");
+	std::cout << behaviorComponent->blackBoard["test1"] << std::endl;
 }
 
 void TrackAction::reset()

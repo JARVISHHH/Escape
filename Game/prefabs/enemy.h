@@ -26,6 +26,9 @@ std::shared_ptr<GameObject> createEnemy(std::string shape, std::string material,
 	// AI component
 	std::shared_ptr<PathfindingComponent> pathfindingComponent = std::make_shared<PathfindingComponent>(navMesh);
 	std::shared_ptr<BehaviorComponent> behaviorComponent = std::make_shared<BehaviorComponent>();
+	behaviorComponent->blackBoard["test1"] = pathfindingComponent;
+	behaviorComponent->blackBoard["test2"] = behaviorComponent;
+	std::cout << "original: " << pathfindingComponent << " " << behaviorComponent << std::endl;
 	std::shared_ptr<Selector> root = std::make_shared<Selector>();
 	std::shared_ptr<Sequence> backBaseSequence = std::make_shared<Sequence>();
 	std::shared_ptr<ScopeCondition> scopeCondition = std::make_shared<ScopeCondition>("character", 3, navMesh);

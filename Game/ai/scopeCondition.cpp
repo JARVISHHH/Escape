@@ -11,6 +11,7 @@ void ScopeCondition::start()
 	transform = behaviorComponent->getGameObject()->getComponent<TransformComponent>("transform");
 	auto targetObjects = behaviorComponent->getGameObject()->getGameWorld()->getGameObjects(targetTag);
 	if (targetObjects.size() > 0) targetTransform = targetObjects[0]->getComponent<TransformComponent>("transform");
+	std::cout << behaviorComponent->blackBoard["test2"] << std::endl;
 }
 
 bool ScopeCondition::checkCondition(double seconds)

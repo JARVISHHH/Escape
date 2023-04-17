@@ -14,6 +14,8 @@ public:
 
 	void setRoot(std::shared_ptr<BTNode> root);
 
+	std::unordered_map<std::string, std::shared_ptr<void>> blackBoard;
+
 private:
 	std::shared_ptr<BTNode> root = nullptr;
 };
