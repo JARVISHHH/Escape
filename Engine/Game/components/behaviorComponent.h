@@ -4,7 +4,7 @@
 
 class BTNode;
 
-class BehaviorComponent : public GameComponent {
+class BehaviorComponent : public GameComponent, public std::enable_shared_from_this<BehaviorComponent> {
 public:
 	BehaviorComponent();
 	BehaviorComponent(std::shared_ptr<BTNode> root);

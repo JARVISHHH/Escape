@@ -19,5 +19,4 @@ private:
 	std::string targetTag;
 	std::shared_ptr<TransformComponent> targetTransform = nullptr;
 	std::shared_ptr<PathfindingComponent> pathfindingComponent = nullptr;
-
 };

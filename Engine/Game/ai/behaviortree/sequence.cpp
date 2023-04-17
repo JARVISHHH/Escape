@@ -13,6 +13,8 @@ BTStatus Sequence::update(double seconds)
 		}
 	}
 
+	if (finalStatus == BT_SUCCESS) reset();
+
 	return finalStatus;
 }
 

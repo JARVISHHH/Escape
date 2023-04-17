@@ -11,3 +11,4 @@
 #include <Engine/Game/components/physicsComponent.h>
 #include <Engine/Game/components/transformComponent.h>
 #include <Engine/Game/components/pathFindingComponent.h>
+#include <Engine/Game/components/behaviorComponent.h>

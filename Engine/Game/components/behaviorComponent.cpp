@@ -8,8 +8,9 @@ BehaviorComponent::BehaviorComponent()
 }
 
 BehaviorComponent::BehaviorComponent(std::shared_ptr<BTNode> root)
-	: GameComponent("behavior"), root(root)
+	: GameComponent("behavior")
 {
+	setRoot(root);
 }
 
 void BehaviorComponent::start()
@@ -25,4 +26,5 @@ void BehaviorComponent::update(double seconds)
 void BehaviorComponent::setRoot(std::shared_ptr<BTNode> root)
 {
 	this->root = root;
+	root->setBehaviorComponent(shared_from_this());
 }

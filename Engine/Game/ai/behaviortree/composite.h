@@ -12,7 +12,7 @@ public:
 	virtual void reset() = 0;
 
 	void addChild(std::shared_ptr<BTNode> child);
-	void setBehaviorComponent(std::shared_ptr<BehaviorComponent>);
+	void setBehaviorComponent(std::shared_ptr<BehaviorComponent> behaviorComponent);
 
 protected:
 	void setLastRunning(int index) {
@@ -23,5 +23,5 @@ protected:
 
 	std::vector<std::shared_ptr<BTNode>> children;
 	std::shared_ptr<BTNode> lastRunning = nullptr;
-	int lastRunningIndex = -1;
+	int lastRunningIndex = 0;
 };

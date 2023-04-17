@@ -9,6 +9,7 @@
 #include <Engine/Game/components/collisionComponents/cylinderComponent.h>
 #include <Engine/Game/components/collisionResponseComponent.h>
 #include <Engine/Game/components/physicsComponent.h>
+#include <Engine/Game/components/behaviorComponent.h>
 #include <Engine/Game/gameSystems/tickSystem.h>
 
 #include "gameComponents/characterCollisionResponse.h"
@@ -57,7 +58,7 @@ void GameScreen::init()
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
 	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(rand() % 38 - 19, 0.25, rand() % 38 - 19));
 	std::shared_ptr<GameObject> environment = createEnvironment(shared_from_this(), "test");
-	std::shared_ptr<GameObject> enemy = createEnemy("cylinder", "monokuma", glm::vec3(0, 3, 0), navMesh);
+	std::shared_ptr<GameObject> enemy = createEnemy("cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
@@ -91,8 +92,9 @@ void GameScreen::init()
 	gameWorld->addGameObject(environment);
 
 	drawSystem->addGameObject(enemy);
-	tickSystem->addComponent(enemy->getComponent<EnemyMovement>("enemyMovement"));
+	//tickSystem->addComponent(enemy->getComponent<EnemyMovement>("enemyMovement"));
 	tickSystem->addComponent(enemy->getComponent<PathfindingComponent>("pathfinding"));
+	tickSystem->addComponent(enemy->getComponent<BehaviorComponent>("behavior"));
 	collisionSystem->addGameObject(enemy);
 	gameWorld->addGameObject(enemy);
 
