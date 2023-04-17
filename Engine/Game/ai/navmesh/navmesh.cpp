@@ -196,6 +196,23 @@ bool NavMesh::insideTriangle(glm::vec3 pos, std::shared_ptr<NavMeshNode> node) {
 	return true;
 }
 
+float NavMesh::rayCast(glm::vec3& origin, glm::vec3 direction)
+{
+	float res = -1;
+
+	for (const auto& node : nodes) {
+		if (glm::dot(direction, node->normal) == 0) continue;
+		float t = glm::dot(vertexPositions[node->positionIndex[0]] - origin, node->normal) / glm::dot(direction, node->normal);
+		if (t >= 0 && (res < 0 || res > t)) {
+			auto pos = origin + t * direction;
+			if (!insideTriangle(pos, node)) continue;
+			res = t;
+		}
+	}
+
+	return res;
+}
+
 float NavMesh::rayCast(glm::vec3& origin, glm::vec3 direction, std::shared_ptr<NavMeshNode>& castedNode)
 {
 	float res = -1;

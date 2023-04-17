@@ -37,7 +37,7 @@ add_subdirectory(${GLFW_SOURCE_DIR})
 add_subdirectory(${GLM_SOURCE_DIR})
 add_subdirectory(${FREETYPE_SOURCE_DIR})
 
-add_library(StaticGLEW STATIC ${GLEW_SOURCE_DIR}/src/glew.c)
+add_library(StaticGLEW STATIC ${GLEW_SOURCE_DIR}/src/glew.c "Engine/Game/components/behaviorComponent.h")
 
 include_directories(${GLFW_SOURCE_DIR}/include
                     ${GLFW_SOURCE_DIR}/deps
@@ -124,6 +124,8 @@ add_executable(${PROJECT_NAME}
     Engine/Game/components/physicsComponent.cpp
     Engine/Game/components/pathFindingComponent.h
     Engine/Game/components/pathFindingComponent.cpp
+    Engine/Game/components/behaviorComponent.h
+    Engine/Game/components/behaviorComponent.cpp
     Engine/Game/components/collisionResponseComponent.h
     Engine/Game/components/collisionResponseComponent.cpp
     Engine/Game/components/collisionComponents/collisionComponent.h
@@ -158,6 +160,18 @@ add_executable(${PROJECT_NAME}
     Engine/Game/ai/navmesh/navmeshedge.h
     Engine/Game/ai/navmesh/navmeshedge.cpp
 
+    Engine/Game/ai/behaviortree/btnode.h
+    Engine/Game/ai/behaviortree/composite.h
+    Engine/Game/ai/behaviortree/composite.cpp
+    Engine/Game/ai/behaviortree/action.h
+    Engine/Game/ai/behaviortree/action.cpp
+    Engine/Game/ai/behaviortree/condition.h
+    Engine/Game/ai/behaviortree/condition.cpp
+    Engine/Game/ai/behaviortree/selector.h
+    Engine/Game/ai/behaviortree/selector.cpp
+    Engine/Game/ai/behaviortree/sequence.h
+    Engine/Game/ai/behaviortree/sequence.cpp
+
     Game/app.h
     Game/app.cpp
     Game/menuScreen.h
@@ -182,7 +196,7 @@ add_executable(${PROJECT_NAME}
     Game/gameComponents/movingBoard.cpp
     Game/gameComponents/enemyMovement.h
     Game/gameComponents/enemyMovement.cpp
-)
+ "Engine/Game/components/behaviorComponent.h")
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})
 

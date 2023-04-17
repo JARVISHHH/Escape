@@ -19,7 +19,7 @@ void PathfindingComponent::start()
 
 void PathfindingComponent::update(double seconds)
 {
-	if (currentIndex >= path.size()) return;
+	if (currentIndex >= path.size() || isStop) return;
 	glm::vec3 currentPos = transformComponent->getModelTransform()->getPos();
 	double leftTime = seconds;
 	while (leftTime > 0 && currentIndex < path.size()) {
@@ -40,13 +40,20 @@ void PathfindingComponent::update(double seconds)
 	//std::cout << "current pos: " << currentPos[0] << " " << currentPos[1] << " " << currentPos[2] << std::endl;
 }
 
-void PathfindingComponent::setDestination(glm::vec3 targetPosition)
+bool PathfindingComponent::setDestination(glm::vec3 targetPosition)
 {
-	if (navMesh == nullptr) return;
+	if (navMesh == nullptr) return false;
 	//std::cout << "targetPosition: " << targetPosition[0] << " " << targetPosition[1] << " " << targetPosition[2] << std::endl;
-	if (glm::length(targetPosition - targetPos) < 0.00001) return;
+	if (glm::length(targetPosition - targetPos) < 0.00001) return true;
 	targetPos = targetPosition;
 	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
 	path = navMesh->pathFinding(transformComponent->getModelTransform()->getPos(), targetPosition);
 	currentIndex = 0;
+	return path.size() > 0;
+}
+
+bool PathfindingComponent::getTarget()
+{
+	if (currentIndex >= path.size()) return true;
+	return false;
 }

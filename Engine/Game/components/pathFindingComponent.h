@@ -12,11 +12,12 @@ public:
 	void start() override;
 	void update(double seconds) override;
 
-	void setDestination(glm::vec3 targetPosition);
-
+	bool setDestination(glm::vec3 targetPosition);
 	void setNavMesh(std::shared_ptr<NavMesh> navMesh) { this->navMesh = navMesh; }
+	bool getTarget();
 
 	float speed = 2;
+	bool isStop = false;
 
 private:
 	std::shared_ptr<TransformComponent> transformComponent = nullptr;
