@@ -196,7 +196,7 @@ bool NavMesh::insideTriangle(glm::vec3 pos, std::shared_ptr<NavMeshNode> node) {
 	return true;
 }
 
-float NavMesh::rayCast(glm::vec3& origin, glm::vec3 direction)
+float NavMesh::rayCast(glm::vec3 origin, glm::vec3 direction)
 {
 	float res = -1;
 
@@ -213,7 +213,7 @@ float NavMesh::rayCast(glm::vec3& origin, glm::vec3 direction)
 	return res;
 }
 
-float NavMesh::rayCast(glm::vec3& origin, glm::vec3 direction, std::shared_ptr<NavMeshNode>& castedNode)
+float NavMesh::rayCast(glm::vec3 origin, glm::vec3 direction, std::shared_ptr<NavMeshNode>& castedNode)
 {
 	float res = -1;
 

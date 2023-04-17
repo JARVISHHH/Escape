@@ -161,6 +161,7 @@ add_executable(${PROJECT_NAME}
     Engine/Game/ai/navmesh/navmeshedge.cpp
 
     Engine/Game/ai/behaviortree/btnode.h
+    Engine/Game/ai/behaviortree/btnode.cpp
     Engine/Game/ai/behaviortree/composite.h
     Engine/Game/ai/behaviortree/composite.cpp
     Engine/Game/ai/behaviortree/action.h
@@ -186,6 +187,11 @@ add_executable(${PROJECT_NAME}
     Game/prefabs/goal.h
     Game/prefabs/enemy.h
 
+    Game/ai/scopeCondition.h
+    Game/ai/scopeCondition.cpp
+    Game/ai/trackAction.h
+    Game/ai/trackAction.cpp
+
     Game/gameComponents/characterCollisionResponse.h
     Game/gameComponents/characterCollisionResponse.cpp
     Game/gameComponents/fallingCollisionResponse.h
@@ -196,7 +202,7 @@ add_executable(${PROJECT_NAME}
     Game/gameComponents/movingBoard.cpp
     Game/gameComponents/enemyMovement.h
     Game/gameComponents/enemyMovement.cpp
- "Engine/Game/components/behaviorComponent.h")
+ )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})
 

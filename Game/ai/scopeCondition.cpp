@@ -9,7 +9,7 @@ ScopeCondition::ScopeCondition(std::string targetTag, float maxDistance, std::sh
 void ScopeCondition::start()
 {
 	transform = behaviorComponent->getGameObject()->getComponent<TransformComponent>("transform");
-	auto& targetObjects = behaviorComponent->getGameObject()->getGameWorld()->getGameObjects(targetTag);
+	auto targetObjects = behaviorComponent->getGameObject()->getGameWorld()->getGameObjects(targetTag);
 	if (targetObjects.size() > 0) targetTransform = targetObjects[0]->getComponent<TransformComponent>("tranform");
 }
 

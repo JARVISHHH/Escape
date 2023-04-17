@@ -13,7 +13,7 @@ TrackAction::TrackAction(std::string targetTag)
 void TrackAction::start()
 {
 	if (trackObject) {
-		auto& targetObjects = behaviorComponent->getGameObject()->getGameWorld()->getGameObjects(targetTag);
+		auto targetObjects = behaviorComponent->getGameObject()->getGameWorld()->getGameObjects(targetTag);
 		if (targetObjects.size() > 0) targetTransform = targetObjects[0]->getComponent<TransformComponent>("transform");
 	}
 	pathfindingComponent = behaviorComponent->getGameObject()->getComponent<PathfindingComponent>("pathfinding");
