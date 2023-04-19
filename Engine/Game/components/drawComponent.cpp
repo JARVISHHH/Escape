@@ -22,6 +22,9 @@ void DrawComponent::draw()
 {
 	std::shared_ptr<TransformComponent> transformComponent = gameObject->getComponent<TransformComponent>("transform");
 	if (transformComponent == nullptr) return;
+	auto pos = transformComponent->getModelTransform()->getPos();
+	//if (gameObject->getTag() == "character")
+	//	std::cout << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
 	Global::graphics.drawShape(shape, transformComponent->getModelTransform(), material);
 }
 

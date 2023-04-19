@@ -68,23 +68,32 @@ bool HierarchicalGrid::insert(int id, std::shared_ptr<entityComponentPair> entit
 	node->entityComponentPairs.insert(entity);
 	entity->first->gridNode = node;
 
+	//std::cout << "id: " << id << std::endl;
+	//aabb->printMaxPoint();
+	//aabb->printMinPoint();
+
 	return true;
 }
 
 void HierarchicalGrid::update(std::shared_ptr<entityComponentPair> entity)
 {
 	const auto& ray = entity->first->getGameObject()->getComponent<TransformComponent>("transform")->getRay();
-	if (glm::length(ray->direction) < 0.000001) return;  // No move
+	//entity->first->getAABB()->printMaxPoint();
+	//entity->first->getAABB()->printMinPoint();
+	//std::cout << glm::length(ray->direction) << std::endl;
+	if (glm::length(ray->direction) == 0) return;  // No move
 	if(entity->first->gridNode != nullptr)
 		entity->first->gridNode->entityComponentPairs.erase(entity);
-	insert(1, entity, entity->first->getAABB());
+	if (!insert(1, entity, entity->first->getAABB()))
+		std::cout << "grid insert failed" << std::endl;
 }
 
 int sum = 0;
 
 void HierarchicalGrid::collide()
 {
-	sum = 0;
+	//sum = 0;
+	//print();
 	for (int i = 1; i < nodesNum; i++) {
 		collide(nodes[i], nodes[i]);
 	}

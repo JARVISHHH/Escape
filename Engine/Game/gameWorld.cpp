@@ -29,16 +29,22 @@ void GameWorld::start()
 
 void GameWorld::update(double seconds)
 {
-	auto characterControllerSystem = getGameSystem<CharacterControllerSystem>("characterController");
-	if (characterControllerSystem != nullptr) characterControllerSystem->update(seconds);
-	auto physicsSystem = getGameSystem<PhysicsSystem>("physics");
-	if (physicsSystem != nullptr) physicsSystem->update(seconds);
-	auto tickSystem = getGameSystem<TickSystem>("tick");
-	if (tickSystem != nullptr) tickSystem->update(seconds);
-	auto collisionSystem = getGameSystem<CollisionSystem>("collision");
-	if (collisionSystem != nullptr) collisionSystem->update(seconds);
-	auto cameraSystem = getGameSystem<CameraSystem>("camera");
-	if (cameraSystem != nullptr) cameraSystem->update(seconds);
+	double totalTime = seconds;
+	while (totalTime > 0) {
+		if (totalTime > maxTimeStep) seconds = maxTimeStep;
+		else seconds = totalTime;
+		auto characterControllerSystem = getGameSystem<CharacterControllerSystem>("characterController");
+		if (characterControllerSystem != nullptr) characterControllerSystem->update(seconds);
+		auto physicsSystem = getGameSystem<PhysicsSystem>("physics");
+		if (physicsSystem != nullptr) physicsSystem->update(seconds);
+		auto tickSystem = getGameSystem<TickSystem>("tick");
+		if (tickSystem != nullptr) tickSystem->update(seconds);
+		auto collisionSystem = getGameSystem<CollisionSystem>("collision");
+		if (collisionSystem != nullptr) collisionSystem->update(seconds);
+		auto cameraSystem = getGameSystem<CameraSystem>("camera");
+		if (cameraSystem != nullptr) cameraSystem->update(seconds);
+		totalTime -= seconds;
+	}
 }
 
 void GameWorld::draw()

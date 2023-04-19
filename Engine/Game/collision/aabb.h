@@ -28,6 +28,8 @@ public:
     glm::vec4 getCenter() {return center;}
     glm::vec4 getMaxPoint() { return maxPoint; }
     glm::vec4 getMinPoint() { return minPoint; }
+    void printMaxPoint() { std::cout << "maxPoint: " << maxPoint[0] << " " << maxPoint[1] << " " << maxPoint[2] << std::endl; }
+    void printMinPoint() { std::cout << "minPoint: " << minPoint[0] << " " << minPoint[1] << " " << minPoint[2] << std::endl; }
 
     void setMaxPoint(glm::vec4 maxPoint) { this->maxPoint = maxPoint; this->center = (this->maxPoint + this->minPoint) / 2.0f; }
     void setMinPoint(glm::vec4 minPoint) { this->minPoint = minPoint; this->center = (this->maxPoint + this->minPoint) / 2.0f;}

@@ -29,14 +29,10 @@ extern std::shared_ptr<App> app;
 
 GameScreen::GameScreen() 
 	: Screen(){
-
-	addEnvironmentMesh("level", "./Resources/Meshes/level.obj");
-	addEnvironmentMesh("board", "./Resources/Meshes/board.obj");
-	addEnvironmentMesh("bvh_test", "./Resources/Meshes/test.obj");
 	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
 	addEnvironmentMesh("building", "./Resources/Meshes/building.obj");
 	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
-	addEnvironmentMesh("test", "./Resources/Meshes/environment3nav.obj");
+	addEnvironmentMesh("test", "./Resources/Meshes/environment3.obj");
 
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");
@@ -56,7 +52,8 @@ void GameScreen::init()
 
 	// Create game object
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
-	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(rand() % 38 - 19, 0.25, rand() % 38 - 19));
+	//std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(10, 1, 5));
+	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(11, 5, 0));
 	std::shared_ptr<GameObject> environment = createEnvironment(shared_from_this(), "test");
 	std::shared_ptr<GameObject> enemy = createEnemy("cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
 
@@ -65,7 +62,7 @@ void GameScreen::init()
 	physicsSystem = std::make_shared<PhysicsSystem>();
 	std::shared_ptr<CharacterControllerSystem> characterControllerSystem = std::make_shared<CharacterControllerSystem>();
 	std::shared_ptr<CameraSystem> cameraSystem = std::make_shared<CameraSystem>(camera, character);
-	collisionSystem = std::make_shared<CollisionSystem>(6, gameWorld);
+	collisionSystem = std::make_shared<CollisionSystem>(2, gameWorld);
 	std::shared_ptr<TickSystem> tickSystem = std::make_shared<TickSystem>();
 
 	// Add systems to game world

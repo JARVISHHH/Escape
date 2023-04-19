@@ -9,7 +9,9 @@
 CollisionSystem::CollisionSystem(int level, std::shared_ptr<GameWorld> gameWorld)
 	: GameSystem("collision"), hierarchicalGrid(std::make_shared<HierarchicalGrid>(level, gameWorld->getAABB()))
 {
-
+	auto maxPoint = gameWorld->getAABB()->getMaxPoint(), minPoint = gameWorld->getAABB()->getMinPoint();
+	std::cout << "max point: " << maxPoint[0] << " " << maxPoint[1] << " " << maxPoint[2] << std::endl;
+	std::cout << "min point: " << minPoint[0] << " " << minPoint[1] << " " << minPoint[2] << std::endl;
 }
 
 void CollisionSystem::update(double seconds)
@@ -22,6 +24,10 @@ void CollisionSystem::doCollision()
 	updateEntityComponentPairs();
 
 	bool doAccelerate = true;
+
+	for (int i = 0; i < entityComponentPairs.size(); i++) {
+		entityComponentPairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
+	}
 
 	// Update movable game objects
 	if (!doAccelerate) {
@@ -46,7 +52,7 @@ void CollisionSystem::doCollision()
 
 	// Check collision between environments
 	for (int i = 0; i < entityComponentPairs.size(); i++) {
-		entityComponentPairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
+		entityComponentPairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRayEnd();
 		std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> collisionRes;
 		if(!doAccelerate) collisionRes = entityComponentPairs[i]->first->ellipsoidTriangleCollision(environmentComponents);
 		else collisionRes = entityComponentPairs[i]->first->ellipsoidTriangleCollision(bvh);
@@ -56,7 +62,7 @@ void CollisionSystem::doCollision()
 	}
 
 	for (int i = 0; i < entityComponentPairs.size(); i++) {
-		entityComponentPairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
+		entityComponentPairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRayEnd();
 	}
 }
 

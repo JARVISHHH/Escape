@@ -21,6 +21,10 @@ void TransformComponent::updateRay() {
 	ray->update(ray->endPoint, modelTransform->getPos());
 }
 
+void TransformComponent::updateRayEnd() {
+	ray->update(ray->origin, modelTransform->getPos());
+}
+
 void TransformComponent::setRay(glm::vec3 origin, glm::vec3 endPoint)
 {
 	ray->update(origin, endPoint);
