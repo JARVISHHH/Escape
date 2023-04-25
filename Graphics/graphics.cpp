@@ -83,9 +83,14 @@ std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string fil
     std::vector<tinyobj::material_t> materials;
     std::string warn, err;
 
-    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filepath.c_str())) {
+    std::string dirPath = "./Resources/Meshes/";
+
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filepath.c_str(), dirPath.c_str())) {
         throw std::runtime_error(warn + err);
     }
+
+    std::cout << "warn: " << warn << std::endl;
+    std::cout << "err: " << err << std::endl;
 
     int numTriangles = 0;
     for(size_t s = 0; s < shapes.size(); s++){

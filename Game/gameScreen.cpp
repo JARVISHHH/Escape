@@ -29,16 +29,19 @@ extern std::shared_ptr<App> app;
 
 GameScreen::GameScreen() 
 	: Screen(){
-	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
-	addEnvironmentMesh("building", "./Resources/Meshes/building.obj");
-	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
-	addEnvironmentMesh("test", "./Resources/Meshes/environment3.obj");
-
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");
 	Global::graphics.addMaterial("monomi", "Resources/Images/monomi.png");
 	Global::graphics.addMaterial("learn", "Resources/Images/learn.jpg");
 	Global::graphics.addMaterial("wall", "Resources/Images/wall.jpg");
+	Global::graphics.addMaterial("ground", "Resources/Images/ground.png");
+
+	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
+	addEnvironmentMesh("building", "./Resources/Meshes/building.obj");
+	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
+	addEnvironmentMesh("test", "./Resources/Meshes/environment3.obj");
+	addEnvironmentMesh("map", "./Resources/Meshes/map.obj");
+	addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj");
 }
 
 void GameScreen::init()
@@ -54,7 +57,8 @@ void GameScreen::init()
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
 	//std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(10, 1, 5));
 	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(11, 5, 0));
-	std::shared_ptr<GameObject> environment = createEnvironment(shared_from_this(), "test");
+	std::shared_ptr<GameObject> environment = createEnvironment(shared_from_this(), "map");
+	std::shared_ptr<GameObject> ground = createEnvironment(shared_from_this(), "ground", "ground");
 	std::shared_ptr<GameObject> enemy = createEnemy("cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
 
 	// Create systems
@@ -83,6 +87,10 @@ void GameScreen::init()
 	drawSystem->addGameObject(goalObject);	
 	collisionSystem->addGameObject(goalObject);
 	gameWorld->addGameObject(goalObject);
+
+	drawSystem->addGameObject(ground);
+	collisionSystem->addEnvironmentObject(ground);
+	gameWorld->addGameObject(ground);
 
 	drawSystem->addGameObject(environment);
 	collisionSystem->addEnvironmentObject(environment);

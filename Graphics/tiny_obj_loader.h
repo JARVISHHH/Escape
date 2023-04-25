@@ -2541,6 +2541,7 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
   }
 
   std::string baseDir = mtl_basedir ? mtl_basedir : "";
+
   if (!baseDir.empty()) {
 #ifndef _WIN32
     const char dirsep = '/';
@@ -2813,6 +2814,8 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
     if ((0 == strncmp(token, "usemtl", 6))) {
       token += 6;
       std::string namebuf = parseString(&token);
+
+      std::cout << "material: " << namebuf << std::endl;
 
       int newMaterialId = -1;
       std::map<std::string, int>::const_iterator it =
