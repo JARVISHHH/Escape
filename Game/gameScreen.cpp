@@ -41,7 +41,7 @@ GameScreen::GameScreen()
 	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
 	addEnvironmentMesh("test", "./Resources/Meshes/environment3.obj");
 	addEnvironmentMesh("map", "./Resources/Meshes/map.obj");
-	addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj");
+	addEnvironmentMesh("ground", "./Resources/Meshes/groundNav.obj");
 }
 
 void GameScreen::init()
@@ -50,15 +50,15 @@ void GameScreen::init()
 	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this());
 	
 	// Create NavMesh
-	navMesh = std::make_shared<NavMesh>("./Resources/Meshes/environment3nav.obj");
+	navMesh = std::make_shared<NavMesh>("./Resources/Meshes/groundNav.obj");
 	navMesh->bake();
 
 	// Create game object
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
 	//std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(10, 1, 5));
 	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(11, 5, 0));
-	std::shared_ptr<GameObject> environment = createEnvironment(shared_from_this(), "map");
-	std::shared_ptr<GameObject> ground = createEnvironment(shared_from_this(), "ground", "ground");
+	//std::shared_ptr<GameObject> environment = createEnvironment(shared_from_this(), "ground");
+	std::shared_ptr<GameObject> ground = createEnvironment(shared_from_this(), "ground", "");
 	std::shared_ptr<GameObject> enemy = createEnemy("cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
 
 	// Create systems
@@ -92,9 +92,9 @@ void GameScreen::init()
 	collisionSystem->addEnvironmentObject(ground);
 	gameWorld->addGameObject(ground);
 
-	drawSystem->addGameObject(environment);
-	collisionSystem->addEnvironmentObject(environment);
-	gameWorld->addGameObject(environment);
+	//drawSystem->addGameObject(environment);
+	//collisionSystem->addEnvironmentObject(environment);
+	//gameWorld->addGameObject(environment);
 
 	drawSystem->addGameObject(enemy);
 	//tickSystem->addComponent(enemy->getComponent<EnemyMovement>("enemyMovement"));

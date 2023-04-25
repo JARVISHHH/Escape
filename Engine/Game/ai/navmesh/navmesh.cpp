@@ -59,6 +59,8 @@ void NavMesh::bake()
 	std::cout << "exterior: " << exterior << std::endl;
 }
 
+int out = 0;
+
 std::vector<glm::vec3> NavMesh::pathFinding(glm::vec3 start, glm::vec3 end) {
 	// Get start and end positions
 	std::shared_ptr<NavMeshNode> startNode, endNode;
@@ -78,6 +80,12 @@ std::vector<glm::vec3> NavMesh::pathFinding(glm::vec3 start, glm::vec3 end) {
 
 	auto path = aStar(startPos, endPos, startNode, endNode);
 
+	//if (out < 5) {
+	//	for (int i = 0; i < path.size(); i++) {
+	//		std::cout << i << ": " << path[i][0] << " " << path[i][1] << " " << path[i][2] << std::endl;
+	//	}
+	//	out++;
+	//}
 	//for (int i = 0; i < path.size(); i++) {
 	//	std::cout << i << ": " << path[i][0] << " " << path[i][1] << " " << path[i][2] << std::endl;
 	//}
@@ -115,7 +123,7 @@ std::vector<glm::vec3> NavMesh::aStar(glm::vec3 startPos, glm::vec3 endPos, std:
 	std::unordered_map<std::shared_ptr<NavMeshEdge>, std::shared_ptr<NavMeshEdge>> lastEdge;
 	std::unordered_map<std::shared_ptr<NavMeshEdge>, std::shared_ptr<NavMeshNode>> enteringNode;
 	std::unordered_set<std::shared_ptr<NavMeshEdge>> closedList;
-	std::priority_queue<std::pair<float, std::shared_ptr<NavMeshEdge>>> openList;
+	std::priority_queue<std::pair<float, std::shared_ptr<NavMeshEdge>>, std::vector<std::pair<float, std::shared_ptr<NavMeshEdge>>>, std::greater<std::pair<float, std::shared_ptr<NavMeshEdge>>>> openList;
 
 	std::vector<glm::vec3> path = {};
 

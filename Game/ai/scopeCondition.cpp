@@ -21,6 +21,7 @@ bool ScopeCondition::checkCondition(double seconds)
 	auto sourcePos = transform->getModelTransform()->getPos();
 	auto targetPos = targetTransform->getModelTransform()->getPos();
 	float curDistance = glm::length(sourcePos - targetPos);
+	std::cout << curDistance << std::endl;
 	if (curDistance <= maxDistance) return false;
 	else return true;
 }

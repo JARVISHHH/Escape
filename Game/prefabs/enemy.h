@@ -30,13 +30,13 @@ std::shared_ptr<GameObject> createEnemy(std::string shape, std::string material,
 	behaviorComponent->blackBoard["test2"] = behaviorComponent;
 	std::cout << "original: " << pathfindingComponent << " " << behaviorComponent << std::endl;
 	std::shared_ptr<Selector> root = std::make_shared<Selector>();
-	std::shared_ptr<Sequence> backBaseSequence = std::make_shared<Sequence>();
-	std::shared_ptr<ScopeCondition> scopeCondition = std::make_shared<ScopeCondition>("character", 3, navMesh);
-	std::shared_ptr<TrackAction> trackBase = std::make_shared<TrackAction>(pos);
+	//std::shared_ptr<Sequence> backBaseSequence = std::make_shared<Sequence>();
+	//std::shared_ptr<ScopeCondition> scopeCondition = std::make_shared<ScopeCondition>("character", 30, navMesh);
+	//std::shared_ptr<TrackAction> trackBase = std::make_shared<TrackAction>(pos);
 	std::shared_ptr<TrackAction> trackTarget = std::make_shared<TrackAction>("character");
-	backBaseSequence->addChild(scopeCondition);
-	backBaseSequence->addChild(trackBase);
-	root->addChild(backBaseSequence);
+	//backBaseSequence->addChild(scopeCondition);
+	//backBaseSequence->addChild(trackBase);
+	//root->addChild(backBaseSequence);
 	root->addChild(trackTarget);
 	behaviorComponent->setRoot(root);
 	// Moving component
