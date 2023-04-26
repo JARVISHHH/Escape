@@ -13,10 +13,7 @@
 #include <Engine/Game/gameSystems/tickSystem.h>
 
 #include "gameComponents/characterCollisionResponse.h"
-#include <Game/gameComponents/fallingCollisionResponse.h>
-#include <Game/gameComponents/fallingPhysics.h>
 #include <Engine/Game/components/collisionComponents/environmentComponent.h>
-#include <Game/gameComponents/movingBoard.h>
 
 #include <Game/prefabs/character.h>
 #include <Game/prefabs/environment.h>
@@ -57,7 +54,7 @@ void GameScreen::init()
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
 	//std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(10, 1, 5));
 	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(11, 5, 0));
-	//std::shared_ptr<GameObject> environment = createEnvironment(shared_from_this(), "ground");
+	std::shared_ptr<GameObject> environment = createEnvironment(shared_from_this(), "ground");
 	std::shared_ptr<GameObject> ground = createEnvironment(shared_from_this(), "ground", "");
 	std::shared_ptr<GameObject> enemy = createEnemy("cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
 
@@ -82,6 +79,7 @@ void GameScreen::init()
 	physicsSystem->addGameObject(character);
 	characterControllerSystem->setCharatcer(character);
 	collisionSystem->addGameObject(character);
+	tickSystem->addComponent(character->getComponent<HealthComponent>("health"));
 	gameWorld->addGameObject(character);
 
 	drawSystem->addGameObject(goalObject);	
@@ -92,9 +90,9 @@ void GameScreen::init()
 	collisionSystem->addEnvironmentObject(ground);
 	gameWorld->addGameObject(ground);
 
-	//drawSystem->addGameObject(environment);
-	//collisionSystem->addEnvironmentObject(environment);
-	//gameWorld->addGameObject(environment);
+	drawSystem->addGameObject(environment);
+	collisionSystem->addEnvironmentObject(environment);
+	gameWorld->addGameObject(environment);
 
 	drawSystem->addGameObject(enemy);
 	//tickSystem->addComponent(enemy->getComponent<EnemyMovement>("enemyMovement"));

@@ -17,6 +17,6 @@ Health
 - [ ] health for player
 - [ ] health pack maybe?
 
-Pathfind
+Pathfinding
 
 - [ ] funnel algorithm

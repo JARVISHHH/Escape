@@ -12,3 +12,4 @@
 #include <Engine/Game/components/transformComponent.h>
 #include <Engine/Game/components/pathFindingComponent.h>
 #include <Engine/Game/components/behaviorComponent.h>
+#include <Engine/Game/components/healthComponent.h>

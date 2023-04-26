@@ -126,6 +126,8 @@ add_executable(${PROJECT_NAME}
     Engine/Game/components/pathFindingComponent.cpp
     Engine/Game/components/behaviorComponent.h
     Engine/Game/components/behaviorComponent.cpp
+    Engine/Game/components/healthComponent.h
+    Engine/Game/components/healthComponent.cpp
     Engine/Game/components/collisionResponseComponent.h
     Engine/Game/components/collisionResponseComponent.cpp
     Engine/Game/components/collisionComponents/collisionComponent.h
@@ -194,12 +196,6 @@ add_executable(${PROJECT_NAME}
 
     Game/gameComponents/characterCollisionResponse.h
     Game/gameComponents/characterCollisionResponse.cpp
-    Game/gameComponents/fallingCollisionResponse.h
-    Game/gameComponents/fallingCollisionResponse.cpp
-    Game/gameComponents/fallingPhysics.h
-    Game/gameComponents/fallingPhysics.cpp
-    Game/gameComponents/movingBoard.h
-    Game/gameComponents/movingBoard.cpp
     Game/gameComponents/enemyMovement.h
     Game/gameComponents/enemyMovement.cpp
  )
