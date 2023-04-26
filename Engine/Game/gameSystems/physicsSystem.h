@@ -5,6 +5,7 @@
 class PhysicsSystem : public GameSystem {
 public:
 	PhysicsSystem();
+	PhysicsSystem(std::shared_ptr<GameWorld> gameWorld);
 
 	void update(double seconds);
 	void addGameObject(std::shared_ptr<GameObject> gameObject);

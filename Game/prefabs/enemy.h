@@ -7,7 +7,7 @@
 #include <Engine/Game/ai/behaviortree/selector.h>
 #include <Engine/Game/ai/behaviortree/sequence.h>
 
-std::shared_ptr<GameObject> createEnemy(std::string shape, std::string material, glm::vec3 pos, std::shared_ptr<NavMesh> navMesh)
+std::shared_ptr<GameObject> createEnemy(std::shared_ptr<GameWorld> gameWorld, std::string shape, std::string material, glm::vec3 pos, std::shared_ptr<NavMesh> navMesh)
 {
 	std::shared_ptr<GameObject> enemyObject = std::make_shared<GameObject>("enemy");
 
@@ -50,6 +50,13 @@ std::shared_ptr<GameObject> createEnemy(std::string shape, std::string material,
 	enemyObject->addComponent(pathfindingComponent);
 	enemyObject->addComponent(behaviorComponent);
 	//enemyObject->addComponent(enemyMovement);
+
+	// Add the gameObject to systems
+	gameWorld->getGameSystem<DrawSystem>("draw")->addGameObject(enemyObject);
+	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(pathfindingComponent);
+	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(behaviorComponent);
+	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(enemyObject);
+	gameWorld->addGameObject(enemyObject);
 
 	return enemyObject;
 }

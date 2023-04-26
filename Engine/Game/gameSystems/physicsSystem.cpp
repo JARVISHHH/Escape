@@ -8,6 +8,11 @@ PhysicsSystem::PhysicsSystem() : GameSystem("physics")
 {
 }
 
+PhysicsSystem::PhysicsSystem(std::shared_ptr<GameWorld> gameWorld)
+	:GameSystem(gameWorld, "physics")
+{
+}
+
 void PhysicsSystem::update(double seconds)
 {
 	updateGameObjects();

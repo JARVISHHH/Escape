@@ -8,6 +8,11 @@ CharacterControllerSystem::CharacterControllerSystem()
 
 }
 
+CharacterControllerSystem::CharacterControllerSystem(std::shared_ptr<GameWorld> gameWorld)
+	: GameSystem(gameWorld, "characterController")
+{
+}
+
 bool CharacterControllerSystem::setCharatcer(std::shared_ptr<GameObject> character)
 {
 	this->character = character;

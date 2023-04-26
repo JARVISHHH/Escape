@@ -6,7 +6,7 @@
 #include <Engine/Game/components/collisionComponents/environmentComponent.h>
 #include <Engine/Game/components/transformComponent.h>
 
-CollisionSystem::CollisionSystem(int level, std::shared_ptr<GameWorld> gameWorld)
+CollisionSystem::CollisionSystem(std::shared_ptr<GameWorld> gameWorld, int level)
 	: GameSystem("collision"), hierarchicalGrid(std::make_shared<HierarchicalGrid>(level, gameWorld->getAABB()))
 {
 	auto maxPoint = gameWorld->getAABB()->getMaxPoint(), minPoint = gameWorld->getAABB()->getMinPoint();

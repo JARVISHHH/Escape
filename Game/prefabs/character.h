@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Game/components.h"
-#include <Engine/Game/components/healthComponent.h>
 
 std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld)
 {
@@ -39,6 +38,14 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	character->addComponent(cylinderComponent);
 	character->addComponent(collisionResponseComponent);
 	character->addComponent(healthComponent);
+
+	gameWorld->getGameSystem<CameraSystem>("camera")->setCharacter(character);
+	gameWorld->getGameSystem<DrawSystem>("draw")->addGameObject(character);
+	gameWorld->getGameSystem<PhysicsSystem>("physics")->addGameObject(character);
+	gameWorld->getGameSystem<CharacterControllerSystem>("characterController")->setCharatcer(character);
+	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(character);
+	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(healthComponent);
+	gameWorld->addGameObject(character);
 
 	return character;
 }

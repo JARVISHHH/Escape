@@ -44,26 +44,15 @@ GameScreen::GameScreen()
 void GameScreen::init()
 {
 	auto camera = std::make_shared<Camera>();
-	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this());
-	
-	// Create NavMesh
-	navMesh = std::make_shared<NavMesh>("./Resources/Meshes/groundNav.obj");
-	navMesh->bake();
 
-	// Create game object
-	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
-	//std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(10, 1, 5));
-	std::shared_ptr<GameObject> goalObject = createGoal(glm::vec3(11, 5, 0));
-	std::shared_ptr<GameObject> environment = createEnvironment(shared_from_this(), "ground");
-	std::shared_ptr<GameObject> ground = createEnvironment(shared_from_this(), "ground", "");
-	std::shared_ptr<GameObject> enemy = createEnemy("cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
+	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this());
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
 	physicsSystem = std::make_shared<PhysicsSystem>();
 	std::shared_ptr<CharacterControllerSystem> characterControllerSystem = std::make_shared<CharacterControllerSystem>();
-	std::shared_ptr<CameraSystem> cameraSystem = std::make_shared<CameraSystem>(camera, character);
-	collisionSystem = std::make_shared<CollisionSystem>(2, gameWorld);
+	std::shared_ptr<CameraSystem> cameraSystem = std::make_shared<CameraSystem>(camera);
+	collisionSystem = std::make_shared<CollisionSystem>(gameWorld, 2);
 	std::shared_ptr<TickSystem> tickSystem = std::make_shared<TickSystem>();
 
 	// Add systems to game world
@@ -73,33 +62,17 @@ void GameScreen::init()
 	gameWorld->addGameSystem(cameraSystem);
 	gameWorld->addGameSystem(collisionSystem);
 	gameWorld->addGameSystem(tickSystem);
+	
+	// Create NavMesh
+	navMesh = std::make_shared<NavMesh>("./Resources/Meshes/groundNav.obj");
+	navMesh->bake();
 
-	// Add game objects to systems and game world
-	drawSystem->addGameObject(character);
-	physicsSystem->addGameObject(character);
-	characterControllerSystem->setCharatcer(character);
-	collisionSystem->addGameObject(character);
-	tickSystem->addComponent(character->getComponent<HealthComponent>("health"));
-	gameWorld->addGameObject(character);
-
-	drawSystem->addGameObject(goalObject);	
-	collisionSystem->addGameObject(goalObject);
-	gameWorld->addGameObject(goalObject);
-
-	drawSystem->addGameObject(ground);
-	collisionSystem->addEnvironmentObject(ground);
-	gameWorld->addGameObject(ground);
-
-	drawSystem->addGameObject(environment);
-	collisionSystem->addEnvironmentObject(environment);
-	gameWorld->addGameObject(environment);
-
-	drawSystem->addGameObject(enemy);
-	//tickSystem->addComponent(enemy->getComponent<EnemyMovement>("enemyMovement"));
-	tickSystem->addComponent(enemy->getComponent<PathfindingComponent>("pathfinding"));
-	tickSystem->addComponent(enemy->getComponent<BehaviorComponent>("behavior"));
-	collisionSystem->addGameObject(enemy);
-	gameWorld->addGameObject(enemy);
+	// Create game object
+	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
+	std::shared_ptr<GameObject> goalObject = createGoal(gameWorld, glm::vec3(11, 5, 0));
+	std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "ground");
+	std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "ground", "");
+	std::shared_ptr<GameObject> enemy = createEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
 
 	collisionSystem->buildBVH();
 	collisionSystem->buildHG();
@@ -109,7 +82,6 @@ void GameScreen::init()
 	score = 0;
 	result = "";
 	time = 0;
-	fallingNumber = 0;
 	active = true;
 
 	Screen::init();

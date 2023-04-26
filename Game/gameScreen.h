@@ -37,5 +37,4 @@ private:
     std::string result = "";
     float time = 0;
     float maxTime = 20;
-    int fallingNumber = 0;
 };

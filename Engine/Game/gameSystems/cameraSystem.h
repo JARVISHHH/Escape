@@ -4,7 +4,8 @@
 
 class CameraSystem : public GameSystem {
 public:
-	CameraSystem(std::shared_ptr<Camera> camera, std::shared_ptr<GameObject> character);
+	CameraSystem(std::shared_ptr<Camera> camera);
+	CameraSystem(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Camera> camera);
 
 	void update(double seconds);
 	void mousePosEvent(double xpos, double ypos);

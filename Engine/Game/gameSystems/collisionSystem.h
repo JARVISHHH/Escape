@@ -10,7 +10,7 @@ class EnvironmentComponent;
 
 class CollisionSystem : public GameSystem {
 public:
-	CollisionSystem(int level, std::shared_ptr<GameWorld> gameWorld);
+	CollisionSystem(std::shared_ptr<GameWorld> gameWorld, int level);
 
 	void update(double seconds);
 	void doCollision();

@@ -1,11 +1,16 @@
 #include "cameraSystem.h"
 #include <Engine/Game/components/transformComponent.h>
 
-CameraSystem::CameraSystem(std::shared_ptr<Camera> camera, std::shared_ptr<GameObject> character)
+CameraSystem::CameraSystem(std::shared_ptr<Camera> camera)
 	: GameSystem("camera")
 {
 	this->camera = camera;
-	this->character = character;
+}
+
+CameraSystem::CameraSystem(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Camera> camera)
+	: GameSystem(gameWorld, "camera")
+{
+	this->camera = camera;
 }
 
 void CameraSystem::update(double seconds)

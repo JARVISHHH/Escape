@@ -7,6 +7,11 @@ DrawSystem::DrawSystem() : GameSystem("draw")
 	
 }
 
+DrawSystem::DrawSystem(std::shared_ptr<GameWorld> gameWorld)
+	:GameSystem(gameWorld, "draw")
+{
+}
+
 void DrawSystem::draw()
 {
 	updateGameObjects();

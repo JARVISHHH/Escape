@@ -14,7 +14,7 @@ Time
 
 Health
 
-- [ ] health for player
+- [x] health for player
 - [ ] health pack maybe?
 
 Pathfinding

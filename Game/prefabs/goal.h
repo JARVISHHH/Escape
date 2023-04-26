@@ -2,7 +2,7 @@
 
 #include <Game/components.h>
 
-std::shared_ptr<GameObject> createGoal(glm::vec3 pos)
+std::shared_ptr<GameObject> createGoal(std::shared_ptr<GameWorld> gameWorld,  glm::vec3 pos)
 {
 	std::shared_ptr<GameObject> goalObject = std::make_shared<GameObject>("goal");
 
@@ -24,6 +24,11 @@ std::shared_ptr<GameObject> createGoal(glm::vec3 pos)
 	goalObject->addComponent(drawComponent);
 	goalObject->addComponent(collisionComponent);
 	goalObject->addComponent(collisionResponse);
+
+	// Add the game object to systems
+	gameWorld->getGameSystem<DrawSystem>("draw")->addGameObject(goalObject);
+	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(goalObject);
+	gameWorld->addGameObject(goalObject);
 
 	return goalObject;
 }

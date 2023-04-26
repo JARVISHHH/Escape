@@ -5,6 +5,7 @@
 class DrawSystem : public GameSystem {
 public:
 	DrawSystem();
+	DrawSystem(std::shared_ptr<GameWorld> gameWorld);
 
 	void draw();
 

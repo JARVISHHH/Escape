@@ -8,6 +8,7 @@ class CharacterControllerSystem : public GameSystem
 {
 public:
 	CharacterControllerSystem();
+	CharacterControllerSystem(std::shared_ptr<GameWorld> gameWorld);
 
 	void update(double seconds);
 

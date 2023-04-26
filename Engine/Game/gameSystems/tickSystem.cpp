@@ -6,6 +6,11 @@ TickSystem::TickSystem()
 {
 }
 
+TickSystem::TickSystem(std::shared_ptr<GameWorld> gameWorld)
+	: GameSystem(gameWorld, "tick")
+{
+}
+
 void TickSystem::update(double seconds)
 {
 	for (const auto& component : components) {
