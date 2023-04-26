@@ -29,6 +29,7 @@ void GameWorld::start()
 
 void GameWorld::update(double seconds)
 {
+	if (stop || finish) return;
 	double totalTime = seconds;
 	while (totalTime > 0) {
 		if (totalTime > maxTimeStep) seconds = maxTimeStep;
@@ -102,6 +103,12 @@ bool GameWorld::removeGameObject(std::shared_ptr<GameObject> gameObject)
 			gameObjects[tag].erase(gameObjects[tag].begin() + i);
 	}
 	return true;
+}
+
+std::shared_ptr<GameObject> GameWorld::getGameObject(std::string tag)
+{
+	if (gameObjects.find(tag) == gameObjects.end()) return nullptr;
+	return gameObjects[tag][0];
 }
 
 std::vector<std::shared_ptr<GameObject>> GameWorld::getGameObjects(std::string tag) {

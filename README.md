@@ -9,7 +9,7 @@ Enemy
 
 Time
 
-- [ ] 60 seconds
+- [x] 60 seconds
 - [ ] score if survive 60 seconds
 
 Health

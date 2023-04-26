@@ -19,6 +19,7 @@
 #include <Game/prefabs/environment.h>
 #include <Game/prefabs/goal.h>
 #include <Game/prefabs/enemy.h>
+#include <Game/prefabs/gamehandler.h>
 
 #include <corecrt_math_defines.h>
 
@@ -68,6 +69,7 @@ void GameScreen::init()
 	navMesh->bake();
 
 	// Create game object
+	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 10);
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
 	std::shared_ptr<GameObject> goalObject = createGoal(gameWorld, glm::vec3(11, 5, 0));
 	std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "ground");

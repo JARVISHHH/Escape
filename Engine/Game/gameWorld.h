@@ -32,6 +32,7 @@ public:
 	// Game objects related
 	bool addGameObject(std::shared_ptr<GameObject> gameObject);  // Add an existed game object
 	bool removeGameObject(std::shared_ptr<GameObject> gameObject);  // Remove a game object
+	std::shared_ptr<GameObject> getGameObject(std::string tag);  // Get the first found game object
 	std::vector<std::shared_ptr<GameObject>> getGameObjects(std::string tag);  // Get a list of game object
 
 	std::shared_ptr<Camera> getCamera();
@@ -40,8 +41,10 @@ public:
 
 	std::shared_ptr<AABB> getAABB();
 
+	void setIsStop(bool stop) { this->stop = stop; }
 	void setWin(bool win) { this->win = win; }
 	void setFinish(bool finish) { this->finish = finish; }
+	bool isStop() { return stop; }
 	bool isFinish() { return finish; }
 	bool istWin() { return win; }
 
@@ -55,6 +58,7 @@ protected:
 	std::shared_ptr<AABB> aabb = std::make_shared<AABB>(glm::vec4(20, 20, 20, 1), glm::vec4(-20, -5, -20, 1));
 
 	double maxTimeStep = 0.005;
+	bool stop = false;
 
 	bool finish = false;
 	bool win = false;

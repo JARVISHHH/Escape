@@ -188,6 +188,7 @@ add_executable(${PROJECT_NAME}
     Game/prefabs/environment.h
     Game/prefabs/goal.h
     Game/prefabs/enemy.h
+    Game/prefabs/gamehandler.h
 
     Game/ai/scopeCondition.h
     Game/ai/scopeCondition.cpp
@@ -198,6 +199,8 @@ add_executable(${PROJECT_NAME}
     Game/gameComponents/characterCollisionResponse.cpp
     Game/gameComponents/enemyMovement.h
     Game/gameComponents/enemyMovement.cpp
+    Game/gameComponents/gameHandlerComponent.h
+    Game/gameComponents/gameHandlerComponent.cpp
  )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})
