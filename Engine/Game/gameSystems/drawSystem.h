@@ -8,11 +8,12 @@ public:
 	DrawSystem(std::shared_ptr<GameWorld> gameWorld);
 
 	void draw();
+	void drawPhong();
+	void drawText();
 
-	bool addGameObject(std::shared_ptr<GameObject> gameObject);
-
-	void updateGameObjects();
+	bool addComponent(std::shared_ptr<GameComponent> gameComponent);
+	void updateComponents();
 
 protected:
-	std::vector<std::shared_ptr<GameObject>> gameObjects;
+	std::vector<std::shared_ptr<GameComponent>> components;
 };

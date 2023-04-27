@@ -15,7 +15,7 @@ public:
 	DrawComponent(std::string shapeType);
 	DrawComponent(std::string shapeType, std::string materialName);
 
-	void draw();
+	void drawPhong() override;
 
 	void setShape(std::string shapeType);
 	void setMaterial(std::string materialName);

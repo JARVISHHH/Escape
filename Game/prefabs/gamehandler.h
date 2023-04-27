@@ -17,6 +17,7 @@ std::shared_ptr<GameObject> createGameHandler(std::shared_ptr<GameWorld> gameWor
 	gameHandler->addComponent(gameHandlerComponent);
 
 	// Add the gameObject to systems
+	gameWorld->getGameSystem<DrawSystem>("draw")->addComponent(gameHandlerComponent);
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(gameHandlerComponent);
 	gameWorld->addGameObject(gameHandler);
 

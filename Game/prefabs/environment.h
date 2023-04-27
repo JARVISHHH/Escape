@@ -29,7 +29,7 @@ std::shared_ptr<GameObject> createEnvironment(std::shared_ptr<GameWorld> gameWor
 	environmentObject->addComponent(collisionComponent);
 
 	// Add the gameObject to systems
-	gameWorld->getGameSystem<DrawSystem>("draw")->addGameObject(environmentObject);
+	gameWorld->getGameSystem<DrawSystem>("draw")->addComponent(drawComponent);
 	gameWorld->getGameSystem<CollisionSystem>("collision")->addEnvironmentObject(environmentObject);
 	gameWorld->addGameObject(environmentObject);
 

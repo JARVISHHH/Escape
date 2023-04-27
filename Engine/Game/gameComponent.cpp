@@ -14,6 +14,14 @@ void GameComponent::update(double seconds)
 {
 }
 
+void GameComponent::drawPhong()
+{
+}
+
+void GameComponent::drawText()
+{
+}
+
 std::string GameComponent::getTag() const
 {
 	return tag;

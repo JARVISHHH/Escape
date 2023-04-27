@@ -26,7 +26,7 @@ std::shared_ptr<GameObject> createGoal(std::shared_ptr<GameWorld> gameWorld,  gl
 	goalObject->addComponent(collisionResponse);
 
 	// Add the game object to systems
-	gameWorld->getGameSystem<DrawSystem>("draw")->addGameObject(goalObject);
+	gameWorld->getGameSystem<DrawSystem>("draw")->addComponent(drawComponent);
 	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(goalObject);
 	gameWorld->addGameObject(goalObject);
 

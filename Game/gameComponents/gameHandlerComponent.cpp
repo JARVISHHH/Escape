@@ -27,10 +27,21 @@ void GameHandlerComponent::update(double seconds)
 	}
 }
 
+void GameHandlerComponent::drawText()
+{
+	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), result, glm::ivec2(50, 300), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 2.5f, 0.1f, glm::vec3(1, 0, 1));
+}
+
 void GameHandlerComponent::endGame(bool win)
 {
-	if (win) gameState = GameState::Win;
-	else gameState = GameState::Lose;
+	if (win) {
+		gameState = GameState::Win;
+		result = "You win!";
+	}
+	else {
+		gameState = GameState::Lose;
+		result = "You lose!";
+	}
 	gameObject->getGameWorld()->setWin(win);
 	gameObject->getGameWorld()->setFinish(true);
 }

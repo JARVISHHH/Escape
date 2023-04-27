@@ -52,7 +52,7 @@ std::shared_ptr<GameObject> createEnemy(std::shared_ptr<GameWorld> gameWorld, st
 	//enemyObject->addComponent(enemyMovement);
 
 	// Add the gameObject to systems
-	gameWorld->getGameSystem<DrawSystem>("draw")->addGameObject(enemyObject);
+	gameWorld->getGameSystem<DrawSystem>("draw")->addComponent(drawComponent);
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(pathfindingComponent);
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(behaviorComponent);
 	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(enemyObject);

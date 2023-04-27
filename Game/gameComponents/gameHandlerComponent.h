@@ -16,6 +16,7 @@ public:
 
 	void start() override;
 	void update(double seconds) override;
+	void drawText() override;
 
 	void endGame(bool win);
 
@@ -24,6 +25,8 @@ private:
 	GameState gameState;
 	float maxTime = 60;
 	float leftTime;
+
+	std::string result = "";
 
 	std::string targetTag;
 	std::shared_ptr<HealthComponent> target;

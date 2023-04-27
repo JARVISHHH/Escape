@@ -9,6 +9,8 @@ public:
 
 	virtual void start();
 	virtual void update(double seconds);
+	virtual void drawPhong();
+	virtual void drawText();
 
 	std::string getTag() const;
 	void setGameObject(std::shared_ptr<GameObject> gameObject);

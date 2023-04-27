@@ -22,9 +22,8 @@ public:
 
     void update(double seconds) override;
     void draw() override;
-    void addScore();
 
-    void checkResult();
+    //void checkResult();
 
 private:
     std::shared_ptr<DrawSystem> drawSystem;
@@ -33,8 +32,6 @@ private:
 
     std::shared_ptr<NavMesh> navMesh;
 
-    int score = 0;
-    std::string result = "";
-    float time = 0;
-    float maxTime = 20;
+    //int score = 0;
+    //std::string result = "";
 };

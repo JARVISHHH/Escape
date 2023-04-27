@@ -18,7 +18,7 @@ DrawComponent::DrawComponent(std::string shapeType, std::string materialName) : 
 	if(materialName.compare("") != 0) material = Global::graphics.getMaterial(materialName);
 }
 
-void DrawComponent::draw()
+void DrawComponent::drawPhong()
 {
 	std::shared_ptr<TransformComponent> transformComponent = gameObject->getComponent<TransformComponent>("transform");
 	if (transformComponent == nullptr) return;

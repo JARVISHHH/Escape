@@ -14,26 +14,39 @@ DrawSystem::DrawSystem(std::shared_ptr<GameWorld> gameWorld)
 
 void DrawSystem::draw()
 {
-	updateGameObjects();
+	updateComponents();
+	drawPhong();
+	drawText();
+}
+
+void DrawSystem::drawPhong()
+{
 	Global::graphics.bindShader("phong");
 	Global::graphics.setGlobalData(glm::vec3(0.5f));
 	Global::graphics.setCameraData(gameWorld->getCamera());
-	std::shared_ptr<DrawComponent> drawComponent = nullptr;
-	for (auto gameObject : gameObjects) {
-		drawComponent = gameObject->getComponent<DrawComponent>("draw");
-		if (drawComponent != nullptr) drawComponent->draw();
+	for (auto component : components) {
+		component->drawPhong();
 	}
 }
 
-bool DrawSystem::addGameObject(std::shared_ptr<GameObject> gameObject)
+void DrawSystem::drawText()
 {
-	gameObjects.push_back(gameObject);
+	Global::graphics.bindShader("text");
+	std::shared_ptr<DrawComponent> drawComponent = nullptr;
+	for (auto component : components) {
+		component->drawText();
+	}
+}
+
+bool DrawSystem::addComponent(std::shared_ptr<GameComponent> gameComponent)
+{
+	components.push_back(gameComponent);
 	return true;
 }
 
-void DrawSystem::updateGameObjects()
+void DrawSystem::updateComponents()
 {
-	for (int i = gameObjects.size() - 1; i >= 0; i--)
-		if (!gameObjects[i]->getActiveStatus())
-			gameObjects.erase(gameObjects.begin() + i);
+	for (int i = components.size() - 1; i >= 0; i--)
+		if (!components[i]->getGameObject()->getActiveStatus())
+			components.erase(components.begin() + i);
 }
