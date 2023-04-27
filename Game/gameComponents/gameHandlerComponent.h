@@ -30,4 +30,6 @@ private:
 
 	std::string targetTag;
 	std::shared_ptr<HealthComponent> target;
+
+	int score = 0;
 };

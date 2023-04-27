@@ -39,7 +39,7 @@ GameScreen::GameScreen()
 	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
 	addEnvironmentMesh("test", "./Resources/Meshes/environment3.obj");
 	addEnvironmentMesh("map", "./Resources/Meshes/map.obj");
-	addEnvironmentMesh("ground", "./Resources/Meshes/groundNav.obj");
+	addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj");
 }
 
 void GameScreen::init()
@@ -72,8 +72,8 @@ void GameScreen::init()
 	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 10);
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
 	std::shared_ptr<GameObject> goalObject = createGoal(gameWorld, glm::vec3(11, 5, 0));
-	std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "ground");
-	std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "ground", "");
+	std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "map");
+	std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "ground", "ground");
 	std::shared_ptr<GameObject> enemy = createEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
 
 	collisionSystem->buildBVH();

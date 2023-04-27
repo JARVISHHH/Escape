@@ -16,7 +16,6 @@ void GameHandlerComponent::update(double seconds)
 {
 	if (gameState != GameState::Running) return;
 	if (leftTime <= 0) {
-		leftTime = maxTime;
 		endGame(true);
 	}
 	else if (target->getCurrentHealth() <= 0) {
@@ -30,6 +29,7 @@ void GameHandlerComponent::update(double seconds)
 void GameHandlerComponent::drawText()
 {
 	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), result, glm::ivec2(50, 300), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 2.5f, 0.1f, glm::vec3(1, 0, 1));
+	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Remaining time: " + std::to_string((int)(leftTime + 1)) + "s", glm::ivec2(0, 470), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
 }
 
 void GameHandlerComponent::endGame(bool win)
