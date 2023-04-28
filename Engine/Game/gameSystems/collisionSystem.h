@@ -38,6 +38,10 @@ protected:
 	typedef std::pair<std::shared_ptr<CollisionComponent>, std::shared_ptr<CollisionResponseComponent>> entityComponentPair;
 	std::unordered_map<std::string, std::vector<std::shared_ptr<entityComponentPair>>> entityComponentPairs;
 	std::vector<std::shared_ptr<EnvironmentComponent>> environmentComponents;
+
+	std::unordered_map<std::string, std::vector<std::shared_ptr<entityComponentPair>>> entityWaitingList;
+	//std::vector<std::shared_ptr<EnvironmentComponent>> environmentWaitingList;
+
 	std::shared_ptr<BVH> bvh;
 	std::unordered_map<std::string, std::shared_ptr<HierarchicalGrid>> hierarchicalGrids;
 	std::unordered_map<std::string, std::unordered_set<std::string>> layerCollisionMatrix;

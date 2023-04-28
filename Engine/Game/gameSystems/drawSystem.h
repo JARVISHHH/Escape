@@ -16,4 +16,5 @@ public:
 
 protected:
 	std::vector<std::shared_ptr<GameComponent>> components;
+	std::vector<std::shared_ptr<GameComponent>> waitingList;
 };

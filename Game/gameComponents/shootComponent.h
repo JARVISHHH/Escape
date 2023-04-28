@@ -14,9 +14,10 @@ public:
 
 private:
 	std::string targetTag;
+	std::shared_ptr<TransformComponent> transform;
 	std::shared_ptr<TransformComponent> targetTransform;
 
-	bool stop = false;
+	bool stop = true;
 	float shootInterval = 2;
 	float leftInterval = 2;
 };

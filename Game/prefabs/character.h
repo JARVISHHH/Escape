@@ -43,7 +43,7 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	gameWorld->getGameSystem<DrawSystem>("draw")->addComponent(drawComponent);
 	gameWorld->getGameSystem<PhysicsSystem>("physics")->addGameObject(character);
 	gameWorld->getGameSystem<CharacterControllerSystem>("characterController")->setCharatcer(character);
-	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(character);
+	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(character, "character");
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(healthComponent);
 	gameWorld->addGameObject(character);
 

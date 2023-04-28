@@ -189,6 +189,7 @@ add_executable(${PROJECT_NAME}
     Game/prefabs/goal.h
     Game/prefabs/enemy.h
     Game/prefabs/gamehandler.h
+    Game/prefabs/projectile.h
 
     Game/ai/scopeCondition.h
     Game/ai/scopeCondition.cpp

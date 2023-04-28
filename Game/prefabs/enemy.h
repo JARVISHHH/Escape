@@ -8,8 +8,6 @@
 #include <Engine/Game/ai/behaviortree/sequence.h>
 #include <Game/ai/barrierCondition.h>
 #include <Game/gameComponents/shootComponent.h>
-#include <Game/gameComponents/movingComponent.h>
-#include <Game/gameComponents/projectileCollisionResponse.h>
 #include <Game/ai/shootAction.h>
 
 std::shared_ptr<GameObject> createChasingEnemy(std::shared_ptr<GameWorld> gameWorld, std::string shape, std::string material, glm::vec3 pos, std::shared_ptr<NavMesh> navMesh)
@@ -72,6 +70,7 @@ std::shared_ptr<GameObject> createShootingEnemy(std::shared_ptr<GameWorld> gameW
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.5);
 	modelTransform->translate(pos);
+	transformComponent->updateRay();
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
 	// Collision component
@@ -104,39 +103,6 @@ std::shared_ptr<GameObject> createShootingEnemy(std::shared_ptr<GameWorld> gameW
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(shootComponent);
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(behaviorComponent);
 	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(enemyObject);
-	gameWorld->addGameObject(enemyObject);
-
-	return enemyObject;
-}
-
-std::shared_ptr<GameObject> createProjectile(std::shared_ptr<GameWorld> gameWorld, std::string shape, std::string material, glm::vec3 pos, glm::vec3 direction) {
-	std::shared_ptr<GameObject> enemyObject = std::make_shared<GameObject>("enemy");
-
-	// Create components
-	// Transform Component
-	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
-	auto modelTransform = transformComponent->getModelTransform();
-	modelTransform->scale(0.5);
-	modelTransform->translate(pos);
-	// Draw component
-	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
-	// Collision component
-	std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>();
-	std::shared_ptr<ProjectileCollisionResponse> collisionResponseComponent = std::make_shared<ProjectileCollisionResponse>(true);
-	// Moving component
-	std::shared_ptr<MovingComponent> movingComponent = std::make_shared<MovingComponent>(direction);
-
-	// Add components to game objects
-	enemyObject->addComponent(transformComponent);
-	enemyObject->addComponent(drawComponent);
-	enemyObject->addComponent(collisionComponent);
-	enemyObject->addComponent(collisionResponseComponent);
-	enemyObject->addComponent(movingComponent);
-
-	// Add the gameObject to systems
-	gameWorld->getGameSystem<DrawSystem>("draw")->addComponent(drawComponent);
-	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(enemyObject);
-	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(movingComponent);
 	gameWorld->addGameObject(enemyObject);
 
 	return enemyObject;

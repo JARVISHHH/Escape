@@ -49,6 +49,7 @@ void GameWorld::update(double seconds)
 		auto cameraSystem = getGameSystem<CameraSystem>("camera");
 		if (cameraSystem != nullptr) cameraSystem->update(seconds);
 		totalTime -= seconds;
+		updateGameObjects();
 	}
 }
 
@@ -133,4 +134,14 @@ std::shared_ptr<Screen> GameWorld::getScreen()
 std::shared_ptr<AABB> GameWorld::getAABB()
 {
 	return aabb;
+}
+
+void GameWorld::updateGameObjects()
+{
+	for (auto iter = gameObjects.begin(); iter != gameObjects.end(); iter++) {
+		auto& objects = iter->second;
+		for (int i = objects.size() - 1; i >= 0; i--)
+			if (!objects[i]->getActiveStatus())
+				objects.erase(objects.begin() + i);
+	}
 }

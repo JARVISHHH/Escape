@@ -62,6 +62,8 @@ protected:
 
 	bool finish = false;
 	bool win = false;
+
+	void updateGameObjects();
 };
 
 template<class T>

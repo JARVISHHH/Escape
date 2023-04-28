@@ -13,4 +13,5 @@ public:
 
 private:
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
+	std::vector<std::shared_ptr<GameObject>> waitingList;
 };

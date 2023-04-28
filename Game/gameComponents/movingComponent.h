@@ -4,7 +4,7 @@
 
 class MovingComponent : public GameComponent {
 public:
-	MovingComponent(glm::vec3 direction, float speed = 1);
+	MovingComponent(glm::vec3 direction, float speed = 3);
 
 	void start() override;
 	void update(double seconds) override;

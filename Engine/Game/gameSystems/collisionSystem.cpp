@@ -21,9 +21,9 @@ void CollisionSystem::update(double seconds)
 
 void CollisionSystem::doCollision()
 {
-	updateEntityComponentPairs();
-
 	bool doAccelerate = true;
+
+	updateEntityComponentPairs();
 
 	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
 		auto layer = iter->first;
@@ -75,19 +75,26 @@ void CollisionSystem::doCollision()
 		for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
 			auto layer = iter->first;
 			auto& pairs = iter->second;
-			for (int i = 0; i < iter->second.size(); i++) {
+			for (int i = 0; i < pairs.size(); i++) {
 				hierarchicalGrids[layer]->update(pairs[i]);
 			}
 		}
 		// Collide
 		for (auto iter1 = layerCollisionMatrix.begin(); iter1 != layerCollisionMatrix.end(); iter1++) {
 			auto layer1 = iter1->first;
+			//std::cout << layer1 << " collide with: ";
 			for (auto iter2 = layerCollisionMatrix[layer1].begin(); iter2 != layerCollisionMatrix[layer1].end(); iter2++) {
 				auto layer2 = *iter2;
-				HierarchicalGrid::collide(hierarchicalGrids[layer1], hierarchicalGrids[layer2], 1, 1);
+				//std::cout << layer2 << " ";
+				HierarchicalGrid::collideAll(hierarchicalGrids[layer1], hierarchicalGrids[layer2], 1, 1);
 			}
+			//std::cout << std::endl;
 		}
 	}
+
+	updateEntityComponentPairs();
+
+	//std::cout << "projectile: " << entityComponentPairs["projectile"].size() << std::endl;
 
 	// Check collision between environments
 	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
@@ -128,6 +135,9 @@ void CollisionSystem::notifyCollision(std::string layer1, std::string layer2, in
 
 void CollisionSystem::addLayer(std::string layer)
 {
+	//for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++)
+	//	std::cout << iter->first << " ";
+	//std::cout << std::endl;
 	if (entityComponentPairs.find(layer) != entityComponentPairs.end()) return;  // The layer already exists
 	entityComponentPairs[layer] = std::vector<std::shared_ptr<entityComponentPair>>();
 	hierarchicalGrids[layer] = std::make_shared<HierarchicalGrid>(HGLevel, gameWorld->getAABB());
@@ -135,6 +145,7 @@ void CollisionSystem::addLayer(std::string layer)
 	for (auto iter = layerCollisionMatrix.begin(); iter != layerCollisionMatrix.end(); iter++) {
 		layerCollisionMatrix[layer].insert(iter->first);
 	}
+	//std::cout << "added " << layer << std::endl;
 }
 
 void CollisionSystem::addGameObject(std::shared_ptr<GameObject> gameObject, std::string layer)
@@ -143,10 +154,12 @@ void CollisionSystem::addGameObject(std::shared_ptr<GameObject> gameObject, std:
 	auto collisionResponseComponent = gameObject->getComponent<CollisionResponseComponent>("collisionResponse");
 
 	addLayer(layer);
+
 	for (auto collisionComponent : collisionComponents) {
 		auto entity = std::make_shared<entityComponentPair>(collisionComponent, collisionResponseComponent);
-		entityComponentPairs[layer].push_back(entity);
-		hierarchicalGrids[layer]->insert(1, entity, collisionComponent->getAABB());
+		entityWaitingList[layer].push_back(entity);
+		//entityComponentPairs[layer].push_back(entity);
+		//hierarchicalGrids[layer]->insert(1, entity, collisionComponent->getAABB());
 	}
 }
 
@@ -167,15 +180,31 @@ void CollisionSystem::addEnvironmentObject(std::shared_ptr<GameObject> gameEnvir
 	auto environmentComponent = gameEnvironment->getComponent<EnvironmentComponent>("environment");
 	if (environmentComponent == nullptr) return;
 	environmentComponent->buildBoundingBox();
+	//environmentWaitingList.push_back(environmentComponent);
 	environmentComponents.push_back(environmentComponent);
 }
 
 void CollisionSystem::updateEntityComponentPairs()
 {
+	for (auto iter = entityWaitingList.begin(); iter != entityWaitingList.end();) {
+		auto layer = iter->first;
+		auto& pairs = iter->second;
+		if (entityComponentPairs.find(layer) == entityComponentPairs.end()) entityComponentPairs[layer] = std::vector<std::shared_ptr<entityComponentPair>>();
+		for (auto entityComponentPair : pairs) {
+			entityComponentPairs[layer].push_back(entityComponentPair);
+			hierarchicalGrids[layer]->insert(1, entityComponentPair, entityComponentPair->first->getAABB());
+		}
+		pairs.clear();
+		iter = entityWaitingList.erase(iter);
+	}
 	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
-		for (int i = iter->second.size() - 1; i >= 0; i--)
-			if (!iter->second[i]->first->getGameObject()->getActiveStatus())
-				iter->second.erase(iter->second.begin() + i);
+		auto layer = iter->first;
+		auto& pairs = iter->second;
+		for (int i = pairs.size() - 1; i >= 0; i--)
+			if (!pairs[i]->first->getGameObject()->getActiveStatus()) {
+				pairs[i]->first->gridNode->entityComponentPairs.erase(pairs[i]);
+				pairs.erase(pairs.begin() + i);
+			}
 	}
 }
 

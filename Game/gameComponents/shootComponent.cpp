@@ -1,5 +1,7 @@
 #include "shootComponent.h"
 
+#include <Game/prefabs/projectile.h>
+
 ShootComponent::ShootComponent(std::string targetTag, bool stop)
 	:GameComponent("shoot"), targetTag(targetTag), stop(stop)
 {
@@ -8,8 +10,12 @@ ShootComponent::ShootComponent(std::string targetTag, bool stop)
 
 void ShootComponent::start()
 {
+	transform = gameObject->getComponent<TransformComponent>("transform");
+
 	auto targetObject = gameObject->getGameWorld()->getGameObject(targetTag);
 	if (targetObject != nullptr) targetTransform = targetObject->getComponent<TransformComponent>("transform");
+
+	stop = false;
 }
 
 void ShootComponent::update(double seconds)
@@ -32,5 +38,7 @@ void ShootComponent::setStop(bool stop)
 
 void ShootComponent::shoot()
 {
+	auto direction = targetTransform->getModelTransform()->getPos() - transform->getModelTransform()->getPos();
+	createProjectile(gameObject->getGameWorld(), "cylinder", "monomi", transform->getModelTransform()->getPos(), glm::normalize(direction));
 	std::cout << "shoot" << std::endl;
 }

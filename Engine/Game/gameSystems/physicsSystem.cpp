@@ -27,11 +27,13 @@ void PhysicsSystem::update(double seconds)
 
 void PhysicsSystem::addGameObject(std::shared_ptr<GameObject> gameObject)
 {
-	gameObjects.push_back(gameObject);
+	waitingList.push_back(gameObject);
 }
 
 void PhysicsSystem::updateGameObjects()
 {
+	gameObjects.insert(gameObjects.end(), waitingList.begin(), waitingList.end());
+	waitingList.clear();
 	for (int i = gameObjects.size() - 1; i >= 0; i--)
 		if (!gameObjects[i]->getActiveStatus())
 			gameObjects.erase(gameObjects.begin() + i);

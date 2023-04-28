@@ -79,6 +79,9 @@ void GameScreen::init()
 
 	collisionSystem->buildBVH();
 	collisionSystem->buildHG();
+	collisionSystem->addLayer("projectile");
+	collisionSystem->deleteLayerCollision("projectile", "default");
+	collisionSystem->deleteLayerCollision("projectile", "projectile");
 
 	gameWorld->start();
 
