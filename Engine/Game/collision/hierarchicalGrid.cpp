@@ -108,6 +108,27 @@ void HierarchicalGrid::collide(std::shared_ptr<GridNode> node, std::shared_ptr<G
 	if (nextNode->id * 2 + 1 < nodesNum) collide(node, nodes[nextNode->id * 2 + 1]);
 }
 
+void HierarchicalGrid::collide(std::shared_ptr<HierarchicalGrid> grid1, std::shared_ptr<HierarchicalGrid> grid2, int nodeIndex1, int nodeIndex2) {
+	if (nodeIndex1 >= grid1->nodesNum) return;
+	if (nodeIndex2 >= grid2->nodesNum) return;
+	if (nodeIndex1 > nodeIndex2) {
+		collide(grid2, grid1, nodeIndex2, nodeIndex1);
+		return;
+	}
+	if (grid1 == grid2) grid1->collide();
+	else if (nodeIndex1 == nodeIndex2) {
+		grid1->nodes[nodeIndex1]->collide(grid2->nodes[nodeIndex2]);
+		collide(grid1, grid2, nodeIndex1, nodeIndex2 * 2);
+		collide(grid1, grid2, nodeIndex1, nodeIndex2 * 2 + 1);
+		collide(grid1, grid2, nodeIndex1  * 2, nodeIndex2);
+		collide(grid1, grid2, nodeIndex1 * 2 + 1, nodeIndex2);
+	}
+	else {
+		collide(grid1, grid2, nodeIndex1, nodeIndex2 * 2);
+		collide(grid1, grid2, nodeIndex1, nodeIndex2 * 2 + 1);
+	}
+}
+
 void HierarchicalGrid::print()
 {
 	for (int i = 0; i < nodes.size(); i++) {

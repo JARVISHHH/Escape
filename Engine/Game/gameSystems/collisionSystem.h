@@ -14,10 +14,14 @@ public:
 
 	void update(double seconds);
 	void doCollision();
-	void notifyEnvironmentCollision(int index, std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos);
-	void notifyCollision(int index1, int index2, glm::vec3 mtv);
+	void notifyEnvironmentCollision(std::string layer, int index, std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos);
+	void notifyCollision(std::string layer1, std::string layer2, int index1, int index2, glm::vec3 mtv);
 
-	void addGameObject(std::shared_ptr<GameObject> gameObject);
+	void addLayer(std::string layer);
+	void addLayerCollision(std::string layer1, std::string layer2);
+	void deleteLayerCollision(std::string layer1, std::string layer2);
+
+	void addGameObject(std::shared_ptr<GameObject> gameObject, std::string layer = "default");
 	void addEnvironmentObject(std::shared_ptr<GameObject> gameEnvironment);
 
 	void updateEntityComponentPairs();
@@ -27,10 +31,14 @@ public:
 
 	std::shared_ptr<CollisionInfo> environmentRayCast(glm::vec3 source, glm::vec3 target);
 
+
 protected:
+	int HGLevel;
+
 	typedef std::pair<std::shared_ptr<CollisionComponent>, std::shared_ptr<CollisionResponseComponent>> entityComponentPair;
-	std::vector<std::shared_ptr<entityComponentPair>> entityComponentPairs;
+	std::unordered_map<std::string, std::vector<std::shared_ptr<entityComponentPair>>> entityComponentPairs;
 	std::vector<std::shared_ptr<EnvironmentComponent>> environmentComponents;
 	std::shared_ptr<BVH> bvh;
-	std::shared_ptr<HierarchicalGrid> hierarchicalGrid;
+	std::unordered_map<std::string, std::shared_ptr<HierarchicalGrid>> hierarchicalGrids;
+	std::unordered_map<std::string, std::unordered_set<std::string>> layerCollisionMatrix;
 };

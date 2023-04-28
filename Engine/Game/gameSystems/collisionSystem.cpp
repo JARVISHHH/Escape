@@ -7,7 +7,7 @@
 #include <Engine/Game/components/transformComponent.h>
 
 CollisionSystem::CollisionSystem(std::shared_ptr<GameWorld> gameWorld, int level)
-	: GameSystem("collision"), hierarchicalGrid(std::make_shared<HierarchicalGrid>(level, gameWorld->getAABB()))
+	: GameSystem("collision"), HGLevel(level)
 {
 	auto maxPoint = gameWorld->getAABB()->getMaxPoint(), minPoint = gameWorld->getAABB()->getMinPoint();
 	std::cout << "max point: " << maxPoint[0] << " " << maxPoint[1] << " " << maxPoint[2] << std::endl;
@@ -25,69 +25,141 @@ void CollisionSystem::doCollision()
 
 	bool doAccelerate = true;
 
-	for (int i = 0; i < entityComponentPairs.size(); i++) {
-		entityComponentPairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
+	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
+		auto layer = iter->first;
+		auto& pairs = iter->second;
+		for (int i = 0; i < pairs.size(); i++) {
+			pairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
+		}
 	}
 
 	// Update movable game objects
 	if (!doAccelerate) {
-		int sum = 0;
-		for (int i = 0; i < entityComponentPairs.size(); i++)
-			for (int j = 0; j < i; j++) {
-				sum++;
-				auto collisionComponent1 = entityComponentPairs[i]->first;
-				auto collisionComponent2 = entityComponentPairs[j]->first;
-				glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
-				if (glm::length(mtv) == 0) continue;  // No collision
-				notifyCollision(i, j, mtv);
+		//int sum = 0;
+		for (auto iter1 = entityComponentPairs.begin(); iter1 != entityComponentPairs.end(); iter1++) {
+			auto layer1 = iter1->first;
+			auto& pairs1 = iter1->second;
+			for (auto iter2 = layerCollisionMatrix[layer1].begin(); iter2 != layerCollisionMatrix[layer1].end(); iter2++) {
+				auto layer2 = *iter2;
+				auto& pairs2 = entityComponentPairs[layer2];
+				// Collision with other layer
+				if (layer1.compare(layer2) != 0) {
+					for (int i = 0; i < pairs1.size(); i++) {
+						for (int j = 0; j < pairs2.size(); j++) {
+							auto collisionComponent1 = pairs1[i]->first;
+							auto collisionComponent2 = pairs2[j]->first;
+							glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
+							if (glm::length(mtv) == 0) continue;  // No collision
+							notifyCollision(layer1, layer2, i, j, mtv);
+						}
+					}
+				}
+				// Self-layer collision
+				else {
+					for (int i = 0; i < pairs1.size(); i++) {
+						for (int j = i + 1; j < pairs2.size(); j++) {
+							auto collisionComponent1 = pairs1[i]->first;
+							auto collisionComponent2 = pairs2[j]->first;
+							glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
+							if (glm::length(mtv) == 0) continue;  // No collision
+							notifyCollision(layer1, layer2, i, j, mtv);
+						}
+					}
+				}
 			}
+		}
 		//std::cout << "collision: " << sum << std::endl;
 	}
 	else {
-		for (int i = 0; i < entityComponentPairs.size(); i++) {
-			hierarchicalGrid->update(entityComponentPairs[i]);
+		// Update
+		for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
+			auto layer = iter->first;
+			auto& pairs = iter->second;
+			for (int i = 0; i < iter->second.size(); i++) {
+				hierarchicalGrids[layer]->update(pairs[i]);
+			}
 		}
-		hierarchicalGrid->collide();
+		// Collide
+		for (auto iter1 = layerCollisionMatrix.begin(); iter1 != layerCollisionMatrix.end(); iter1++) {
+			auto layer1 = iter1->first;
+			for (auto iter2 = layerCollisionMatrix[layer1].begin(); iter2 != layerCollisionMatrix[layer1].end(); iter2++) {
+				auto layer2 = *iter2;
+				HierarchicalGrid::collide(hierarchicalGrids[layer1], hierarchicalGrids[layer2], 1, 1);
+			}
+		}
 	}
 
 	// Check collision between environments
-	for (int i = 0; i < entityComponentPairs.size(); i++) {
-		entityComponentPairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRayEnd();
-		std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> collisionRes;
-		if(!doAccelerate) collisionRes = entityComponentPairs[i]->first->ellipsoidTriangleCollision(environmentComponents);
-		else collisionRes = entityComponentPairs[i]->first->ellipsoidTriangleCollision(bvh);
-		notifyEnvironmentCollision(i, collisionRes.first, collisionRes.second);
+	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
+		auto layer = iter->first;
+		auto& pairs = iter->second;
+		for (int i = 0; i < pairs.size(); i++)
+		{
+			pairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRayEnd();
+			std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> collisionRes;
+			if (!doAccelerate) collisionRes = pairs[i]->first->ellipsoidTriangleCollision(environmentComponents);
+			else collisionRes = pairs[i]->first->ellipsoidTriangleCollision(bvh);
+			notifyEnvironmentCollision(layer, i, collisionRes.first, collisionRes.second);
+		}
 	}
 
-	for (int i = 0; i < entityComponentPairs.size(); i++) {
-		entityComponentPairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRayEnd();
+	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
+		auto layer = iter->first;
+		auto& pairs = iter->second;
+		for (int i = 0; i < pairs.size(); i++) {
+			pairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
+		}
 	}
 }
 
-void CollisionSystem::notifyEnvironmentCollision(int index, std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
+void CollisionSystem::notifyEnvironmentCollision(std::string layer, int index, std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
 {
-	if (entityComponentPairs[index]->second != nullptr)
-		entityComponentPairs[index]->second->doCollision(collisions, curPos);
+	if (entityComponentPairs[layer][index]->second != nullptr)
+		entityComponentPairs[layer][index]->second->doCollision(collisions, curPos);
 }
 
-void CollisionSystem::notifyCollision(int index1, int index2, glm::vec3 mtv)
+void CollisionSystem::notifyCollision(std::string layer1, std::string layer2, int index1, int index2, glm::vec3 mtv)
 {
-	if(entityComponentPairs[index1]->second != nullptr)
-		entityComponentPairs[index1]->second->doCollision(entityComponentPairs[index2]->second, mtv);
-	if(entityComponentPairs[index2]->second != nullptr)
-		entityComponentPairs[index2]->second->doCollision(entityComponentPairs[index1]->second, -mtv);
+	if(entityComponentPairs[layer1][index1]->second != nullptr)
+		entityComponentPairs[layer1][index1]->second->doCollision(entityComponentPairs[layer2][index2]->second, mtv);
+	if(entityComponentPairs[layer2][index2]->second != nullptr)
+		entityComponentPairs[layer2][index2]->second->doCollision(entityComponentPairs[layer1][index1]->second, -mtv);
 }
 
-void CollisionSystem::addGameObject(std::shared_ptr<GameObject> gameObject)
+void CollisionSystem::addLayer(std::string layer)
+{
+	if (entityComponentPairs.find(layer) != entityComponentPairs.end()) return;  // The layer already exists
+	entityComponentPairs[layer] = std::vector<std::shared_ptr<entityComponentPair>>();
+	hierarchicalGrids[layer] = std::make_shared<HierarchicalGrid>(HGLevel, gameWorld->getAABB());
+	layerCollisionMatrix[layer].insert(layer);
+	for (auto iter = layerCollisionMatrix.begin(); iter != layerCollisionMatrix.end(); iter++) {
+		layerCollisionMatrix[layer].insert(iter->first);
+	}
+}
+
+void CollisionSystem::addGameObject(std::shared_ptr<GameObject> gameObject, std::string layer)
 {
 	auto collisionComponents = gameObject->getComponents<CollisionComponent>("collision");
 	auto collisionResponseComponent = gameObject->getComponent<CollisionResponseComponent>("collisionResponse");
 
+	addLayer(layer);
 	for (auto collisionComponent : collisionComponents) {
 		auto entity = std::make_shared<entityComponentPair>(collisionComponent, collisionResponseComponent);
-		entityComponentPairs.push_back(entity);
-		hierarchicalGrid->insert(1, entity, collisionComponent->getAABB());
+		entityComponentPairs[layer].push_back(entity);
+		hierarchicalGrids[layer]->insert(1, entity, collisionComponent->getAABB());
 	}
+}
+
+void CollisionSystem::addLayerCollision(std::string layer1, std::string layer2)
+{
+	layerCollisionMatrix[layer1].insert(layer2);
+	layerCollisionMatrix[layer2].erase(layer1);
+}
+
+void CollisionSystem::deleteLayerCollision(std::string layer1, std::string layer2)
+{
+	layerCollisionMatrix[layer1].erase(layer2);
+	layerCollisionMatrix[layer2].erase(layer1);
 }
 
 void CollisionSystem::addEnvironmentObject(std::shared_ptr<GameObject> gameEnvironment)
@@ -100,9 +172,11 @@ void CollisionSystem::addEnvironmentObject(std::shared_ptr<GameObject> gameEnvir
 
 void CollisionSystem::updateEntityComponentPairs()
 {
-	for (int i = entityComponentPairs.size() - 1; i >= 0; i--)
-		if (!entityComponentPairs[i]->first->getGameObject()->getActiveStatus())
-			entityComponentPairs.erase(entityComponentPairs.begin() + i);
+	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
+		for (int i = iter->second.size() - 1; i >= 0; i--)
+			if (!iter->second[i]->first->getGameObject()->getActiveStatus())
+				iter->second.erase(iter->second.begin() + i);
+	}
 }
 
 void CollisionSystem::buildBVH()
@@ -113,8 +187,13 @@ void CollisionSystem::buildBVH()
 
 void CollisionSystem::buildHG()
 {
-	for (int i = 0; i < entityComponentPairs.size(); i++)
-		hierarchicalGrid->insert(1, entityComponentPairs[i], entityComponentPairs[i]->first->getAABB());
+	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
+		auto layer = iter->first;
+		auto& pairs = iter->second;
+		for (int i = 0; i < pairs.size(); i++)
+			hierarchicalGrids[layer]->insert(1, pairs[i], pairs[i]->first->getAABB());
+	}
+	
 	//hierarchicalGrid->print();
 }
 

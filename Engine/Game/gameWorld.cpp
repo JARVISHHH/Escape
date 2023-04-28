@@ -25,6 +25,10 @@ void GameWorld::start()
 			gameObject->start();
 		}
 	}
+
+	for (auto it = gameSystems.begin(); it != gameSystems.end(); it++) {
+		it->second->start();
+	}
 }
 
 void GameWorld::update(double seconds)

@@ -14,11 +14,12 @@ public:
 	void collide();
 	void collide(std::shared_ptr<GridNode> node, std::shared_ptr<GridNode> nextNode);
 
+	static void collide(std::shared_ptr<HierarchicalGrid> grid1, std::shared_ptr<HierarchicalGrid> grid2, int nodeIndex1, int nodeIndex2);
+
 	void print();
 
 private:
 	int level;
 	int nodesNum;
 	std::vector<std::shared_ptr<GridNode>> nodes;
-
 };

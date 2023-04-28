@@ -6,6 +6,10 @@ GameSystem::GameSystem(std::string tag)
 
 }
 
+void GameSystem::start()
+{
+}
+
 GameSystem::GameSystem(std::shared_ptr<GameWorld> gameWorld, std::string tag)
 	:gameWorld(gameWorld), tag(tag)
 {

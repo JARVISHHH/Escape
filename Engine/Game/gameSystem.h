@@ -9,6 +9,7 @@ public:
 	GameSystem(std::string tag);
 	GameSystem(std::shared_ptr<GameWorld> gameWorld, std::string tag);
 
+	virtual void start();
 	std::string getTag() const;
 	void setGameWorld(std::shared_ptr<GameWorld> gameWorld);
 
