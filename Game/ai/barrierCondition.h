@@ -2,10 +2,11 @@
 
 #include <Engine/Game/ai/behaviortree/condition.h>
 #include <Game/components.h>
+#include <Engine/Game/gameSystems/collisionSystem.h>
 
-class ScopeCondition : public Condition {
+class BarrierCondition : public Condition {
 public:
-	ScopeCondition(std::string targetTag, float maxDistance);
+	BarrierCondition(std::string targetTag);
 	void start() override;
 
 protected:
@@ -13,8 +14,7 @@ protected:
 
 private:
 	std::string targetTag;
+	std::shared_ptr<CollisionSystem> collisionSystem = nullptr;
 	std::shared_ptr<TransformComponent> transform = nullptr;
 	std::shared_ptr<TransformComponent> targetTransform = nullptr;
-
-	float maxDistance;
 };

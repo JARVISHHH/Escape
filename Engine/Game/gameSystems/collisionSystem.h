@@ -25,6 +25,8 @@ public:
 	void buildBVH();
 	void buildHG();
 
+	std::shared_ptr<CollisionInfo> environmentRayCast(glm::vec3 source, glm::vec3 target);
+
 protected:
 	typedef std::pair<std::shared_ptr<CollisionComponent>, std::shared_ptr<CollisionResponseComponent>> entityComponentPair;
 	std::vector<std::shared_ptr<entityComponentPair>> entityComponentPairs;

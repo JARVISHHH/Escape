@@ -194,6 +194,10 @@ add_executable(${PROJECT_NAME}
     Game/ai/scopeCondition.cpp
     Game/ai/trackAction.h
     Game/ai/trackAction.cpp
+    Game/ai/shootAction.h
+    Game/ai/shootAction.cpp
+    Game/ai/barrierCondition.h
+    Game/ai/barrierCondition.cpp
 
     Game/gameComponents/characterCollisionResponse.h
     Game/gameComponents/characterCollisionResponse.cpp
@@ -201,6 +205,12 @@ add_executable(${PROJECT_NAME}
     Game/gameComponents/enemyMovement.cpp
     Game/gameComponents/gameHandlerComponent.h
     Game/gameComponents/gameHandlerComponent.cpp
+    Game/gameComponents/shootComponent.h
+    Game/gameComponents/shootComponent.cpp
+    Game/gameComponents/movingComponent.h
+    Game/gameComponents/movingComponent.cpp
+    Game/gameComponents/projectileCollisionResponse.h
+    Game/gameComponents/projectileCollisionResponse.cpp
  )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})

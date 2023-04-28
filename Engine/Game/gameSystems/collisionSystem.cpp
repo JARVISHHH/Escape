@@ -56,8 +56,6 @@ void CollisionSystem::doCollision()
 		std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> collisionRes;
 		if(!doAccelerate) collisionRes = entityComponentPairs[i]->first->ellipsoidTriangleCollision(environmentComponents);
 		else collisionRes = entityComponentPairs[i]->first->ellipsoidTriangleCollision(bvh);
-		//auto collisionRes = entityComponentPairs[i].first->ellipsoidTriangleCollision(environmentComponents);
-		//auto collisionRes = entityComponentPairs[i].first->ellipsoidTriangleCollision(bvh);
 		notifyEnvironmentCollision(i, collisionRes.first, collisionRes.second);
 	}
 
@@ -118,4 +116,25 @@ void CollisionSystem::buildHG()
 	for (int i = 0; i < entityComponentPairs.size(); i++)
 		hierarchicalGrid->insert(1, entityComponentPairs[i], entityComponentPairs[i]->first->getAABB());
 	//hierarchicalGrid->print();
+}
+
+std::shared_ptr<CollisionInfo> CollisionSystem::environmentRayCast(glm::vec3 source, glm::vec3 target)
+{
+	auto res = std::make_shared<CollisionInfo>();
+
+	auto ray = std::make_shared<Ray>(source, target);
+	glm::mat4x4 transformMatrix(1.0f);
+
+	glm::vec4 maxPoint, minPoint;
+	maxPoint[3] = 1, minPoint[3] = 1;
+	for (int i = 0; i < 3; i++) {
+		maxPoint[i] = std::max(source[i], target[i]);
+		minPoint[i] = std::min(source[i], target[i]);
+	}
+	auto aabb = std::make_shared<AABB>(maxPoint, minPoint);
+		
+	auto thisCollision = bvh->getClosestCollision(transformMatrix, aabb, ray);
+	if (thisCollision != nullptr && thisCollision->t >= 0 && (thisCollision->t < res->t || res->t < 0)) res = thisCollision;
+	
+	return res;
 }

@@ -1,7 +1,7 @@
 #include "scopeCondition.h"
 
-ScopeCondition::ScopeCondition(std::string targetTag, float maxDistance, std::shared_ptr<NavMesh> navMesh)
-	:targetTag(targetTag), maxDistance(maxDistance), navMesh(navMesh)
+ScopeCondition::ScopeCondition(std::string targetTag, float maxDistance)
+	:targetTag(targetTag), maxDistance(maxDistance)
 {
 
 }
@@ -11,7 +11,6 @@ void ScopeCondition::start()
 	transform = behaviorComponent->getGameObject()->getComponent<TransformComponent>("transform");
 	auto targetObjects = behaviorComponent->getGameObject()->getGameWorld()->getGameObjects(targetTag);
 	if (targetObjects.size() > 0) targetTransform = targetObjects[0]->getComponent<TransformComponent>("transform");
-	std::cout << behaviorComponent->blackBoard["test2"] << std::endl;
 }
 
 bool ScopeCondition::checkCondition(double seconds)
@@ -21,7 +20,7 @@ bool ScopeCondition::checkCondition(double seconds)
 	auto sourcePos = transform->getModelTransform()->getPos();
 	auto targetPos = targetTransform->getModelTransform()->getPos();
 	float curDistance = glm::length(sourcePos - targetPos);
-	std::cout << curDistance << std::endl;
+	//std::cout << curDistance << std::endl;
 	if (curDistance <= maxDistance) return false;
 	else return true;
 }
