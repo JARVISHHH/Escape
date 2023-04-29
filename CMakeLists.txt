@@ -175,6 +175,11 @@ add_executable(${PROJECT_NAME}
     Engine/Game/ai/behaviortree/sequence.h
     Engine/Game/ai/behaviortree/sequence.cpp
 
+    Engine/Game/map/map.h
+    Engine/Game/map/map.cpp
+    Engine/Game/map/mapnode.h
+    Engine/Game/map/mapnode.cpp
+
     Game/app.h
     Game/app.cpp
     Game/menuScreen.h

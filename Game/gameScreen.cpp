@@ -1,5 +1,7 @@
 #include "gameScreen.h"
 
+#include <Engine/Game/map/map.h>
+
 #include <Engine/Game/components/transformComponent.h>
 #include <Engine/Game/components/drawComponent.h>
 #include <Engine/Game/gameSystems/characterControllerSystem.h>
@@ -47,6 +49,10 @@ void GameScreen::init()
 	auto camera = std::make_shared<Camera>();
 
 	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this());
+
+	std::shared_ptr<Map> map = std::make_shared<Map>(gameWorld);
+	map->generateMap();
+	map->printMap();
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
