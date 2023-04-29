@@ -24,7 +24,7 @@ std::shared_ptr<GameObject> createProjectile(std::shared_ptr<GameWorld> gameWorl
 	std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>();
 	std::shared_ptr<ProjectileCollisionResponse> collisionResponseComponent = std::make_shared<ProjectileCollisionResponse>(true);
 	// Moving component
-	std::shared_ptr<MovingComponent> movingComponent = std::make_shared<MovingComponent>(direction);
+	std::shared_ptr<MovingComponent> movingComponent = std::make_shared<MovingComponent>(direction, 5);
 
 	// Add components to game objects
 	enemyObject->addComponent(transformComponent);

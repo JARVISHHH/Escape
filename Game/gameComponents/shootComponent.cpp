@@ -40,5 +40,4 @@ void ShootComponent::shoot()
 {
 	auto direction = targetTransform->getModelTransform()->getPos() - transform->getModelTransform()->getPos();
 	createProjectile(gameObject->getGameWorld(), "cylinder", "monomi", transform->getModelTransform()->getPos(), glm::normalize(direction));
-	std::cout << "shoot" << std::endl;
 }

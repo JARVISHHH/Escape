@@ -94,8 +94,6 @@ void CollisionSystem::doCollision()
 
 	updateEntityComponentPairs();
 
-	//std::cout << "projectile: " << entityComponentPairs["projectile"].size() << std::endl;
-
 	// Check collision between environments
 	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
 		auto layer = iter->first;
