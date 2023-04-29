@@ -22,6 +22,7 @@
 #include <Game/prefabs/goal.h>
 #include <Game/prefabs/enemy.h>
 #include <Game/prefabs/gamehandler.h>
+#include <Game/prefabs/dungeon.h>
 
 #include <corecrt_math_defines.h>
 
@@ -36,12 +37,11 @@ GameScreen::GameScreen()
 	Global::graphics.addMaterial("wall", "Resources/Images/wall.jpg");
 	Global::graphics.addMaterial("ground", "Resources/Images/ground.png");
 
-	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
 	addEnvironmentMesh("building", "./Resources/Meshes/building.obj");
 	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
-	addEnvironmentMesh("test", "./Resources/Meshes/environment3.obj");
 	addEnvironmentMesh("map", "./Resources/Meshes/map.obj");
 	addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj");
+	addEnvironmentMesh("box", "./Resources/Meshes/box.obj");
 }
 
 void GameScreen::init()
@@ -49,10 +49,6 @@ void GameScreen::init()
 	auto camera = std::make_shared<Camera>();
 
 	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this());
-
-	std::shared_ptr<Map> map = std::make_shared<Map>(gameWorld);
-	map->generateMap();
-	map->printMap();
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
@@ -69,6 +65,12 @@ void GameScreen::init()
 	gameWorld->addGameSystem(cameraSystem);
 	gameWorld->addGameSystem(collisionSystem);
 	gameWorld->addGameSystem(tickSystem);
+
+	// Generate map
+	std::shared_ptr<Map> map = std::make_shared<Map>(gameWorld);
+	map->generateMap();
+	//map->printMap();
+	createDungeon(gameWorld, shared_from_this(), map);
 	
 	// Create NavMesh
 	navMesh = std::make_shared<NavMesh>("./Resources/Meshes/groundNav.obj");
@@ -78,9 +80,10 @@ void GameScreen::init()
 	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 60);
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
 	std::shared_ptr<GameObject> goalObject = createGoal(gameWorld, glm::vec3(11, 5, 0));
-	std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "map");
-	std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "ground", "ground");
-	std::shared_ptr<GameObject> chasingEnemy = createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
+	//std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "map");
+	std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "box", "grass");
+	//std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "ground", "ground");
+	//std::shared_ptr<GameObject> chasingEnemy = createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
 	std::shared_ptr<GameObject> shootingEnemy = createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(2, 0.5, -3));
 
 	collisionSystem->buildBVH();

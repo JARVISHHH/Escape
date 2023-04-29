@@ -6,6 +6,7 @@
 #include "vertex.h"
 #include "Engine/Game/collision/collisionInfo.h"
 #include <Engine/Game/collision/ray.h>
+#include <Graphics/modeltransform.h>
 
 
 class Triangle {

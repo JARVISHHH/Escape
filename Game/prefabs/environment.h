@@ -11,12 +11,6 @@ std::shared_ptr<GameObject> createEnvironment(std::shared_ptr<GameWorld> gameWor
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
 	if (transform != nullptr) modelTransform->copy(transform);
-	if (shape.compare("level") == 0) {
-		modelTransform->scale(0.25);
-	}
-	else if (shape.compare("bvh_test") == 0) {
-		modelTransform->scale(0.25);
-	}
 
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);

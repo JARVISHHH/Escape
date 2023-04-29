@@ -2,7 +2,7 @@
 #include <Engine/Game/components/transformComponent.h>
 #include <Engine/Game/collision/gridnode.h>
 
-const float EPSILON = 0.0000005;
+const float EPSILON = 0.00000001;
 
 CollisionComponent::CollisionComponent()
 	:GameComponent("collision")

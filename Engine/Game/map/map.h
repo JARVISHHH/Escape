@@ -14,6 +14,8 @@ public:
 
 	void printMap();
 
+	std::shared_ptr<MapNode> mapRoot;
+
 protected:
 
 
@@ -22,8 +24,10 @@ private:
 
 	int maxDepth = 3;
 	std::shared_ptr<AABB> aabb;
-	glm::vec3 minimumSize = glm::vec3(3, 5, 3);
+	glm::vec3 minimumSize = glm::vec3(10, 5, 10);
+	float margine = 0.5;
 
-	std::shared_ptr<MapNode> mapRoot;
-
+	void splitSpace();
+	void assignRoom();
+	void connect();
 };

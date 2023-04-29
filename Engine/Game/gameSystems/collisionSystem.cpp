@@ -92,7 +92,7 @@ void CollisionSystem::doCollision()
 		}
 	}
 
-	updateEntityComponentPairs();
+	//updateEntityComponentPairs();
 
 	// Check collision between environments
 	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
@@ -112,7 +112,7 @@ void CollisionSystem::doCollision()
 		auto layer = iter->first;
 		auto& pairs = iter->second;
 		for (int i = 0; i < pairs.size(); i++) {
-			pairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
+			pairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRayEnd();
 		}
 	}
 }
@@ -189,6 +189,7 @@ void CollisionSystem::updateEntityComponentPairs()
 		auto& pairs = iter->second;
 		if (entityComponentPairs.find(layer) == entityComponentPairs.end()) entityComponentPairs[layer] = std::vector<std::shared_ptr<entityComponentPair>>();
 		for (auto entityComponentPair : pairs) {
+			entityComponentPair->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
 			entityComponentPairs[layer].push_back(entityComponentPair);
 			hierarchicalGrids[layer]->insert(1, entityComponentPair, entityComponentPair->first->getAABB());
 		}
