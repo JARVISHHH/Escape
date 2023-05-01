@@ -13,11 +13,11 @@ TrackAction::TrackAction(std::string targetTag)
 void TrackAction::start()
 {
 	if (trackObject) {
-		auto targetObject = behaviorComponent->getGameObject()->getGameWorld()->getGameObject(targetTag);
+		auto targetObject = getBehaviorComponent()->getGameObject()->getGameWorld()->getGameObject(targetTag);
 		if (targetObject != nullptr) targetTransform = targetObject->getComponent<TransformComponent>("transform");
 	}
 	//pathfindingComponent = std::static_pointer_cast<PathfindingComponent>(behaviorComponent->blackBoard["test1"]);
-	pathfindingComponent = behaviorComponent->getGameObject()->getComponent<PathfindingComponent>("pathfinding");
+	pathfindingComponent = getBehaviorComponent()->getGameObject()->getComponent<PathfindingComponent>("pathfinding");
 }
 
 void TrackAction::reset()

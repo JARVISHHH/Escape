@@ -6,7 +6,7 @@ ShootAction::ShootAction()
 
 void ShootAction::start()
 {
-	shootComponent = behaviorComponent->getGameObject()->getComponent<ShootComponent>("shoot");
+	shootComponent = getBehaviorComponent()->getGameObject()->getComponent<ShootComponent>("shoot");
 }
 
 void ShootAction::reset()

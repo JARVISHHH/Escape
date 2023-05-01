@@ -135,7 +135,7 @@ std::shared_ptr<Camera> GameWorld::getCamera()
 
 std::shared_ptr<Screen> GameWorld::getScreen()
 {
-	return screen;
+	return screen.lock();
 }
 
 std::shared_ptr<AABB> GameWorld::getAABB()

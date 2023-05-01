@@ -14,8 +14,9 @@ public:
 	virtual BTStatus update(double seconds) = 0;
 	virtual void reset() = 0;
 
+	std::shared_ptr<BehaviorComponent> getBehaviorComponent() { return behaviorComponent.lock(); }
 	virtual void setBehaviorComponent(std::shared_ptr<BehaviorComponent> behaviorComponent) { this->behaviorComponent = behaviorComponent; }
 
 protected:
-	std::shared_ptr<BehaviorComponent> behaviorComponent = nullptr;
+	std::weak_ptr<BehaviorComponent> behaviorComponent;
 };

@@ -14,6 +14,9 @@ public:
 		this->id = id; 
 		aabb = std::make_shared<AABB>();
 	}
+	~GridNode() {
+		std::cout << "grid node delete" << std::endl;
+	}
 
 	void collide(std::shared_ptr<GridNode> node) {
 		for(auto i = entityComponentPairs.begin(); i != entityComponentPairs.end(); i++) {
@@ -39,5 +42,4 @@ public:
 	int id;
 	std::shared_ptr<AABB> aabb;
 	std::unordered_set<std::shared_ptr<entityComponentPair>> entityComponentPairs;
-	//std::unordered_set<entityComponentPair> entityComponentPairs;
 };

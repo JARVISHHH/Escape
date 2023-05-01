@@ -79,7 +79,7 @@ void GameScreen::init()
 	// Create game object
 	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 60);
 	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
-	std::shared_ptr<GameObject> goalObject = createGoal(gameWorld, glm::vec3(11, 5, 0));
+	//std::shared_ptr<GameObject> goalObject = createGoal(gameWorld, glm::vec3(11, 5, 0));
 	//std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "map");
 	std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "box", "grass");
 	//std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "ground", "ground");
@@ -88,9 +88,9 @@ void GameScreen::init()
 
 	collisionSystem->buildBVH();
 	collisionSystem->buildHG();
-	collisionSystem->addLayer("projectile");
-	collisionSystem->deleteLayerCollision("projectile", "default");
-	collisionSystem->deleteLayerCollision("projectile", "projectile");
+	//collisionSystem->addLayer("projectile");
+	//collisionSystem->deleteLayerCollision("projectile", "default");
+	//collisionSystem->deleteLayerCollision("projectile", "projectile");
 
 	gameWorld->start();
 

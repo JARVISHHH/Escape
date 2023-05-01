@@ -8,6 +8,8 @@ typedef std::pair<std::shared_ptr<CollisionComponent>, std::shared_ptr<Collision
 class HierarchicalGrid {
 public:
 	HierarchicalGrid(int level, std::shared_ptr<AABB> aabb);
+	~HierarchicalGrid();
+
 	void split(std::shared_ptr<GridNode> node);
 	bool insert(int id, std::shared_ptr<entityComponentPair> entity, std::shared_ptr<AABB> aabb);
 	void update(std::shared_ptr<entityComponentPair> entity);

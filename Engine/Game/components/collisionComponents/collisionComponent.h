@@ -11,6 +11,7 @@ class GridNode;
 class CollisionComponent : public std::enable_shared_from_this<CollisionComponent>, public GameComponent {
 public:
 	CollisionComponent();
+	~CollisionComponent();
 
 	virtual glm::vec3 checkCollision(std::shared_ptr<CollisionComponent> component) = 0;
 	virtual glm::vec3 checkCollision(std::shared_ptr<CylinderComponent> component) = 0;
@@ -27,5 +28,5 @@ public:
 	glm::vec4 doNudge(glm::mat4x4& transformMatrix, glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents);
 	glm::vec4 doNudge(glm::mat4x4& transformMatrix, glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::shared_ptr<BVH> bvh);
 
-	std::shared_ptr<GridNode> gridNode = nullptr;
+	std::weak_ptr<GridNode> gridNode;
 };

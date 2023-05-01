@@ -183,7 +183,7 @@ void CollisionSystem::updateEntityComponentPairs()
 		auto& pairs = iter->second;
 		for (int i = pairs.size() - 1; i >= 0; i--)
 			if (!pairs[i]->first->getGameObject()->getActiveStatus()) {
-				pairs[i]->first->gridNode->entityComponentPairs.erase(pairs[i]);
+				pairs[i]->first->gridNode.lock()->entityComponentPairs.erase(pairs[i]);
 				pairs.erase(pairs.begin() + i);
 			}
 	}

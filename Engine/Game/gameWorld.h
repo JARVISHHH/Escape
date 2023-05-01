@@ -50,7 +50,7 @@ public:
 	bool istWin() { return win; }
 
 protected:
-	std::shared_ptr<Screen> screen;
+	std::weak_ptr<Screen> screen;
 	std::unordered_map<std::string, std::shared_ptr<GameSystem>> gameSystems;
 	std::unordered_map<std::string, std::vector<std::shared_ptr<GameObject>>> gameObjects;
 

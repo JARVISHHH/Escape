@@ -19,6 +19,11 @@ HierarchicalGrid::HierarchicalGrid(int level, std::shared_ptr<AABB> aabb)
 	split(nodes[1]);
 }
 
+HierarchicalGrid::~HierarchicalGrid()
+{
+	std::cout << "HierarchicalGrid delete grid nodes: " << nodesNum << std::endl;
+}
+
 void HierarchicalGrid::split(std::shared_ptr<GridNode> node)
 {
 	node->entityComponentPairs.clear();
@@ -82,8 +87,8 @@ void HierarchicalGrid::update(std::shared_ptr<entityComponentPair> entity)
 	//entity->first->getAABB()->printMinPoint();
 	//std::cout << glm::length(ray->direction) << std::endl;
 	if (glm::length(ray->direction) == 0) return;  // No move
-	if(entity->first->gridNode != nullptr)
-		entity->first->gridNode->entityComponentPairs.erase(entity);
+	if(entity->first->gridNode.lock() != nullptr)
+		entity->first->gridNode.lock()->entityComponentPairs.erase(entity);
 	if (!insert(1, entity, entity->first->getAABB()))
 		std::cout << "grid insert failed" << std::endl;
 }

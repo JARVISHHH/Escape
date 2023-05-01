@@ -7,11 +7,11 @@ BarrierCondition::BarrierCondition(std::string targetTag)
 
 void BarrierCondition::start()
 {
-	collisionSystem = behaviorComponent->getGameObject()->getGameWorld()->getGameSystem<CollisionSystem>("collision");
+	collisionSystem = getBehaviorComponent()->getGameObject()->getGameWorld()->getGameSystem<CollisionSystem>("collision");
 
-	transform = behaviorComponent->getGameObject()->getComponent<TransformComponent>("transform");
+	transform = getBehaviorComponent()->getGameObject()->getComponent<TransformComponent>("transform");
 
-	auto targetObject = behaviorComponent->getGameObject()->getGameWorld()->getGameObject(targetTag);
+	auto targetObject = getBehaviorComponent()->getGameObject()->getGameWorld()->getGameObject(targetTag);
 	if (targetObject != nullptr) targetTransform = targetObject->getComponent<TransformComponent>("transform");
 }
 
