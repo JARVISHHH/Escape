@@ -5,7 +5,11 @@
 TransformComponent::TransformComponent() : GameComponent("transform")
 {
 	modelTransform = std::make_shared<ModelTransform>();
-	ray = std::make_shared<Ray>();
+}
+
+void TransformComponent::start()
+{
+	lastPos = modelTransform->getPos();
 }
 
 std::shared_ptr<ModelTransform> TransformComponent::getModelTransform() {
@@ -14,18 +18,10 @@ std::shared_ptr<ModelTransform> TransformComponent::getModelTransform() {
 
 std::shared_ptr<Ray> TransformComponent::getRay()
 {
-	return ray;
+	return std::make_shared<Ray>(lastPos, modelTransform->getPos());
 }
 
-void TransformComponent::updateRay() {
-	ray->update(ray->endPoint, modelTransform->getPos());
-}
-
-void TransformComponent::updateRayEnd() {
-	ray->update(ray->origin, modelTransform->getPos());
-}
-
-void TransformComponent::setRay(glm::vec3 origin, glm::vec3 endPoint)
+void TransformComponent::updateLastPos()
 {
-	ray->update(origin, endPoint);
+	lastPos = modelTransform->getPos();
 }

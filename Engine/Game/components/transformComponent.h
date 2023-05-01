@@ -11,17 +11,18 @@
 class TransformComponent : public GameComponent {
 public:
 	TransformComponent();
+
+	void start() override;
+
 	std::shared_ptr<ModelTransform> getModelTransform();
 	std::shared_ptr<Ray> getRay();
 
-	void updateRay();
-	void updateRayEnd();
-	void setRay(glm::vec3 origin = glm::vec3(0, 0, 0), glm::vec3 endPoint = glm::vec3(0, 0, 0));
+	void updateLastPos();
 	void setOnGround(bool onGround) { this->onGround = onGround; }
 	bool isOnGround() { return onGround; }
 
 protected:
 	std::shared_ptr<ModelTransform> modelTransform;
-	std::shared_ptr<Ray> ray;
+	glm::vec3 lastPos;
 	bool onGround = false;
 };

@@ -20,7 +20,6 @@ std::shared_ptr<GameObject> createChasingEnemy(std::shared_ptr<GameWorld> gameWo
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.5);
 	modelTransform->translate(pos);
-	transformComponent->updateRay();
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
 	// Collision component
@@ -70,7 +69,6 @@ std::shared_ptr<GameObject> createShootingEnemy(std::shared_ptr<GameWorld> gameW
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.5);
 	modelTransform->translate(pos);
-	transformComponent->updateRay();
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
 	// Collision component

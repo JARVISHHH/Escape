@@ -17,7 +17,6 @@ std::shared_ptr<GameObject> createProjectile(std::shared_ptr<GameWorld> gameWorl
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.05);
 	modelTransform->translate(pos);
-	transformComponent->updateRay();
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
 	// Collision component

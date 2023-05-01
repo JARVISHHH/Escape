@@ -10,6 +10,7 @@
 #include <Engine/Game/gameSystems/physicsSystem.h>
 #include <Engine/Game/gameSystems/tickSystem.h>
 #include <Engine/Game/collision/hierarchicalGrid.h>
+#include <Engine/Game/components/transformComponent.h>
 
 
 GameWorld::GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> screen)
@@ -50,6 +51,7 @@ void GameWorld::update(double seconds)
 		if (cameraSystem != nullptr) cameraSystem->update(seconds);
 		totalTime -= seconds;
 		updateGameObjects();
+		updateTransform();
 	}
 }
 
@@ -143,5 +145,14 @@ void GameWorld::updateGameObjects()
 		for (int i = objects.size() - 1; i >= 0; i--)
 			if (!objects[i]->getActiveStatus())
 				objects.erase(objects.begin() + i);
+	}
+}
+
+void GameWorld::updateTransform()
+{
+	for (auto iter = gameObjects.begin(); iter != gameObjects.end(); iter++) {
+		auto& objects = iter->second;
+		for (int i = 0; i < objects.size(); i++)
+			objects[i]->getComponent<TransformComponent>("transform")->updateLastPos();
 	}
 }

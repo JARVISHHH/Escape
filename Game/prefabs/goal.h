@@ -12,7 +12,6 @@ std::shared_ptr<GameObject> createGoal(std::shared_ptr<GameWorld> gameWorld,  gl
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.25);
 	modelTransform->translate(pos);
-	transformComponent->updateRay();
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monomi");
 	// Collision component

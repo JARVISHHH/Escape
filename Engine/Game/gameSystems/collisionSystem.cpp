@@ -25,14 +25,6 @@ void CollisionSystem::doCollision()
 
 	updateEntityComponentPairs();
 
-	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
-		auto layer = iter->first;
-		auto& pairs = iter->second;
-		for (int i = 0; i < pairs.size(); i++) {
-			pairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
-		}
-	}
-
 	// Update movable game objects
 	if (!doAccelerate) {
 		//int sum = 0;
@@ -100,19 +92,10 @@ void CollisionSystem::doCollision()
 		auto& pairs = iter->second;
 		for (int i = 0; i < pairs.size(); i++)
 		{
-			pairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRayEnd();
 			std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> collisionRes;
 			if (!doAccelerate) collisionRes = pairs[i]->first->ellipsoidTriangleCollision(environmentComponents);
 			else collisionRes = pairs[i]->first->ellipsoidTriangleCollision(bvh);
 			notifyEnvironmentCollision(layer, i, collisionRes.first, collisionRes.second);
-		}
-	}
-
-	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
-		auto layer = iter->first;
-		auto& pairs = iter->second;
-		for (int i = 0; i < pairs.size(); i++) {
-			pairs[i]->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRayEnd();
 		}
 	}
 }
@@ -189,7 +172,6 @@ void CollisionSystem::updateEntityComponentPairs()
 		auto& pairs = iter->second;
 		if (entityComponentPairs.find(layer) == entityComponentPairs.end()) entityComponentPairs[layer] = std::vector<std::shared_ptr<entityComponentPair>>();
 		for (auto entityComponentPair : pairs) {
-			entityComponentPair->first->getGameObject()->getComponent<TransformComponent>("transform")->updateRay();
 			entityComponentPairs[layer].push_back(entityComponentPair);
 			hierarchicalGrids[layer]->insert(1, entityComponentPair, entityComponentPair->first->getAABB());
 		}

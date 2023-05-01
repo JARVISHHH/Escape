@@ -64,6 +64,7 @@ protected:
 	bool win = false;
 
 	void updateGameObjects();
+	void updateTransform();
 };
 
 template<class T>

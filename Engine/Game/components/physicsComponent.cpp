@@ -12,7 +12,8 @@ void PhysicsComponent::update(double seconds)
 	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
 	auto modelTransform = transformComponent->getModelTransform();
 
-	velocity -= glm::vec3(0, gravity * seconds, 0);
+	if(!transformComponent->isOnGround())
+		velocity -= glm::vec3(0, gravity * seconds, 0);
 
 	auto moveDistance = velocity * (float)seconds;
 

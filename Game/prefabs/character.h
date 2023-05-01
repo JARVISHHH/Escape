@@ -12,7 +12,6 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.25);
 	modelTransform->translate(glm::vec3(0, 2, 1));
-	transformComponent->updateRay();
 	gameWorld->getCamera()->setPos(modelTransform->getPos());
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
