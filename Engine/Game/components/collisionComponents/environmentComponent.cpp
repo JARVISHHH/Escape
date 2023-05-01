@@ -28,7 +28,7 @@ void EnvironmentComponent::buildBoundingBox()
 std::shared_ptr<CollisionInfo> EnvironmentComponent::getClosestCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray)
 {
 	auto res = std::make_shared<CollisionInfo>();
-	auto triangleTransformMatrix = gameObject->getComponent<TransformComponent>("transform")->getModelTransform()->getModelMatrix();
+	auto triangleTransformMatrix = getGameObject()->getComponent<TransformComponent>("transform")->getModelTransform()->getModelMatrix();
 
 	for (auto triangle : triangles) {
 		auto thisCollision = triangle->intersect(transformMatrix, triangleTransformMatrix, ray);

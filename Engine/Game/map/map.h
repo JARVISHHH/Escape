@@ -20,7 +20,7 @@ protected:
 
 
 private:
-	std::shared_ptr<GameWorld> gameWorld;
+	std::weak_ptr<GameWorld> gameWorld;
 
 	int maxDepth = 3;
 	std::shared_ptr<AABB> aabb;

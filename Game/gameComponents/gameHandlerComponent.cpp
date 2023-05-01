@@ -7,9 +7,9 @@ GameHandlerComponent::GameHandlerComponent(std::string targetTag, float maxTime)
 }
 
 void GameHandlerComponent::start() {
-	target = gameObject->getGameWorld()->getGameObject(targetTag)->getComponent<HealthComponent>("health");
+	target = getGameObject()->getGameWorld()->getGameObject(targetTag)->getComponent<HealthComponent>("health");
 	gameState = GameState::Running;
-	gameObject->getGameWorld()->setIsStop(false);
+	getGameObject()->getGameWorld()->setIsStop(false);
 }
 
 void GameHandlerComponent::update(double seconds)
@@ -42,6 +42,6 @@ void GameHandlerComponent::endGame(bool win)
 		gameState = GameState::Lose;
 		result = "You lose!";
 	}
-	gameObject->getGameWorld()->setWin(win);
-	gameObject->getGameWorld()->setFinish(true);
+	getGameObject()->getGameWorld()->setWin(win);
+	getGameObject()->getGameWorld()->setFinish(true);
 }

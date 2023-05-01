@@ -39,7 +39,7 @@ std::shared_ptr<CollisionInfo> CollisionComponent::getEnvironmentClosestCollisio
 
 std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionComponent::ellipsoidTriangleCollision(std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents)
 {
-	auto ray = gameObject->getComponent<TransformComponent>("transform")->getRay();
+	auto ray = getGameObject()->getComponent<TransformComponent>("transform")->getRay();
 
 	if (glm::length(ray->direction) < EPSILON) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
 
@@ -74,7 +74,7 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 
 std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionComponent::ellipsoidTriangleCollision(std::shared_ptr<BVH> bvh)
 {
-	auto ray = gameObject->getComponent<TransformComponent>("transform")->getRay();
+	auto ray = getGameObject()->getComponent<TransformComponent>("transform")->getRay();
 
 	if (glm::length(ray->direction) < EPSILON) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
 

@@ -10,13 +10,13 @@ CharacterMoveComponent::CharacterMoveComponent()
 void CharacterMoveComponent::update(double seconds)
 {
 
-	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
+	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
 	if (transformComponent == nullptr) {
 		std::cerr << "CharatcerMoveComponent without a transformComponent." << std::endl;
 		return;
 	}
 
-	auto camera = gameObject->getCamera();
+	auto camera = getGameObject()->getCamera();
 	auto look = camera->getLook();
 
 	glm::vec3 moveDir(0, 0, 0);

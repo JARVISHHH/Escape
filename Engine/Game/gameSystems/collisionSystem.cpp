@@ -121,7 +121,7 @@ void CollisionSystem::addLayer(std::string layer)
 	//std::cout << std::endl;
 	if (entityComponentPairs.find(layer) != entityComponentPairs.end()) return;  // The layer already exists
 	entityComponentPairs[layer] = std::vector<std::shared_ptr<entityComponentPair>>();
-	hierarchicalGrids[layer] = std::make_shared<HierarchicalGrid>(HGLevel, gameWorld->getAABB());
+	hierarchicalGrids[layer] = std::make_shared<HierarchicalGrid>(HGLevel, getGameWorld()->getAABB());
 	layerCollisionMatrix[layer].insert(layer);
 	for (auto iter = layerCollisionMatrix.begin(); iter != layerCollisionMatrix.end(); iter++) {
 		layerCollisionMatrix[layer].insert(iter->first);

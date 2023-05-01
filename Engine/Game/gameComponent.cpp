@@ -6,6 +6,11 @@ GameComponent::GameComponent(std::string tag)
 
 }
 
+GameComponent::~GameComponent()
+{
+	std::cout << "game component delete" << std::endl;
+}
+
 void GameComponent::start()
 {
 }
@@ -34,5 +39,5 @@ void GameComponent::setGameObject(std::shared_ptr<GameObject> gameObject)
 
 std::shared_ptr<GameObject> GameComponent::getGameObject()
 {
-	return gameObject;
+	return gameObject.lock();
 }

@@ -19,6 +19,11 @@ GameWorld::GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> scr
 	this->screen = screen;
 }
 
+GameWorld::~GameWorld()
+{
+	std::cout << "game world delete" << std::endl;
+}
+
 void GameWorld::start()
 {
 	for (auto it = gameObjects.begin(); it != gameObjects.end(); it++) {
@@ -97,7 +102,7 @@ bool GameWorld::addGameObject(std::shared_ptr<GameObject> gameObject)
 	std::string tag = gameObject->getTag();
 	if (gameObjects.find(tag) == gameObjects.end()) gameObjects[tag] = std::vector<std::shared_ptr<GameObject>>();
 	gameObjects[tag].push_back(gameObject);
-	gameObject->setGameWorld(std::shared_ptr<GameWorld>(this));
+	gameObject->setGameWorld(shared_from_this());
 	return true;
 }
 

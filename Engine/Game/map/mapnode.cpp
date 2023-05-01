@@ -17,7 +17,7 @@ bool MapNode::split(glm::vec3 minimumSize, float margine, int depth)
 		return false;
 	}
 
-	std::cout << "split" << std::endl;
+	//std::cout << "split" << std::endl;
 
 	float x = aabb->getMaxPoint()[0] - aabb->getMinPoint()[0];
 	float z = aabb->getMaxPoint()[2] - aabb->getMinPoint()[2];

@@ -23,7 +23,7 @@ void DrawSystem::drawPhong()
 {
 	Global::graphics.bindShader("phong");
 	Global::graphics.setGlobalData(glm::vec3(0.5f));
-	Global::graphics.setCameraData(gameWorld->getCamera());
+	Global::graphics.setCameraData(getGameWorld()->getCamera());
 	for (auto component : components) {
 		component->drawPhong();
 	}
@@ -40,7 +40,7 @@ void DrawSystem::drawText()
 
 bool DrawSystem::addComponent(std::shared_ptr<GameComponent> gameComponent)
 {
-	components.push_back(gameComponent);
+	waitingList.push_back(gameComponent);
 	return true;
 }
 

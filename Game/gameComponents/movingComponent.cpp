@@ -7,7 +7,7 @@ MovingComponent::MovingComponent(glm::vec3 direction, float speed)
 
 void MovingComponent::start()
 {
-	transform = gameObject->getComponent<TransformComponent>("transform");
+	transform = getGameObject()->getComponent<TransformComponent>("transform");
 }
 
 void MovingComponent::update(double seconds)

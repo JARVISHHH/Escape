@@ -10,9 +10,9 @@ ShootComponent::ShootComponent(std::string targetTag, bool stop)
 
 void ShootComponent::start()
 {
-	transform = gameObject->getComponent<TransformComponent>("transform");
+	transform = getGameObject()->getComponent<TransformComponent>("transform");
 
-	auto targetObject = gameObject->getGameWorld()->getGameObject(targetTag);
+	auto targetObject = getGameObject()->getGameWorld()->getGameObject(targetTag);
 	if (targetObject != nullptr) targetTransform = targetObject->getComponent<TransformComponent>("transform");
 
 	stop = false;
@@ -39,5 +39,5 @@ void ShootComponent::setStop(bool stop)
 void ShootComponent::shoot()
 {
 	auto direction = targetTransform->getModelTransform()->getPos() - transform->getModelTransform()->getPos();
-	createProjectile(gameObject->getGameWorld(), "cylinder", "monomi", transform->getModelTransform()->getPos(), glm::normalize(direction));
+	createProjectile(getGameObject()->getGameWorld(), "cylinder", "monomi", transform->getModelTransform()->getPos(), glm::normalize(direction));
 }

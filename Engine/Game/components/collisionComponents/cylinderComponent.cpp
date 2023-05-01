@@ -18,8 +18,8 @@ glm::vec3 calculateCircleMtv(glm::vec4 circleCenterA, glm::vec4 circleCenterB, f
 }
 
 glm::vec3 CylinderComponent::checkCollision(std::shared_ptr<CylinderComponent> component) {
-	auto transformComponentA = gameObject->getComponent<TransformComponent>("transform");
-	auto transformComponentB = component->gameObject->getComponent<TransformComponent>("transform");
+	auto transformComponentA = getGameObject()->getComponent<TransformComponent>("transform");
+	auto transformComponentB = component->getGameObject()->getComponent<TransformComponent>("transform");
 	auto modelMatrixA = transformComponentA->getModelTransform()->getModelMatrix(), modelMatrixB = transformComponentB->getModelTransform()->getModelMatrix();
 	auto circleCenterA = modelMatrixA * glm::vec4(0, 0, 0, 1), circleCenterB = modelMatrixB * glm::vec4(0, 0, 0, 1);
 	float radiusA = transformComponentA->getModelTransform()->getScale().x * 0.5, radiusB = transformComponentB->getModelTransform()->getScale().x * 0.5;
@@ -37,7 +37,7 @@ glm::vec3 CylinderComponent::checkCollision(std::shared_ptr<CylinderComponent> c
 
 glm::mat4x4 CylinderComponent::getTransformMatrix()
 {
-	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
+	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
 	glm::mat4x4 transformMatrix = glm::inverse(transformComponent->getModelTransform()->getModelMatrix());
 	transformMatrix = glm::mat4x4(2, 0, 0, 0,
 								  0, 2, 0, 0,
@@ -58,7 +58,7 @@ std::shared_ptr<AABB> CylinderComponent::getAABB()
 	points[6] = { -0.5, -0.5, -0.5, 1 };
 	points[7] = { 0.5, -0.5, -0.5, 1 };
 
-	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
+	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
 	auto curPos3 = transformComponent->getModelTransform()->getPos();
 	auto curPos = glm::vec4(curPos3[0], curPos3[1], curPos3[2], 1);
 	for (int i = 0; i < 8; i++) {
@@ -89,7 +89,7 @@ std::shared_ptr<AABB> CylinderComponent::getAABB(std::shared_ptr<Ray> ray)
 	points[6] = { -0.5, -0.5, -0.5, 1 };
 	points[7] = { 0.5, -0.5, -0.5, 1 };
 
-	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
+	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
 	auto curPos3 = transformComponent->getModelTransform()->getPos();
 	auto curPos = glm::vec4(curPos3[0], curPos3[1], curPos3[2], 1);
 	for (int i = 0; i < 8; i++) {

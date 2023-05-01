@@ -20,7 +20,7 @@ DrawComponent::DrawComponent(std::string shapeType, std::string materialName) : 
 
 void DrawComponent::drawPhong()
 {
-	std::shared_ptr<TransformComponent> transformComponent = gameObject->getComponent<TransformComponent>("transform");
+	std::shared_ptr<TransformComponent> transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
 	if (transformComponent == nullptr) return;
 	auto pos = transformComponent->getModelTransform()->getPos();
 	//if (gameObject->getTag() == "character")

@@ -84,7 +84,7 @@ void GameScreen::init()
 	std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "box", "grass");
 	//std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "ground", "ground");
 	//std::shared_ptr<GameObject> chasingEnemy = createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
-	std::shared_ptr<GameObject> shootingEnemy = createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(2, 0.5, -3));
+	//std::shared_ptr<GameObject> shootingEnemy = createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(2, 0.5, -3));
 
 	collisionSystem->buildBVH();
 	collisionSystem->buildHG();

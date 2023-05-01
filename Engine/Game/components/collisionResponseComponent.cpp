@@ -33,7 +33,7 @@ void CollisionResponseComponent::doCollision(std::vector<std::shared_ptr<Collisi
 void CollisionResponseComponent::resolveCollision(std::shared_ptr<CollisionResponseComponent> otherComponent, glm::vec3 mtv)
 {
 	if (isStatic) return;
-	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
+	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
 	if (otherComponent == nullptr || otherComponent->isStatic) transformComponent->getModelTransform()->translate(mtv);
 	else transformComponent->getModelTransform()->translate(mtv / 2.0f);
 }
@@ -41,7 +41,7 @@ void CollisionResponseComponent::resolveCollision(std::shared_ptr<CollisionRespo
 void CollisionResponseComponent::resolveCollision(std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
 {
 	if (isStatic || collisions.size() <= 0) return;
-	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
+	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
 	transformComponent->getModelTransform()->setPos(curPos);
 }
 
@@ -52,8 +52,8 @@ void CollisionResponseComponent::responseCollision(std::shared_ptr<CollisionResp
 
 void CollisionResponseComponent::responseCollision(std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
 {
-	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
-	auto physicsComponent = gameObject->getComponent<PhysicsComponent>("physics");
+	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
+	auto physicsComponent = getGameObject()->getComponent<PhysicsComponent>("physics");
 	transformComponent->setOnGround(false);
 	for (auto collision : collisions)
 		if (collision->normal.y > 0) 

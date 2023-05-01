@@ -4,20 +4,20 @@
 
 void CharacterCollisionResponse::start()
 {
-	healthComponent = gameObject->getComponent<HealthComponent>("health");
+	healthComponent = getGameObject()->getComponent<HealthComponent>("health");
 }
 
 void CharacterCollisionResponse::responseCollision(std::shared_ptr<CollisionResponseComponent> otherComponent, glm::vec3 mtv)
 {
 	if (mtv.y > 0) {
-		auto physicsComponent = gameObject->getComponent<PhysicsComponent>("physics");
+		auto physicsComponent = getGameObject()->getComponent<PhysicsComponent>("physics");
 		if (physicsComponent != nullptr && physicsComponent->getVelocity().y <= 0)
 			physicsComponent->applyVelocity(glm::vec3(0, -physicsComponent->getVelocity().y, 0));
 	}
 
 	if (otherComponent->getGameObject()->getTag().compare("goal") == 0) {
-		gameObject->getGameWorld()->setWin(true);
-		gameObject->getGameWorld()->setFinish(true);
+		getGameObject()->getGameWorld()->setWin(true);
+		getGameObject()->getGameWorld()->setFinish(true);
 	}
 	else if (otherComponent->getGameObject()->getTag().compare("enemy") == 0) {
 		healthComponent->damage(2);

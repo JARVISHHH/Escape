@@ -8,9 +8,9 @@ EnemyMovement::EnemyMovement(std::string targetTag)
 
 void EnemyMovement::start()
 {
-	auto targetObjects = gameObject->getGameWorld()->getGameObjects(targetTag);
+	auto targetObjects = getGameObject()->getGameWorld()->getGameObjects(targetTag);
 	if (targetObjects.size() != 0) target = targetObjects[0]->getComponent<TransformComponent>("transform");
-	pathfinding = gameObject->getComponent<PathfindingComponent>("pathfinding");
+	pathfinding = getGameObject()->getComponent<PathfindingComponent>("pathfinding");
 }
 
 void EnemyMovement::update(double seconds)

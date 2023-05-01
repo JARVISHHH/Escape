@@ -11,8 +11,8 @@ CharacterJumpComponent::CharacterJumpComponent()
 
 void CharacterJumpComponent::update(double seconds)
 {
-	auto transformComponent = gameObject->getComponent<TransformComponent>("transform");
-	auto physicsComponent = gameObject->getComponent<PhysicsComponent>("physics");
+	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
+	auto physicsComponent = getGameObject()->getComponent<PhysicsComponent>("physics");
 	if (transformComponent == nullptr || physicsComponent == nullptr) {
 		std::cerr << "CharatcerJumpComponent with incomplete components." << std::endl;
 		return;

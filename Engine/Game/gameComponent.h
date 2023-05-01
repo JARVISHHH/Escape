@@ -6,6 +6,7 @@ class GameComponent
 {
 public:
 	GameComponent(std::string tag);
+	~GameComponent();
 
 	virtual void start();
 	virtual void update(double seconds);
@@ -17,6 +18,6 @@ public:
 	std::shared_ptr<GameObject> getGameObject();
 
 protected:
-	std::shared_ptr<GameObject> gameObject;
+	std::weak_ptr<GameObject> gameObject;
 	const std::string tag;
 };

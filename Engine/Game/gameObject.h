@@ -11,6 +11,7 @@ class GameObject : public std::enable_shared_from_this<GameObject>
 {
 public:
 	GameObject(std::string tag);
+	~GameObject();
 
 	void start();
 
@@ -32,7 +33,7 @@ public:
 
 protected:
 	std::string tag;
-	std::shared_ptr<GameWorld> gameWorld;
+	std::weak_ptr<GameWorld> gameWorld;
 	std::unordered_map<std::string, std::vector<std::shared_ptr<GameComponent>>> components;
 	bool activeStatus = true;
 };

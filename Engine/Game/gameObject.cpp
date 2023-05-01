@@ -7,6 +7,11 @@ GameObject::GameObject(std::string tag)
 	this->tag = tag;
 }
 
+GameObject::~GameObject()
+{
+	std::cout << "game object delete" << std::endl;
+}
+
 void GameObject::start()
 {
 	for (auto it = components.begin(); it != components.end(); it++) {
@@ -23,7 +28,7 @@ std::string GameObject::getTag()
 
 std::shared_ptr<GameWorld> GameObject::getGameWorld()
 {
-	return gameWorld;
+	return gameWorld.lock();
 }
 
 void GameObject::setGameWorld(std::shared_ptr<GameWorld> gameWorld)
@@ -53,7 +58,7 @@ bool GameObject::removeComponent(std::string tag, std::shared_ptr<GameComponent>
 
 std::shared_ptr<Camera> GameObject::getCamera()
 {
-	return gameWorld->getCamera();
+	return gameWorld.lock()->getCamera();
 }
 
 void GameObject::setActiveStatus(bool activeStatus)
