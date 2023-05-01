@@ -54,9 +54,9 @@ void GameWorld::update(double seconds)
 		if (collisionSystem != nullptr) collisionSystem->update(seconds);
 		auto cameraSystem = getGameSystem<CameraSystem>("camera");
 		if (cameraSystem != nullptr) cameraSystem->update(seconds);
-		totalTime -= seconds;
 		updateGameObjects();
 		updateTransform();
+		totalTime -= seconds;
 	}
 }
 

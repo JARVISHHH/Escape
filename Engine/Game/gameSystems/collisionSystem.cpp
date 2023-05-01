@@ -26,63 +26,63 @@ void CollisionSystem::doCollision()
 	updateEntityComponentPairs();
 
 	// Update movable game objects
-	if (!doAccelerate) {
-		//int sum = 0;
-		for (auto iter1 = entityComponentPairs.begin(); iter1 != entityComponentPairs.end(); iter1++) {
-			auto layer1 = iter1->first;
-			auto& pairs1 = iter1->second;
-			for (auto iter2 = layerCollisionMatrix[layer1].begin(); iter2 != layerCollisionMatrix[layer1].end(); iter2++) {
-				auto layer2 = *iter2;
-				auto& pairs2 = entityComponentPairs[layer2];
-				// Collision with other layer
-				if (layer1.compare(layer2) != 0) {
-					for (int i = 0; i < pairs1.size(); i++) {
-						for (int j = 0; j < pairs2.size(); j++) {
-							auto collisionComponent1 = pairs1[i]->first;
-							auto collisionComponent2 = pairs2[j]->first;
-							glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
-							if (glm::length(mtv) == 0) continue;  // No collision
-							notifyCollision(layer1, layer2, i, j, mtv);
-						}
-					}
-				}
-				// Self-layer collision
-				else {
-					for (int i = 0; i < pairs1.size(); i++) {
-						for (int j = i + 1; j < pairs2.size(); j++) {
-							auto collisionComponent1 = pairs1[i]->first;
-							auto collisionComponent2 = pairs2[j]->first;
-							glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
-							if (glm::length(mtv) == 0) continue;  // No collision
-							notifyCollision(layer1, layer2, i, j, mtv);
-						}
-					}
-				}
-			}
-		}
-		//std::cout << "collision: " << sum << std::endl;
-	}
-	else {
-		// Update
-		for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
-			auto layer = iter->first;
-			auto& pairs = iter->second;
-			for (int i = 0; i < pairs.size(); i++) {
-				hierarchicalGrids[layer]->update(pairs[i]);
-			}
-		}
-		// Collide
-		for (auto iter1 = layerCollisionMatrix.begin(); iter1 != layerCollisionMatrix.end(); iter1++) {
-			auto layer1 = iter1->first;
-			//std::cout << layer1 << " collide with: ";
-			for (auto iter2 = layerCollisionMatrix[layer1].begin(); iter2 != layerCollisionMatrix[layer1].end(); iter2++) {
-				auto layer2 = *iter2;
-				//std::cout << layer2 << " ";
-				HierarchicalGrid::collideAll(hierarchicalGrids[layer1], hierarchicalGrids[layer2], 1, 1);
-			}
-			//std::cout << std::endl;
-		}
-	}
+	//if (!doAccelerate) {
+	//	//int sum = 0;
+	//	for (auto iter1 = entityComponentPairs.begin(); iter1 != entityComponentPairs.end(); iter1++) {
+	//		auto layer1 = iter1->first;
+	//		auto& pairs1 = iter1->second;
+	//		for (auto iter2 = layerCollisionMatrix[layer1].begin(); iter2 != layerCollisionMatrix[layer1].end(); iter2++) {
+	//			auto layer2 = *iter2;
+	//			auto& pairs2 = entityComponentPairs[layer2];
+	//			// Collision with other layer
+	//			if (layer1.compare(layer2) != 0) {
+	//				for (int i = 0; i < pairs1.size(); i++) {
+	//					for (int j = 0; j < pairs2.size(); j++) {
+	//						auto collisionComponent1 = pairs1[i]->first;
+	//						auto collisionComponent2 = pairs2[j]->first;
+	//						glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
+	//						if (glm::length(mtv) == 0) continue;  // No collision
+	//						notifyCollision(layer1, layer2, i, j, mtv);
+	//					}
+	//				}
+	//			}
+	//			// Self-layer collision
+	//			else {
+	//				for (int i = 0; i < pairs1.size(); i++) {
+	//					for (int j = i + 1; j < pairs2.size(); j++) {
+	//						auto collisionComponent1 = pairs1[i]->first;
+	//						auto collisionComponent2 = pairs2[j]->first;
+	//						glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
+	//						if (glm::length(mtv) == 0) continue;  // No collision
+	//						notifyCollision(layer1, layer2, i, j, mtv);
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//	//std::cout << "collision: " << sum << std::endl;
+	//}
+	//else {
+	//	// Update
+	//	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
+	//		auto layer = iter->first;
+	//		auto& pairs = iter->second;
+	//		for (int i = 0; i < pairs.size(); i++) {
+	//			hierarchicalGrids[layer]->update(pairs[i]);
+	//		}
+	//	}
+	//	// Collide
+	//	for (auto iter1 = layerCollisionMatrix.begin(); iter1 != layerCollisionMatrix.end(); iter1++) {
+	//		auto layer1 = iter1->first;
+	//		//std::cout << layer1 << " collide with: ";
+	//		for (auto iter2 = layerCollisionMatrix[layer1].begin(); iter2 != layerCollisionMatrix[layer1].end(); iter2++) {
+	//			auto layer2 = *iter2;
+	//			//std::cout << layer2 << " ";
+	//			HierarchicalGrid::collideAll(hierarchicalGrids[layer1], hierarchicalGrids[layer2], 1, 1);
+	//		}
+	//		//std::cout << std::endl;
+	//	}
+	//}
 
 	//updateEntityComponentPairs();
 

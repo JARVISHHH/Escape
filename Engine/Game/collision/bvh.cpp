@@ -13,6 +13,11 @@ BVH::BVH(std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponen
 		aabbs.insert(aabbs.end(), environmentComponent->getBoundingBox().begin(), environmentComponent->getBoundingBox().end());
 }
 
+BVH::~BVH()
+{
+	std::cout << "bvh delete" << std::endl;
+}
+
 std::shared_ptr<BVHNode> BVH::buildRoot()
 {
 	if (aabbs.size() == 0) return nullptr;

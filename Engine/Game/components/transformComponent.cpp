@@ -7,9 +7,14 @@ TransformComponent::TransformComponent() : GameComponent("transform")
 	modelTransform = std::make_shared<ModelTransform>();
 }
 
+TransformComponent::~TransformComponent()
+{
+	std::cout << "transform component delete" << std::endl;
+}
+
 void TransformComponent::start()
 {
-	lastPos = modelTransform->getPos();
+	updateLastPos();
 }
 
 std::shared_ptr<ModelTransform> TransformComponent::getModelTransform() {

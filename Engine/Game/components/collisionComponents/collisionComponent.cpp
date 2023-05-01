@@ -2,7 +2,7 @@
 #include <Engine/Game/components/transformComponent.h>
 #include <Engine/Game/collision/gridnode.h>
 
-const float EPSILON = 0.00000001;
+const float EPSILON = 0.0000001;
 
 CollisionComponent::CollisionComponent()
 	:GameComponent("collision")
@@ -76,7 +76,7 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 {
 	auto ray = getGameObject()->getComponent<TransformComponent>("transform")->getRay();
 
-	if (glm::length(ray->direction) < EPSILON) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
+	if (glm::length(ray->direction) == 0) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
 
 	std::vector<std::shared_ptr<CollisionInfo>> collisions;
 	glm::mat4x4 transformMatrix = getTransformMatrix();

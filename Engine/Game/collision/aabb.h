@@ -38,7 +38,7 @@ public:
     std::shared_ptr<CollisionInfo> getCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray);
 
 private:
-    std::shared_ptr<EnvironmentComponent> environmentComponent;
+    std::weak_ptr<EnvironmentComponent> environmentComponent;
     std::shared_ptr<Triangle> triangle;
 
     glm::vec4 center;

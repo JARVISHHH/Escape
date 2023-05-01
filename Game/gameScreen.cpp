@@ -73,8 +73,8 @@ void GameScreen::init()
 	createDungeon(gameWorld, shared_from_this(), map);
 	
 	// Create NavMesh
-	navMesh = std::make_shared<NavMesh>("./Resources/Meshes/groundNav.obj");
-	navMesh->bake();
+	//navMesh = std::make_shared<NavMesh>("./Resources/Meshes/groundNav.obj");
+	//navMesh->bake();
 
 	// Create game object
 	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 60);

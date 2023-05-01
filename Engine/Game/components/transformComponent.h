@@ -11,6 +11,7 @@
 class TransformComponent : public GameComponent {
 public:
 	TransformComponent();
+	~TransformComponent();
 
 	void start() override;
 

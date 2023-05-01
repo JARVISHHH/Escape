@@ -12,10 +12,10 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		auto center = (mapNode->room->getMaxPoint() + mapNode->room->getMinPoint()) / 2.0f;
 		auto size = (mapNode->room->getMaxPoint() - mapNode->room->getMinPoint()) / 2.0f;
 		auto transform = std::make_shared<ModelTransform>();
-		//transform->scale(2);
-		transform->scale(glm::vec3(size[0], 0.5f, size[2]));
-		transform->translate(glm::vec3(center[0], center[1], center[2]));
-		createEnvironment(gameWorld, screen, "box", "grass", transform);
+		transform->scale(1 / 20.0);
+		transform->scale(glm::vec3(size[0], 20.0f, size[2]));
+		transform->translate(glm::vec3(center[0], center[1] + 0.5, center[2]));
+		createEnvironment(gameWorld, screen, "ground", "ground", transform);
 	}
 }
 
