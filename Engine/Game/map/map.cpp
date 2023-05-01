@@ -6,6 +6,11 @@ Map::Map(std::shared_ptr<GameWorld> gameWorld, int maxDepth)
 {
 }
 
+Map::~Map()
+{
+	std::cout << "map delete" << std::endl;
+}
+
 void Map::generateMap()
 {
 	mapRoot = std::make_shared<MapNode>(shared_from_this(), aabb);

@@ -35,7 +35,8 @@ void NavMesh::bake()
 			}
 			edge = edgesMap[v1][v2];
 			// Update graph
-			for (const auto& otherNode : edge->connectedNodes) {
+			for (int i = 0; i < edge->connectedNodes.size(); i++) {
+				const auto& otherNode = edge->connectedNodes[i].lock();
 				otherNode->connectedNodes.push_back(node);
 				node->connectedNodes.push_back(otherNode);
 				commonEdges[node][otherNode] = edge;
@@ -134,13 +135,14 @@ std::vector<glm::vec3> NavMesh::aStar(glm::vec3 startPos, glm::vec3 endPos, std:
 		return path;
 	}
 
-	for (const auto& edge : startNode->connectedEdges) {
+	for (int i = 0; i < startNode->connectedEdges.size(); i++) {
+		const auto& edge = startNode->connectedEdges[i].lock();
 		if (!edge->isInterior) continue;
 		openList.push({getEuclidianDistance(edge, startPos) + getEuclidianDistance(edge, endPos), edge});
 		lastEdge[edge] = edge;
 		std::shared_ptr<NavMeshNode> nextNode;
-		if (edge->connectedNodes[0] == startNode) nextNode = edge->connectedNodes[1];
-		else nextNode = edge->connectedNodes[0];
+		if (edge->connectedNodes[0].lock() == startNode) nextNode = edge->connectedNodes[1].lock();
+		else nextNode = edge->connectedNodes[0].lock();
 		enteringNode[edge] = nextNode;
 	}
 	std::shared_ptr<NavMeshEdge> endEdge;
@@ -157,13 +159,13 @@ std::vector<glm::vec3> NavMesh::aStar(glm::vec3 startPos, glm::vec3 endPos, std:
 		closedList.insert(currentEdge);
 		auto costH = getEuclidianDistance(currentEdge, endPos);
 		for (const auto& connectedNode : enteringNode[currentEdge]->connectedNodes) {
-			const auto& connectedEdge = commonEdges[connectedNode][enteringNode[currentEdge]];
+			const auto& connectedEdge = commonEdges[connectedNode.lock()][enteringNode[currentEdge]];
 			if (closedList.find(connectedEdge) != closedList.end()) continue;  // In closed list
 			float newCost = cost - costH + getEuclidianDistance(connectedEdge, currentEdge) + getEuclidianDistance(connectedEdge, endPos);
 			if (lowestCost.find(connectedEdge) == lowestCost.end() || lowestCost[connectedEdge] > newCost) {
 				lowestCost[connectedEdge] = newCost;
 				lastEdge[connectedEdge] = currentEdge;
-				enteringNode[connectedEdge] = connectedNode;
+				enteringNode[connectedEdge] = connectedNode.lock();
 				openList.push({ newCost , connectedEdge });
 			}
 		}

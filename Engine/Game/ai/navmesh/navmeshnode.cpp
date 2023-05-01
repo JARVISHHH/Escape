@@ -13,3 +13,8 @@ NavMeshNode::NavMeshNode(std::shared_ptr<NavMesh> navMesh, glm::ivec3 face)
 	center = (v1 + v2 + v3) / 3.0f;
 	//std::cout << "center: " << center[0] << " " << center[1] << " " << center[2] << std::endl;
 }
+
+std::shared_ptr<NavMesh> NavMeshNode::getNavMesh()
+{
+	return navMesh.lock();
+}

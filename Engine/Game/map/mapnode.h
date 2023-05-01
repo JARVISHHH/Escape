@@ -7,6 +7,7 @@ class MapNode {
 public:
 	MapNode(std::shared_ptr<Map> map, std::shared_ptr<AABB> aabb);
 	MapNode(std::shared_ptr<Map> map, glm::vec4 maxPoint, glm::vec4 minPoint);
+	~MapNode();
 
 	bool split(glm::vec3 minimumSize, float margine, int depth);
 	bool splitX(glm::vec3 minimumSize, float margine);
@@ -14,6 +15,7 @@ public:
 
 	void assign(glm::vec3 minimumSize);
 
+	std::shared_ptr<Map> getMap();
 	void printNode();
 
 	std::shared_ptr<AABB> room = nullptr;
@@ -22,7 +24,7 @@ public:
 protected:
 
 private:
-	std::shared_ptr<Map> map;
+	std::weak_ptr<Map> map;
 	std::shared_ptr<AABB> aabb;
 
 	bool isLeaf = false;

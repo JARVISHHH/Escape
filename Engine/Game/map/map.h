@@ -8,6 +8,7 @@ class MapNode;
 class Map: public std::enable_shared_from_this<Map> {
 public:
 	Map(std::shared_ptr<GameWorld> gameWorld, int maxDepth = 3);
+	~Map();
 
 	void generateMap();
 	int getMaxDepth() { return maxDepth; }

@@ -10,9 +10,14 @@ MapNode::MapNode(std::shared_ptr<Map> map, glm::vec4 maxPoint, glm::vec4 minPoin
 {
 }
 
+MapNode::~MapNode()
+{
+	std::cout << "map node delete" << std::endl;
+}
+
 bool MapNode::split(glm::vec3 minimumSize, float margine, int depth)
 {
-	if (depth >= map->getMaxDepth()) {
+	if (depth >= getMap()->getMaxDepth()) {
 		isLeaf = true;
 		return false;
 	}
@@ -49,8 +54,8 @@ bool MapNode::splitX(glm::vec3 minimumSize, float margine)
 	glm::vec4 leftMinPoint = aabb->getMinPoint(), rightMaxPoint = aabb->getMaxPoint();
 	leftMinPoint[0] = leftMaxPoint[0] - splitSize + margine, rightMaxPoint[0] = leftMaxPoint[0] - splitSize - margine;
 
-	leftChild = std::make_shared<MapNode>(map, leftMaxPoint, leftMinPoint);
-	rightChild = std::make_shared<MapNode>(map, rightMaxPoint, rightMinPoint);
+	leftChild = std::make_shared<MapNode>(getMap(), leftMaxPoint, leftMinPoint);
+	rightChild = std::make_shared<MapNode>(getMap(), rightMaxPoint, rightMinPoint);
 
 	return true;
 }
@@ -66,8 +71,8 @@ bool MapNode::splitZ(glm::vec3 minimumSize, float margine)
 	glm::vec4 leftMinPoint = aabb->getMinPoint(), rightMaxPoint = aabb->getMaxPoint();
 	leftMinPoint[2] = leftMaxPoint[2] - splitSize + margine, rightMaxPoint[2] = leftMaxPoint[2] - splitSize - margine;
 
-	leftChild = std::make_shared<MapNode>(map, leftMaxPoint, leftMinPoint);
-	rightChild = std::make_shared<MapNode>(map, rightMaxPoint, rightMinPoint);
+	leftChild = std::make_shared<MapNode>(getMap(), leftMaxPoint, leftMinPoint);
+	rightChild = std::make_shared<MapNode>(getMap(), rightMaxPoint, rightMinPoint);
 
 	return true;
 }
@@ -88,6 +93,11 @@ void MapNode::assign(glm::vec3 minimumSize)
 		}
 		room = std::make_shared<AABB>(maxPoint, minPoint);
 	}
+}
+
+std::shared_ptr<Map> MapNode::getMap()
+{
+	return map.lock();
 }
 
 void MapNode::printNode()
