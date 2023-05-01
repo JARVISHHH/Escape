@@ -54,11 +54,11 @@ void CollisionResponseComponent::responseCollision(std::vector<std::shared_ptr<C
 {
 	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
 	auto physicsComponent = getGameObject()->getComponent<PhysicsComponent>("physics");
-	transformComponent->setOnGround(false);
+	//transformComponent->setOnGround(false);
 	for (auto collision : collisions)
 		if (collision->normal.y > 0) 
 		{
-			transformComponent->setOnGround(true);
+			//transformComponent->setOnGround(true);
 			if (physicsComponent != nullptr) physicsComponent->setVelocity(glm::vec3(physicsComponent->getVelocity().x, 0.0f, physicsComponent->getVelocity().z));
 		}
 }

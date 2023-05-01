@@ -59,8 +59,6 @@ std::shared_ptr<AABB> CylinderComponent::getAABB()
 	points[7] = { 0.5, -0.5, -0.5, 1 };
 
 	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
-	auto curPos3 = transformComponent->getModelTransform()->getPos();
-	auto curPos = glm::vec4(curPos3[0], curPos3[1], curPos3[2], 1);
 	for (int i = 0; i < 8; i++) {
 		points[i] = transformComponent->getModelTransform()->getModelMatrix() * points[i];
 	}
@@ -108,4 +106,16 @@ std::shared_ptr<AABB> CylinderComponent::getAABB(std::shared_ptr<Ray> ray)
 	}
 
 	return std::make_shared<AABB>(maxPoint, minPoint);
+}
+
+void CylinderComponent::updateOnGround()
+{
+	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
+	glm::vec3 source = transformComponent->getModelTransform()->getPos();
+	glm::vec3 target = source + glm::vec3(0, -1, 0);
+	//target[1] += (target - source)[1];
+	auto collisionInfo = collisionSystem.lock()->environmentRayCast(shared_from_this(), source, target, getTransformMatrix());
+	//std::cout << collisionInfo->t << std::endl;
+	if (std::abs(collisionInfo->t) > 0.01) transformComponent->setOnGround(false);
+	else transformComponent->setOnGround(true);
 }

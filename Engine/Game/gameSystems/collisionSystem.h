@@ -2,11 +2,14 @@
 
 #include "Engine/Game/gameSystem.h"
 #include <Engine/Game/collision/bvh.h>
-#include <Engine/Game/collision/hierarchicalGrid.h>
+
+#include <unordered_set>
 
 class CollisionComponent;
 class CollisionResponseComponent;
 class EnvironmentComponent;
+
+class HierarchicalGrid;
 
 class CollisionSystem : public GameSystem {
 public:
@@ -29,7 +32,8 @@ public:
 	void buildBVH();
 	void buildHG();
 
-	std::shared_ptr<CollisionInfo> environmentRayCast(glm::vec3 source, glm::vec3 target);
+	std::shared_ptr<CollisionInfo> environmentRayCast(std::shared_ptr<CollisionComponent> collisionComponent, glm::vec3 source, glm::vec3 target, glm::mat4x4 transformMatrix = glm::mat4x4(1.0f));
+	std::shared_ptr<CollisionInfo> environmentRayCast(glm::vec3 source, glm::vec3 target, glm::mat4x4 transformMatrix = glm::mat4x4(1.0f));
 
 
 protected:

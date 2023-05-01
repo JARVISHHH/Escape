@@ -3,7 +3,7 @@
 #include "Engine/Game/gameComponent.h"
 #include <Engine/Game/components/collisionComponents/environmentComponent.h>
 #include <Engine/Game/collision/bvh.h>
-
+#include <Engine/Game/gameSystems/collisionSystem.h>
 
 class CylinderComponent;
 class GridNode;
@@ -18,10 +18,11 @@ public:
 	virtual glm::mat4x4 getTransformMatrix() = 0;
 	virtual std::shared_ptr<AABB> getAABB() = 0;
 	virtual std::shared_ptr<AABB> getAABB(std::shared_ptr<Ray> ray) = 0;
+	virtual void updateOnGround() = 0;
 
 	std::shared_ptr<CollisionInfo> getEnvironmentClosestCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents);
 	std::shared_ptr<CollisionInfo> getEnvironmentClosestCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray, std::shared_ptr<BVH> bvh);
-	
+
 	std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> ellipsoidTriangleCollision(std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents);
 	std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> ellipsoidTriangleCollision(std::shared_ptr<BVH> bvh);
 
@@ -29,4 +30,5 @@ public:
 	glm::vec4 doNudge(glm::mat4x4& transformMatrix, glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::shared_ptr<BVH> bvh);
 
 	std::weak_ptr<GridNode> gridNode;
+	std::weak_ptr<CollisionSystem> collisionSystem;
 };

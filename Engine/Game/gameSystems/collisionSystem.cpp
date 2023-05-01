@@ -6,6 +6,8 @@
 #include <Engine/Game/components/collisionComponents/environmentComponent.h>
 #include <Engine/Game/components/transformComponent.h>
 
+#include <Engine/Game/collision/hierarchicalGrid.h>
+
 CollisionSystem::CollisionSystem(std::shared_ptr<GameWorld> gameWorld, int level)
 	: GameSystem("collision"), HGLevel(level)
 {
@@ -96,6 +98,7 @@ void CollisionSystem::doCollision()
 			if (!doAccelerate) collisionRes = pairs[i]->first->ellipsoidTriangleCollision(environmentComponents);
 			else collisionRes = pairs[i]->first->ellipsoidTriangleCollision(bvh);
 			notifyEnvironmentCollision(layer, i, collisionRes.first, collisionRes.second);
+			pairs[i]->first->updateOnGround();
 		}
 	}
 }
@@ -172,6 +175,7 @@ void CollisionSystem::updateEntityComponentPairs()
 		auto& pairs = iter->second;
 		if (entityComponentPairs.find(layer) == entityComponentPairs.end()) entityComponentPairs[layer] = std::vector<std::shared_ptr<entityComponentPair>>();
 		for (auto entityComponentPair : pairs) {
+			entityComponentPair->first->collisionSystem = std::static_pointer_cast<CollisionSystem>(shared_from_this());
 			entityComponentPairs[layer].push_back(entityComponentPair);
 			hierarchicalGrids[layer]->insert(1, entityComponentPair, entityComponentPair->first->getAABB());
 		}
@@ -207,12 +211,27 @@ void CollisionSystem::buildHG()
 	//hierarchicalGrid->print();
 }
 
-std::shared_ptr<CollisionInfo> CollisionSystem::environmentRayCast(glm::vec3 source, glm::vec3 target)
+std::shared_ptr<CollisionInfo> CollisionSystem::environmentRayCast(std::shared_ptr<CollisionComponent> collisionComponent, glm::vec3 source, glm::vec3 target, glm::mat4x4 transformMatrix)
+{
+	auto res = std::make_shared<CollisionInfo>();
+
+	glm::vec4 source4 = transformMatrix * glm::vec4(source[0], source[1], source[2], 1);
+	glm::vec4 target4 = transformMatrix * glm::vec4(target[0], target[1], target[2], 1);
+	auto ray = std::make_shared<Ray>(source4, target4);
+
+	auto aabb = collisionComponent->getAABB(std::make_shared<Ray>(source, target));
+		
+	auto thisCollision = bvh->getClosestCollision(transformMatrix, aabb, ray);
+	if (thisCollision != nullptr && thisCollision->t >= 0 && (thisCollision->t < res->t || res->t < 0)) res = thisCollision;
+	
+	return res;
+}
+
+std::shared_ptr<CollisionInfo> CollisionSystem::environmentRayCast(glm::vec3 source, glm::vec3 target, glm::mat4x4 transformMatrix)
 {
 	auto res = std::make_shared<CollisionInfo>();
 
 	auto ray = std::make_shared<Ray>(source, target);
-	glm::mat4x4 transformMatrix(1.0f);
 
 	glm::vec4 maxPoint, minPoint;
 	maxPoint[3] = 1, minPoint[3] = 1;
@@ -221,9 +240,9 @@ std::shared_ptr<CollisionInfo> CollisionSystem::environmentRayCast(glm::vec3 sou
 		minPoint[i] = std::min(source[i], target[i]);
 	}
 	auto aabb = std::make_shared<AABB>(maxPoint, minPoint);
-		
+
 	auto thisCollision = bvh->getClosestCollision(transformMatrix, aabb, ray);
 	if (thisCollision != nullptr && thisCollision->t >= 0 && (thisCollision->t < res->t || res->t < 0)) res = thisCollision;
-	
+
 	return res;
 }

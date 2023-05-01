@@ -8,7 +8,7 @@ GameComponent::GameComponent(std::string tag)
 
 GameComponent::~GameComponent()
 {
-	std::cout << "game component delete" << std::endl;
+	//std::cout << "game component delete" << std::endl;
 }
 
 void GameComponent::start()

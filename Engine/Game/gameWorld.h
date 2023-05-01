@@ -58,7 +58,7 @@ protected:
 
 	std::shared_ptr<AABB> aabb = std::make_shared<AABB>(glm::vec4(30, 20, 30, 1), glm::vec4(-30, -5, -30, 1));
 
-	double maxTimeStep = 0.01;
+	double maxTimeStep = 0.006;
 	bool stop = false;
 
 	bool finish = false;

@@ -6,6 +6,7 @@ class TickSystem : public GameSystem {
 public:
 	TickSystem();
 	TickSystem(std::shared_ptr<GameWorld> gameWorld);
+	~TickSystem();
 
 	void update(double seconds);
 	void addComponent(std::shared_ptr<GameComponent> component);

@@ -3,7 +3,7 @@
 #include <vector>
 #include <Engine/Game/collision/gridnode.h>
 
-typedef std::pair<std::shared_ptr<CollisionComponent>, std::shared_ptr<CollisionResponseComponent>> entityComponentPair;
+//typedef std::pair<std::shared_ptr<CollisionComponent>, std::shared_ptr<CollisionResponseComponent>> entityComponentPair;
 
 class HierarchicalGrid {
 public:

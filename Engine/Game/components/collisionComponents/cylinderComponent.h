@@ -12,7 +12,7 @@ public:
 	glm::mat4x4 getTransformMatrix() override;
 	std::shared_ptr<AABB> getAABB() override;
 	std::shared_ptr<AABB> getAABB(std::shared_ptr<Ray> ray) override;
-
+	void updateOnGround() override;
 
 protected:
 
