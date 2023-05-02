@@ -34,6 +34,6 @@ void TickSystem::updateComponents()
 	components.insert(components.end(), waitingList.begin(), waitingList.end());
 	waitingList.clear();
 	for (int i = components.size() - 1; i >= 0; i--)
-		if (!components[i]->getGameObject()->getActiveStatus())
+		if (!components[i]->isActive())
 			components.erase(components.begin() + i);
 }

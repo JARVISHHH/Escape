@@ -41,3 +41,9 @@ std::shared_ptr<GameObject> GameComponent::getGameObject()
 {
 	return gameObject.lock();
 }
+
+bool GameComponent::isActive()
+{
+	if (gameObject.lock() == nullptr) return false;
+	return gameObject.lock()->getActiveStatus();
+}
