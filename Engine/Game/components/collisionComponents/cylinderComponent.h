@@ -14,6 +14,9 @@ public:
 	std::shared_ptr<AABB> getAABB(std::shared_ptr<Ray> ray) override;
 	void updateOnGround() override;
 
+	static std::shared_ptr<AABB> getAABB(std::shared_ptr<ModelTransform> modelTransform);
+	static std::shared_ptr<AABB> getAABB(std::shared_ptr<ModelTransform> modelTransform, std::shared_ptr<Ray> ray);
+
 protected:
 
 };

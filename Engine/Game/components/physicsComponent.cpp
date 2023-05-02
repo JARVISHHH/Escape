@@ -14,9 +14,7 @@ void PhysicsComponent::update(double seconds)
 
 	if (!transformComponent->isOnGround()) {
 		velocity -= glm::vec3(0, gravity * seconds, 0);
-		std::cout << "Not on ground" << std::endl;
 	}
-	else std::cout << "On ground" << std::endl;
 
 	auto moveDistance = velocity * (float)seconds;
 

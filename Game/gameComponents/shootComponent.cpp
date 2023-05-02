@@ -15,7 +15,7 @@ void ShootComponent::start()
 	auto targetObject = getGameObject()->getGameWorld()->getGameObject(targetTag);
 	if (targetObject != nullptr) targetTransform = targetObject->getComponent<TransformComponent>("transform");
 
-	stop = false;
+	//stop = false;
 }
 
 void ShootComponent::update(double seconds)
@@ -38,6 +38,7 @@ void ShootComponent::setStop(bool stop)
 
 void ShootComponent::shoot()
 {
-	auto direction = targetTransform->getModelTransform()->getPos() - transform->getModelTransform()->getPos();
-	createProjectile(getGameObject()->getGameWorld(), "cylinder", "monomi", transform->getModelTransform()->getPos(), glm::normalize(direction));
+	auto direction = glm::normalize(targetTransform->getModelTransform()->getPos() - transform->getModelTransform()->getPos());
+	std::cout << "shoot " << direction[0] << " " << direction[1] << " " << direction[2] << std::endl;
+	//createProjectile(getGameObject()->getGameWorld(), "cylinder", "monomi", transform->getModelTransform()->getPos(), glm::normalize(direction));
 }

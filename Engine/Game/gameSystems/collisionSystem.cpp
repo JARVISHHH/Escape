@@ -227,22 +227,17 @@ std::shared_ptr<CollisionInfo> CollisionSystem::environmentRayCast(std::shared_p
 	return res;
 }
 
-std::shared_ptr<CollisionInfo> CollisionSystem::environmentRayCast(glm::vec3 source, glm::vec3 target, glm::mat4x4 transformMatrix)
-{
+std::shared_ptr<CollisionInfo> CollisionSystem::environmentRayCast(std::shared_ptr<AABB> movingAABB, glm::vec3 source, glm::vec3 target, glm::mat4x4 transformMatrix) {
 	auto res = std::make_shared<CollisionInfo>();
 
-	auto ray = std::make_shared<Ray>(source, target);
+	glm::vec4 source4(source[0], source[1], source[2], 1), target4(target[0], target[1], target[2], 1);
+	glm::vec3 sphereSource = transformMatrix * source4, sphereTarget = transformMatrix * target4;
+	auto ray = std::make_shared<Ray>(sphereSource, sphereTarget);
 
-	glm::vec4 maxPoint, minPoint;
-	maxPoint[3] = 1, minPoint[3] = 1;
-	for (int i = 0; i < 3; i++) {
-		maxPoint[i] = std::max(source[i], target[i]);
-		minPoint[i] = std::min(source[i], target[i]);
-	}
-	auto aabb = std::make_shared<AABB>(maxPoint, minPoint);
-
-	auto thisCollision = bvh->getClosestCollision(transformMatrix, aabb, ray);
+	auto thisCollision = bvh->getClosestCollision(transformMatrix, movingAABB, ray);
 	if (thisCollision != nullptr && thisCollision->t >= 0 && (thisCollision->t < res->t || res->t < 0)) res = thisCollision;
+
+	res->t = res->t / glm::length(sphereTarget - sphereSource) * glm::length(target - source);
 
 	return res;
 }

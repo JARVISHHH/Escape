@@ -80,7 +80,7 @@ std::shared_ptr<GameObject> createShootingEnemy(std::shared_ptr<GameWorld> gameW
 	// AI component
 	std::shared_ptr<BehaviorComponent> behaviorComponent = std::make_shared<BehaviorComponent>();
 	std::shared_ptr<Selector> root = std::make_shared<Selector>();
-	std::shared_ptr<ScopeCondition> scopeCondition = std::make_shared<ScopeCondition>("character", 30);
+	std::shared_ptr<ScopeCondition> scopeCondition = std::make_shared<ScopeCondition>("character", 10);
 	std::shared_ptr<BarrierCondition> barrierCondition = std::make_shared<BarrierCondition>("character");
 	std::shared_ptr<ShootAction> shootAction = std::make_shared<ShootAction>();
 	root->addChild(scopeCondition);

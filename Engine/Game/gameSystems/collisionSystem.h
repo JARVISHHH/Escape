@@ -33,7 +33,7 @@ public:
 	void buildHG();
 
 	std::shared_ptr<CollisionInfo> environmentRayCast(std::shared_ptr<CollisionComponent> collisionComponent, glm::vec3 source, glm::vec3 target, glm::mat4x4 transformMatrix = glm::mat4x4(1.0f));
-	std::shared_ptr<CollisionInfo> environmentRayCast(glm::vec3 source, glm::vec3 target, glm::mat4x4 transformMatrix = glm::mat4x4(1.0f));
+	std::shared_ptr<CollisionInfo> environmentRayCast(std::shared_ptr<AABB> movingAABB, glm::vec3 source, glm::vec3 target, glm::mat4x4 transformMatrix = glm::mat4x4(1.0f));
 
 
 protected:

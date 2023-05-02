@@ -83,6 +83,8 @@ void createWall(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> sc
 	createEnvironment(gameWorld, screen, "wall", "wall", transform);
 }
 
+bool create = true;
+
 void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode) {
 	if (mapNode == nullptr) return;
 	createDungeon(gameWorld, screen, mapNode->leftChild);
@@ -97,7 +99,12 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		createEnvironment(gameWorld, screen, "box", "ground", transform);
 		mapNode->navMesh = std::make_shared<NavMesh>("./Resources/Meshes/plane.obj");
 		mapNode->navMesh->bake(transform->getModelMatrix());
-		createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], center[1] + 2, center[2]), mapNode->navMesh);
+		//if (create) {
+		//	createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], center[1] + 1, center[2]));
+		//	//create = false;
+		//}
+		createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], center[1] + 1, center[2]));
+		//createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], center[1] + 2, center[2]), mapNode->navMesh);
 		// Walls
 		for (int i = 0; i < mapNode->gapEnds.size(); i++) {
 			auto end = mapNode->gapEnds[i];
