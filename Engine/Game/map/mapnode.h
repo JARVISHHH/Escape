@@ -20,6 +20,8 @@ public:
 	std::shared_ptr<MapNode> findBottomLeft();
 	std::shared_ptr<MapNode> findTopRight();
 
+	glm::vec3 intersect(glm::vec3 origin, glm::vec3 direction);
+
 	std::shared_ptr<Map> getMap();
 	std::shared_ptr<AABB> getAABB();
 	void printNode();
@@ -27,6 +29,8 @@ public:
 	std::shared_ptr<AABB> room = nullptr;
 	std::shared_ptr<MapNode> leftChild = nullptr, rightChild = nullptr;
 	std::shared_ptr<NavMesh> navMesh;
+
+	std::vector<std::pair<glm::vec3, glm::vec3>> gaps;
 
 protected:
 

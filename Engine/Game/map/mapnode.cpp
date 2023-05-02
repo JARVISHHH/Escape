@@ -110,9 +110,24 @@ std::shared_ptr<MapNode> MapNode::connect()
 	if (leftChild->aabb->getMinPoint()[0] - leftChild->margine != rightChild->aabb->getMaxPoint()[0] + rightChild->margine)
 		next = rightChild->findTopRight();
 	else next = rightChild->findBottomLeft();
-	map.lock()->addConnector({left, next});
+	if(left->room->getCenter()[0] <= next->room->getCenter()[0]) map.lock()->addConnector({left, next});
+	else map.lock()->addConnector({ next, left });
 
 	return right;
+}
+
+glm::vec3 MapNode::intersect(glm::vec3 origin, glm::vec3 direction)
+{
+	direction = glm::normalize(direction);
+	float res = -1;
+	for (auto i : { 0, 2 }) {
+		if (direction[i] == 0) continue;
+		auto t1 = (room->getMaxPoint()[i] - origin[i]) / direction[i];
+		auto t2 = (room->getMinPoint()[i] - origin[i]) / direction[i];
+		if (t1 >= 0) res = res >= 0 ? std::min(res, t1) : t1;
+		if (t2 >= 0) res = res >= 0 ? std::min(res, t2) : t2;
+	}
+	return origin + res * direction;
 }
 
 std::shared_ptr<Map> MapNode::getMap()
