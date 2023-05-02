@@ -44,12 +44,12 @@ void Map::connect()
 	}
 }
 
-void Map::addConnector(std::pair<glm::vec3, glm::vec3> connector)
+void Map::addConnector(std::pair<std::shared_ptr<MapNode>, std::shared_ptr<MapNode>> connector)
 {
 	connectors.push_back(connector);
 }
 
-std::vector<std::pair<glm::vec3, glm::vec3>>& Map::getConnectors()
+std::vector<std::pair<std::shared_ptr<MapNode>, std::shared_ptr<MapNode>>>& Map::getConnectors()
 {
 	return connectors;
 }

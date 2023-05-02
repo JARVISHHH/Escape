@@ -21,6 +21,7 @@ public:
 	std::shared_ptr<MapNode> findTopRight();
 
 	std::shared_ptr<Map> getMap();
+	std::shared_ptr<AABB> getAABB();
 	void printNode();
 
 	std::shared_ptr<AABB> room = nullptr;
@@ -34,5 +35,6 @@ private:
 	std::shared_ptr<AABB> aabb;
 
 	bool isLeaf = false;
+	float margine;
 
 };

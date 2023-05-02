@@ -24,7 +24,7 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 
 void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<Map> map) {
 	for (auto& connector : map->getConnectors()) {
-		glm::vec3 source = connector.first, target = connector.second;
+		glm::vec3 source = connector.first->room->getCenter(), target = connector.second->room->getCenter();
 		std::cout << "source: " << source[1] << " target: " << target[1] << std::endl;
 		glm::vec3 center = (source + target) / 2.0f;
 		auto transform = std::make_shared<ModelTransform>();

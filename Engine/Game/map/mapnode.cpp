@@ -17,12 +17,12 @@ MapNode::~MapNode()
 
 bool MapNode::split(glm::vec3 minimumSize, float margine, int depth)
 {
+	this->margine = margine;
+
 	if (depth >= getMap()->getMaxDepth()) {
 		isLeaf = true;
 		return false;
 	}
-
-	margine = 0;
 
 	//std::cout << "split" << std::endl;
 
@@ -100,7 +100,6 @@ void MapNode::assign(glm::vec3 minimumSize)
 
 std::shared_ptr<MapNode> MapNode::connect()
 {
-	//std::cout << "leftChild: " << leftChild << "   rightChild: " << rightChild << std::endl;
 	if (leftChild == nullptr && rightChild == nullptr) return shared_from_this();
 
 	std::shared_ptr<MapNode> left = nullptr, right = nullptr;
@@ -108,16 +107,10 @@ std::shared_ptr<MapNode> MapNode::connect()
 	right = rightChild->connect();
 	std::shared_ptr<MapNode> next = nullptr;
 	// up down split
-	std::cout << leftChild << " " << left << " " << rightChild << " " << right << std::endl;
-	if (leftChild->aabb->getMinPoint()[0] != rightChild->aabb->getMaxPoint()[0]) 
+	if (leftChild->aabb->getMinPoint()[0] - leftChild->margine != rightChild->aabb->getMaxPoint()[0] + rightChild->margine)
 		next = rightChild->findTopRight();
 	else next = rightChild->findBottomLeft();
-	std::cout << next << std::endl;
-	map.lock()->addConnector({left->room->getCenter(), next->room->getCenter()});
-	//if (leftChild->aabb->getMinPoint()[0] != rightChild->aabb->getMaxPoint()[0])
-	//	rightChild->findTopRight();
-	//else
-	//	rightChild->findBottomLeft();
+	map.lock()->addConnector({left, next});
 
 	return right;
 }
@@ -125,6 +118,11 @@ std::shared_ptr<MapNode> MapNode::connect()
 std::shared_ptr<Map> MapNode::getMap()
 {
 	return map.lock();
+}
+
+std::shared_ptr<AABB> MapNode::getAABB()
+{
+	return aabb;
 }
 
 void MapNode::printNode()
@@ -142,20 +140,15 @@ std::shared_ptr<MapNode> MapNode::findBottomLeft()
 {
 	if (leftChild == nullptr && rightChild == nullptr) return shared_from_this();
 	// up down split
-	if (leftChild->aabb->getMinPoint()[0] != rightChild->aabb->getMaxPoint()[0]) return rightChild->findBottomLeft();
+	if (leftChild->aabb->getMinPoint()[0] - leftChild->margine != rightChild->aabb->getMaxPoint()[0] + rightChild->margine) return rightChild->findBottomLeft();
 	else return leftChild->findBottomLeft();
 }
 
 std::shared_ptr<MapNode> MapNode::findTopRight()
 {
 	std::cout << leftChild << " " << rightChild << std::endl;
-	if (leftChild == nullptr && rightChild == nullptr)
-	{
-		std::cout << "return " << shared_from_this() << std::endl;
-		return shared_from_this();
-	}
-	std::cout << "find next" << std::endl;
+	if (leftChild == nullptr && rightChild == nullptr) return shared_from_this();
 	// up down split
-	if (leftChild->aabb->getMinPoint()[0] != rightChild->aabb->getMaxPoint()[0]) return leftChild->findTopRight();
+	if (leftChild->aabb->getMinPoint()[0] - leftChild->margine != rightChild->aabb->getMaxPoint()[0] + rightChild->margine) return leftChild->findTopRight();
 	else return rightChild->findTopRight();
 }
