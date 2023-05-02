@@ -88,7 +88,7 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 	createDungeon(gameWorld, screen, mapNode->leftChild);
 	createDungeon(gameWorld, screen, mapNode->rightChild);
 	if (mapNode->room != nullptr) {
-		// Floor
+		// Floors
 		auto center = (mapNode->room->getMaxPoint() + mapNode->room->getMinPoint()) / 2.0f;
 		auto size = (mapNode->room->getMaxPoint() - mapNode->room->getMinPoint()) / 2.0f;
 		auto transform = std::make_shared<ModelTransform>();
@@ -103,14 +103,17 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 			auto end = mapNode->gapEnds[i];
 			while (findNextCorner(mapNode->gapStarts, end, mapNode->room)) {
 				auto corner = nextCorner(end, mapNode->room);
-				createWall(gameWorld, screen, end, corner, 1.5);
+				createWall(gameWorld, screen, end, corner, 2);
 				end = corner;
 			}
 			auto start = closestStart(mapNode->gapStarts, end, mapNode->room);
 			if (!checkSame(start[0], end[0]) || !checkSame(start[2], end[2])) {
-				createWall(gameWorld, screen, start, end, 1.5);
+				createWall(gameWorld, screen, start, end, 2);
 			}
 		}
+		// Ceilings
+		transform->translate(glm::vec3(0, 3, 0));
+		createEnvironment(gameWorld, screen, "box", "ground", transform);
 	}
 }
 
@@ -123,12 +126,9 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		transform->scale(glm::vec3(glm::length(source - target) / 2, 1.0f, 1.0f));
 		auto angle = std::acos(glm::dot(glm::normalize(target - source), glm::vec3(1, 0, 0)));
 		if (target[2] > source[2]) angle = -angle;
-		std::cout << angle << std::endl;
 		transform->rotate(angle, glm::vec3(0, 1, 0));
 		transform->translate(center);
 		createEnvironment(gameWorld, screen, "plane", "ground", transform);
-
-		// Ceiling
 
 		// Walls
 		// Get intersection
@@ -155,8 +155,16 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 			wallPos.push_back({ intersection1 - glm::vec3(direction1) * 0.25f, intersection2 - glm::vec3(direction1) * 0.25f });
 		}
 		// Build walls
-		createWall(gameWorld, screen, wallPos[0].first, wallPos[1].first, 1.5);
-		createWall(gameWorld, screen, wallPos[0].second, wallPos[1].second, 1.5);
+		createWall(gameWorld, screen, wallPos[0].first, wallPos[1].first, 2);
+		createWall(gameWorld, screen, wallPos[0].second, wallPos[1].second, 2);
+
+		// Ceiling
+		transform = std::make_shared<ModelTransform>();
+		transform->scale(glm::vec3(glm::length(source - target) / 2, 1.0f, 1.0f));
+		transform->rotate(angle, glm::vec3(0, 1, 0));
+		transform->rotate(M_PI, glm::vec3(1, 0, 0));
+		transform->translate(center + glm::vec3(0, 3, 0));
+		createEnvironment(gameWorld, screen, "plane", "ground", transform);
 	}
 	createDungeon(gameWorld, screen, map->mapRoot);
 }
