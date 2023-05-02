@@ -25,7 +25,7 @@ public:
     AABB(std::shared_ptr<EnvironmentComponent> environmentComponent, std::shared_ptr<Triangle> triangle);
     AABB(glm::vec4 maxPoint, glm::vec4 minPoint);
 
-    glm::vec4 getCenter() {return center;}
+    glm::vec4 getCenter() { return center; }
     glm::vec4 getMaxPoint() { return maxPoint; }
     glm::vec4 getMinPoint() { return minPoint; }
     void printMaxPoint() { std::cout << "maxPoint: " << maxPoint[0] << " " << maxPoint[1] << " " << maxPoint[2] << std::endl; }

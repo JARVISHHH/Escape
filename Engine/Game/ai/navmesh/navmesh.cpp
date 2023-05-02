@@ -10,13 +10,15 @@ NavMesh::NavMesh(std::string filePath)
 	
 }
 
-void NavMesh::bake()
+void NavMesh::bake(glm::mat4x4 transformMatrix)
 {
 	auto mesh = Global::graphics.getNavmeshData(filePath);
 	auto& positions = mesh.first;
 	auto& faces = mesh.second;
 
-	vertexPositions = positions;
+	vertexPositions.reserve(positions.size());
+	for(auto& pos: positions)
+		vertexPositions.push_back(transformMatrix * glm::vec4(pos[0], pos[1], pos[2], 1));
 
 	std::unordered_map<int, std::unordered_map<int, std::shared_ptr<NavMeshEdge>>> edgesMap;
 	for (const auto& face : faces) {
@@ -70,8 +72,8 @@ std::vector<glm::vec3> NavMesh::pathFinding(glm::vec3 start, glm::vec3 end) {
 	//std::cout << "original end: " << end[0] << " " << end[1] << " " << end[2] << std::endl;
 	float tStart = rayCast(start, direction, startNode), tEnd = rayCast(end, direction, endNode);
 	if (tStart < 0 || tEnd < 0) {
-		if(tStart < 0) std::cerr << "Pathfinding failed: start ray cast failed!" << std::endl;
-		if (tEnd < 0) std::cerr << "Pathfinding failed: end ray cast failed!" << std::endl;
+		//if(tStart < 0) std::cerr << "Pathfinding failed: start ray cast failed!" << std::endl;
+		//if (tEnd < 0) std::cerr << "Pathfinding failed: end ray cast failed!" << std::endl;
 		return {};
 	}
 	glm::vec3 startPos = start + tStart * direction, endPos = end + tEnd * direction;

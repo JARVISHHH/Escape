@@ -41,6 +41,7 @@ GameScreen::GameScreen()
 	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
 	addEnvironmentMesh("map", "./Resources/Meshes/map.obj");
 	addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj");
+	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
 	addEnvironmentMesh("box", "./Resources/Meshes/box.obj");
 }
 

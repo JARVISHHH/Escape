@@ -14,7 +14,7 @@ class NavMeshNode;
 class NavMesh : public std::enable_shared_from_this<NavMesh> {
 public:
 	NavMesh(std::string filePath);
-	void bake();
+	void bake(glm::mat4x4 transformMatrix = glm::mat4x4(1.0f));
 	std::vector<glm::vec3> pathFinding(glm::vec3 start, glm::vec3 end);
 
 	std::vector<glm::vec3> aStar(glm::vec3 startPos, glm::vec3 endPos, std::shared_ptr<NavMeshNode> startNode, std::shared_ptr<NavMeshNode> endNode);

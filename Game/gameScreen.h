@@ -30,7 +30,7 @@ private:
     std::shared_ptr<PhysicsSystem> physicsSystem;
     std::shared_ptr<CollisionSystem> collisionSystem;
 
-    std::shared_ptr<NavMesh> navMesh;
+    //std::shared_ptr<NavMesh> navMesh;
 
     //int score = 0;
     //std::string result = "";
