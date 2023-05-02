@@ -30,7 +30,9 @@ public:
 	std::shared_ptr<MapNode> leftChild = nullptr, rightChild = nullptr;
 	std::shared_ptr<NavMesh> navMesh;
 
-	std::vector<std::pair<glm::vec3, glm::vec3>> gaps;
+	//std::vector<std::pair<glm::vec3, glm::vec3>> gaps;
+	std::vector<glm::vec3> gapStarts;
+	std::vector<glm::vec3> gapEnds;
 
 protected:
 
