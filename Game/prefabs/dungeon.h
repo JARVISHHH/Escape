@@ -6,13 +6,14 @@
 
 #include <corecrt_math_defines.h>
 
-#define EPSILON 0.000005
+#define EPSILON 0.00001
 
 bool checkSame(float a, float b) {
 	if (std::abs(a - b) < EPSILON) return true;
 	return false;
 }
 
+// End to start
 bool findNextCorner(glm::vec3 start, glm::vec3 end, std::shared_ptr<AABB> aabb) {
 	if (!checkSame(start[0], end[0]) && !checkSame(start[2], end[2])) return true;
 	if (checkSame(start[0], end[0]) && checkSame(start[2], end[2])) return false;
@@ -25,7 +26,7 @@ bool findNextCorner(glm::vec3 start, glm::vec3 end, std::shared_ptr<AABB> aabb) 
 		if (checkSame(end[2], maxPoint[2])) return end[0] > start[0];
 		if (checkSame(end[2], minPoint[2])) return end[0] < start[0];
 	}
-	return false;
+	return true;
 }
 
 bool findNextCorner(std::vector<glm::vec3>& starts, glm::vec3 end, std::shared_ptr<AABB> aabb) {
@@ -50,23 +51,23 @@ glm::vec3 closestStart(std::vector<glm::vec3>& starts, glm::vec3 end, std::share
 	for (auto start : starts)
 		if (!findNextCorner(start, end, aabb))
 			candidates.push_back(start);
-	glm::vec3 res = end;
+	glm::vec3 res = nextCorner(end, aabb);
 	auto maxPoint = aabb->getMaxPoint(), minPoint = aabb->getMinPoint();
 	if (checkSame(end[0], maxPoint[0]) && !checkSame(end[2], minPoint[2])) {
 		for (auto start : candidates)
-			res[2] = std::min(res[2], start[2]);
+			res[2] = std::max(res[2], start[2]);
 	}
 	else if (checkSame(end[0], minPoint[0]) && !checkSame(end[2], maxPoint[2])) {
 		for (auto start : candidates)
-			res[2] = std::max(res[2], start[2]);
+			res[2] = std::min(res[2], start[2]);
 	}
 	else if (checkSame(end[2], maxPoint[2]) && !checkSame(end[0], maxPoint[0])) {
 		for (auto start : candidates)
-			res[0] = std::max(res[0], start[0]);
+			res[0] = std::min(res[0], start[0]);
 	}
 	else {
 		for (auto start : candidates)
-			res[0] = std::min(res[0], start[0]);
+			res[0] = std::max(res[0], start[0]);
 	}
 	return res;
 }
