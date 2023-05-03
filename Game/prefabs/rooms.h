@@ -5,6 +5,8 @@
 #include <Engine/Game/map/map.h>
 #include <Engine/Game/map/mapnode.h>
 
+#define HEIGHT 5
+
 void createSafeRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode) {
 	auto center = (mapNode->room->getMaxPoint() + mapNode->room->getMinPoint()) / 2.0f;
 	auto size = (mapNode->room->getMaxPoint() - mapNode->room->getMinPoint()) / 2.0f;
@@ -13,7 +15,7 @@ void createSafeRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
 
-	transform->translate(glm::vec3(0, 3, 0));
+	transform->translate(glm::vec3(0, HEIGHT, 0));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
 }
 
@@ -29,7 +31,7 @@ void createNormalRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Scre
 	createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 1.5, center[2]));
 	createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 2, center[2]), mapNode->navMesh);
 	
-	transform->translate(glm::vec3(0, 3, 0));
+	transform->translate(glm::vec3(0, HEIGHT, 0));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
 }
 
@@ -48,7 +50,7 @@ void createPlatform(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 }
 
 void createTrapRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode) {
-	std::shared_ptr<Map> roomMap = std::make_shared<Map>(mapNode->room, glm::vec3(2, 0.5, 2), 0);
+	std::shared_ptr<Map> roomMap = std::make_shared<Map>(mapNode->room, glm::vec3(2, 0.5, 1.5), 0.5, 10);
 	roomMap->generateMap();
 	createPlatform(gameWorld, screen, roomMap->mapRoot);
 
@@ -58,6 +60,6 @@ void createTrapRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 	auto transform = std::make_shared<ModelTransform>();
 	transform->scale(glm::vec3(size[0], 0.005f, size[2]));
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
-	transform->translate(glm::vec3(0, 3, 0));
+	transform->translate(glm::vec3(0, HEIGHT, 0));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
 }

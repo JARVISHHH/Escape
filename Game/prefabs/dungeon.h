@@ -9,6 +9,7 @@
 #include <corecrt_math_defines.h>
 
 #define EPSILON 0.00001
+#define HEIGHT 5
 
 bool checkSame(float a, float b) {
 	if (std::abs(a - b) < EPSILON) return true;
@@ -102,12 +103,12 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 			auto end = mapNode->gapEnds[i];
 			while (findNextCorner(mapNode->gapStarts, end, mapNode->room)) {
 				auto corner = nextCorner(end, mapNode->room);
-				createWall(gameWorld, screen, end, corner, 2);
+				createWall(gameWorld, screen, end, corner, HEIGHT);
 				end = corner;
 			}
 			auto start = closestStart(mapNode->gapStarts, end, mapNode->room);
 			if (!checkSame(start[0], end[0]) || !checkSame(start[2], end[2])) {
-				createWall(gameWorld, screen, start, end, 2);
+				createWall(gameWorld, screen, start, end, HEIGHT);
 			}
 		}
 	}
@@ -155,15 +156,15 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 			wallPos.push_back({ intersection1 - glm::vec3(direction1) * 0.25f, intersection2 - glm::vec3(direction1) * 0.25f });
 		}
 		// Build walls
-		createWall(gameWorld, screen, wallPos[0].first, wallPos[1].first, 2);
-		createWall(gameWorld, screen, wallPos[0].second, wallPos[1].second, 2);
+		createWall(gameWorld, screen, wallPos[0].first, wallPos[1].first, HEIGHT);
+		createWall(gameWorld, screen, wallPos[0].second, wallPos[1].second, HEIGHT);
 
 		// Ceiling
 		transform = std::make_shared<ModelTransform>();
 		transform->scale(glm::vec3(glm::length(source - target) / 2, 1.0f, 1.0f));
 		transform->rotate(angle, glm::vec3(0, 1, 0));
 		transform->rotate(M_PI, glm::vec3(1, 0, 0));
-		transform->translate(glm::vec3(center[0], (connector.first->room->getMinPoint()[1] + connector.second->room->getMinPoint()[1]) / 2.0f, center[2]) + glm::vec3(0, 3, 0));
+		transform->translate(glm::vec3(center[0], (connector.first->room->getMinPoint()[1] + connector.second->room->getMinPoint()[1]) / 2.0f, center[2]) + glm::vec3(0, HEIGHT, 0));
 		createEnvironment(gameWorld, screen, "plane", "ground", transform);
 	}
 

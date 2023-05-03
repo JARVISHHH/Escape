@@ -56,7 +56,7 @@ protected:
 
 	std::shared_ptr<Camera> camera;
 
-	std::shared_ptr<AABB> aabb = std::make_shared<AABB>(glm::vec4(30, 20, 30, 1), glm::vec4(-30, -5, -30, 1));
+	std::shared_ptr<AABB> aabb = std::make_shared<AABB>(glm::vec4(20, 10, 20, 1), glm::vec4(-20, -5, -20, 1));
 
 	double maxTimeStep = 0.006;
 	bool stop = false;
