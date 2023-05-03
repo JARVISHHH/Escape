@@ -86,7 +86,8 @@ void MapNode::assign(glm::vec3 minimumSize)
 	if (rightChild != nullptr) rightChild->assign(minimumSize);
 	if (isLeaf) {
 		std::vector<int> indices = { 0, 2 };
-		glm::vec4 maxPoint(0, 0, 0, 1), minPoint(0, 0, 0, 1);
+		
+		glm::vec4 maxPoint = aabb->getMaxPoint(), minPoint = aabb->getMinPoint();
 		for (auto i : indices) {
 			auto total = aabb->getMaxPoint()[i] - aabb->getMinPoint()[i];
 			auto usable = total;

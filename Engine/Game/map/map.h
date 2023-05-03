@@ -7,7 +7,7 @@ class MapNode;
 
 class Map: public std::enable_shared_from_this<Map> {
 public:
-	Map(std::shared_ptr<GameWorld> gameWorld, int maxDepth = 3);
+	Map(std::shared_ptr<AABB> aabb, glm::vec3 minimumSize = glm::vec3(10, 5, 10), float margine = 0.5, int maxDepth = 3);
 	~Map();
 
 	void generateMap();
@@ -24,7 +24,7 @@ protected:
 
 
 private:
-	std::weak_ptr<GameWorld> gameWorld;
+	//std::weak_ptr<GameWorld> gameWorld;
 
 	int maxDepth = 3;
 	std::shared_ptr<AABB> aabb;

@@ -71,7 +71,7 @@ void GameScreen::init()
 	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 60);
 
 	// Generate map
-	std::shared_ptr<Map> map = std::make_shared<Map>(gameWorld);
+	std::shared_ptr<Map> map = std::make_shared<Map>(gameWorld->getAABB());
 	map->generateMap();
 	//map->printMap();
 	createDungeon(gameWorld, shared_from_this(), map, gameHandler);

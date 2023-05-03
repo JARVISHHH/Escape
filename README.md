@@ -59,3 +59,8 @@ simple version
 
 （3）连接相邻节点，把dungeon连接起来
 
+
+
+bug
+
+collision normal check

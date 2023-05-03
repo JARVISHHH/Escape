@@ -1,8 +1,8 @@
 #include "map.h"
 #include "mapnode.h"
 
-Map::Map(std::shared_ptr<GameWorld> gameWorld, int maxDepth)
-	:gameWorld(gameWorld), aabb(gameWorld->getAABB()), maxDepth(maxDepth)
+Map::Map(std::shared_ptr<AABB> aabb, glm::vec3 minimumSize, float margine, int maxDepth)
+	:aabb(aabb), minimumSize(minimumSize), margine(margine), maxDepth(maxDepth)
 {
 }
 
@@ -33,13 +33,13 @@ void Map::connect()
 {
 	if (mapRoot != nullptr) {
 		connectors.clear();
-		/*std::shared_ptr<MapNode> left = nullptr, right = nullptr;
-		if (mapRoot->leftChild != nullptr) left = mapRoot->leftChild->connect(nullptr);
-		if (mapRoot->rightChild != nullptr) {
-			mapRoot->rightChild->connect(nullptr);
-			right = mapRoot->rightChild->findBottomLeft();
-		}
-		if (left != nullptr && right != nullptr) left->connect(right);*/
+		//std::shared_ptr<MapNode> left = nullptr, right = nullptr;
+		//if (mapRoot->leftChild != nullptr) left = mapRoot->leftChild->connect(nullptr);
+		//if (mapRoot->rightChild != nullptr) {
+		//	mapRoot->rightChild->connect(nullptr);
+		//	right = mapRoot->rightChild->findBottomLeft();
+		//}
+		//if (left != nullptr && right != nullptr) left->connect(right);
 		mapRoot->connect();
 	}
 }

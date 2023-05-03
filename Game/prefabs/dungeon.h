@@ -2,6 +2,7 @@
 
 #include <Game/prefabs/environment.h>
 #include <Game/prefabs/character.h>
+#include <Game/prefabs/rooms.h>
 #include <Engine/Game/map/map.h>
 #include <Engine/Game/map/mapnode.h>
 
@@ -75,7 +76,6 @@ glm::vec3 closestStart(std::vector<glm::vec3>& starts, glm::vec3 end, std::share
 
 void createWall(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, glm::vec3 start, glm::vec3 end, float height) {
 	auto transform = std::make_shared<ModelTransform>();
-	//transform->scale(1 / 20.0);
 	transform->scale(glm::vec3(glm::length(end - start) / 2, height, 0.5f));
 	auto angle = std::acos(glm::dot(glm::normalize(end - start), glm::vec3(1, 0, 0)));
 	if (end[2] > start[2]) angle = -angle;
@@ -89,18 +89,13 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 	createDungeon(gameWorld, screen, mapNode->leftChild);
 	createDungeon(gameWorld, screen, mapNode->rightChild);
 	if (mapNode->room != nullptr) {
-		// Floors
-		auto center = (mapNode->room->getMaxPoint() + mapNode->room->getMinPoint()) / 2.0f;
-		auto size = (mapNode->room->getMaxPoint() - mapNode->room->getMinPoint()) / 2.0f;
-		auto transform = std::make_shared<ModelTransform>();
-		transform->scale(glm::vec3(size[0], 0.005f, size[2]));
-		transform->translate(glm::vec3(center[0], center[1], center[2]));
-		createEnvironment(gameWorld, screen, "box", "ground", transform);
-		mapNode->navMesh = std::make_shared<NavMesh>("./Resources/Meshes/plane.obj");
-		mapNode->navMesh->bake(transform->getModelMatrix());
-		if (!mapNode->safeRoom) {
-			createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], center[1] + 1.5, center[2]));
-			createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], center[1] + 2, center[2]), mapNode->navMesh);
+		// Floors && ceilings
+		if (mapNode->safeRoom) {
+			createSafeRoom(gameWorld, screen, mapNode);
+		}
+		else {
+			//createNormalRoom(gameWorld, screen, mapNode);
+			createTrapRoom(gameWorld, screen, mapNode);
 		}
 		// Walls
 		for (int i = 0; i < mapNode->gapEnds.size(); i++) {
@@ -115,9 +110,6 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 				createWall(gameWorld, screen, start, end, 2);
 			}
 		}
-		// Ceilings
-		transform->translate(glm::vec3(0, 3, 0));
-		createEnvironment(gameWorld, screen, "box", "ground", transform);
 	}
 }
 
@@ -131,7 +123,7 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		auto angle = std::acos(glm::dot(glm::normalize(target - source), glm::vec3(1, 0, 0)));
 		if (target[2] > source[2]) angle = -angle;
 		transform->rotate(angle, glm::vec3(0, 1, 0));
-		transform->translate(center);
+		transform->translate(glm::vec3(center[0], (connector.first->room->getMinPoint()[1] + connector.second->room->getMinPoint()[1]) / 2.0f, center[2]));
 		createEnvironment(gameWorld, screen, "plane", "ground", transform);
 
 		// Walls
@@ -143,8 +135,10 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		direction2 = transform->getModelMatrix() * direction2;
 		{
 			auto node = connector.first;
-			auto intersection1 = node->intersect(node->room->getCenter() + direction2, direction1);
-			auto intersection2 = node->intersect(node->room->getCenter() - direction2, direction1);
+			auto center = node->room->getCenter();
+			auto origin = glm::vec4(center[0], node->room->getMinPoint()[1], center[2], 1);
+			auto intersection1 = node->intersect(origin + direction2, direction1);
+			auto intersection2 = node->intersect(origin - direction2, direction1);
 			node->gapStarts.push_back(intersection1);
 			node->gapEnds.push_back(intersection2);
 			wallPos.push_back({ intersection1 - glm::vec3(direction1) * 0.25f, intersection2 - glm::vec3(direction1) * 0.25f });
@@ -152,8 +146,10 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		{
 			auto node = connector.second;
 			direction1 = -direction1;
-			auto intersection1 = node->intersect(node->room->getCenter() + direction2, direction1);
-			auto intersection2 = node->intersect(node->room->getCenter() - direction2, direction1);
+			auto center = node->room->getCenter();
+			auto origin = glm::vec4(center[0], node->room->getMinPoint()[1], center[2], 1);
+			auto intersection1 = node->intersect(origin + direction2, direction1);
+			auto intersection2 = node->intersect(origin - direction2, direction1);
 			node->gapStarts.push_back(intersection2);
 			node->gapEnds.push_back(intersection1);
 			wallPos.push_back({ intersection1 - glm::vec3(direction1) * 0.25f, intersection2 - glm::vec3(direction1) * 0.25f });
@@ -167,18 +163,21 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		transform->scale(glm::vec3(glm::length(source - target) / 2, 1.0f, 1.0f));
 		transform->rotate(angle, glm::vec3(0, 1, 0));
 		transform->rotate(M_PI, glm::vec3(1, 0, 0));
-		transform->translate(center + glm::vec3(0, 3, 0));
+		transform->translate(glm::vec3(center[0], (connector.first->room->getMinPoint()[1] + connector.second->room->getMinPoint()[1]) / 2.0f, center[2]) + glm::vec3(0, 3, 0));
 		createEnvironment(gameWorld, screen, "plane", "ground", transform);
 	}
+
 	// create character
 	auto characterRoom = map->mapRoot->findTopLeft();
 	characterRoom->safeRoom = true;
-	createCharacter(gameWorld, glm::vec3(characterRoom->room->getCenter()) + glm::vec3(0, 1, 0), gameHandlerObject);
+	auto characterRoomCenter = characterRoom->room->getCenter();
+	createCharacter(gameWorld, glm::vec3(characterRoomCenter[0], characterRoom->room->getMinPoint()[1] + 1, characterRoomCenter[2]) + glm::vec3(0, 1, 0), gameHandlerObject);
 
 	// create goal
 	auto goalRoom = map->mapRoot->findTopRight();
 	goalRoom->safeRoom = true;
-	createGoal(gameWorld, glm::vec3(goalRoom->room->getCenter()) + glm::vec3(0, 1, 0));
+	auto goalRoomCenter = goalRoom->room->getCenter();
+	createGoal(gameWorld, glm::vec3(goalRoomCenter[0], goalRoom->room->getMinPoint()[1] + 1, goalRoomCenter[2]) + glm::vec3(0, 1, 0));
 
 	// create rooms
 	createDungeon(gameWorld, screen, map->mapRoot);
