@@ -45,5 +45,7 @@ bool AABB::checkCollision(std::shared_ptr<AABB> movingAABB)
 std::shared_ptr<CollisionInfo> AABB::getCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray)
 {
 	auto triangleTransformMatrix = environmentComponent.lock()->getGameObject()->getComponent<TransformComponent>("transform")->getModelTransform()->getModelMatrix();
-	return triangle->intersect(transformMatrix, triangleTransformMatrix, ray);
+	auto res = triangle->intersect(transformMatrix, triangleTransformMatrix, ray);
+	res->environmentComponent = environmentComponent;
+	return res;
 }

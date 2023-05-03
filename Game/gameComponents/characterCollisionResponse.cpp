@@ -26,9 +26,23 @@ void CharacterCollisionResponse::responseCollision(std::shared_ptr<CollisionResp
 	}
 	else if (otherComponent->getGameObject()->getTag().compare("enemy") == 0) {
 		healthComponent->damage(2);
-		//if (healthComponent->getCurrentHealth() <= 0) {
-		//	gameObject->getGameWorld()->setWin(false);
-		//	gameObject->getGameWorld()->setFinish(true);
-		//}
+	}
+	//else if (otherComponent->getGameObject()->getTag().compare("spike") == 0) {
+	//	gameHandler->endGame(false);
+	//}
+}
+
+void CharacterCollisionResponse::responseCollision(std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)
+{
+	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
+	auto physicsComponent = getGameObject()->getComponent<PhysicsComponent>("physics");
+	for (auto collision : collisions) {
+		if (collision->normal.y > 0)
+		{
+			if (physicsComponent != nullptr) physicsComponent->setVelocity(glm::vec3(physicsComponent->getVelocity().x, 0.0f, physicsComponent->getVelocity().z));
+		}
+		if (collision->environmentComponent.lock()->getGameObject()->getTag().compare("spike") == 0) {
+			gameHandler->endGame(false);
+		}
 	}
 }

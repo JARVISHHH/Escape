@@ -43,6 +43,7 @@ GameScreen::GameScreen()
 	addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj");
 	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
 	addEnvironmentMesh("box", "./Resources/Meshes/box.obj");
+	addEnvironmentMesh("spike", "./Resources/Meshes/spike.obj");
 }
 
 void GameScreen::init()

@@ -139,6 +139,7 @@ add_executable(${PROJECT_NAME}
 
     Engine/Game/collision/ray.h
     Engine/Game/collision/collisioninfo.h
+    Engine/Game/collision/collisioninfo.cpp
     Engine/Game/collision/aabb.h
     Engine/Game/collision/aabb.cpp
     Engine/Game/collision/bvh.h
@@ -196,6 +197,7 @@ add_executable(${PROJECT_NAME}
     Game/prefabs/gamehandler.h
     Game/prefabs/projectile.h
     Game/prefabs/rooms.h
+    Game/prefabs/spike.h
 
     Game/ai/scopeCondition.h
     Game/ai/scopeCondition.cpp
