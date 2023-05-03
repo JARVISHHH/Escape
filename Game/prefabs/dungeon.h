@@ -21,10 +21,10 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 			createSafeRoom(gameWorld, screen, mapNode);
 		}
 		else {
-			//auto pick = rand() % 10;
-			//if(pick < 5) createNormalRoom(gameWorld, screen, mapNode);
-			//else if (pick < 10) createTrapRoom(gameWorld, screen, mapNode);
-			createTrapRoom(gameWorld, screen, mapNode);
+			auto pick = rand() % 10;
+			if(pick < 5) createNormalRoom(gameWorld, screen, mapNode);
+			else if (pick < 10) createTrapRoom(gameWorld, screen, mapNode);
+			//createTrapRoom(gameWorld, screen, mapNode);
 		}
 		// Walls
 		for (int i = 0; i < mapNode->gapEnds.size(); i++) {

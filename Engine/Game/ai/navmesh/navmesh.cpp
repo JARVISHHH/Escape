@@ -70,12 +70,15 @@ std::vector<glm::vec3> NavMesh::pathFinding(glm::vec3 start, glm::vec3 end) {
 	glm::vec3 direction = { 0, -1, 0 };
 	//std::cout << "original start: " << start[0] << " " << start[1] << " " << start[2] << std::endl;
 	//std::cout << "original end: " << end[0] << " " << end[1] << " " << end[2] << std::endl;
-	float tStart = rayCast(start, direction, startNode), tEnd = rayCast(end, direction, endNode);
-	if (tStart < 0 || tEnd < 0) {
-		//if(tStart < 0) std::cerr << "Pathfinding failed: start ray cast failed!" << std::endl;
-		//if (tEnd < 0) std::cerr << "Pathfinding failed: end ray cast failed!" << std::endl;
-		return {};
-	}
+	float tEnd = rayCast(end, direction, endNode);
+	if (tEnd < 0) return {};
+	float tStart = rayCast(start, direction, startNode);
+	if (tStart < 0) return {};
+	//if (tStart < 0 || tEnd < 0) {
+	//	//if(tStart < 0) std::cerr << "Pathfinding failed: start ray cast failed!" << std::endl;
+	//	//if (tEnd < 0) std::cerr << "Pathfinding failed: end ray cast failed!" << std::endl;
+	//	return {};
+	//}
 	glm::vec3 startPos = start + tStart * direction, endPos = end + tEnd * direction;
 
 	//std::cout << "start: " << startPos[0] << " " << startPos[1] << " " << startPos[2] << std::endl;
@@ -130,40 +133,40 @@ std::vector<glm::vec3> NavMesh::aStar(glm::vec3 startPos, glm::vec3 endPos, std:
 
 	std::vector<glm::vec3> path = {};
 
-	bool getEnd = (startNode == endNode);
+	bool getStart = (startNode == endNode);
 	
-	if (getEnd) {
+	if (getStart) {
 		path.push_back(endPos);
 		return path;
 	}
 
-	for (int i = 0; i < startNode->connectedEdges.size(); i++) {
-		const auto& edge = startNode->connectedEdges[i].lock();
+	for (int i = 0; i < endNode->connectedEdges.size(); i++) {
+		const auto& edge = endNode->connectedEdges[i].lock();
 		if (!edge->isInterior) continue;
 		openList.push({getEuclidianDistance(edge, startPos) + getEuclidianDistance(edge, endPos), edge});
 		lastEdge[edge] = edge;
 		std::shared_ptr<NavMeshNode> nextNode;
-		if (edge->connectedNodes[0].lock() == startNode) nextNode = edge->connectedNodes[1].lock();
+		if (edge->connectedNodes[0].lock() == endNode) nextNode = edge->connectedNodes[1].lock();
 		else nextNode = edge->connectedNodes[0].lock();
 		enteringNode[edge] = nextNode;
 	}
-	std::shared_ptr<NavMeshEdge> endEdge;
-	while (!getEnd && !openList.empty()) {
+	std::shared_ptr<NavMeshEdge> startEdge;
+	while (!getStart && !openList.empty()) {
 		auto cost = openList.top().first;
 		auto currentEdge = openList.top().second;
 		openList.pop();
-		if (enteringNode[currentEdge] == endNode) {
-			getEnd = true;
-			endEdge = currentEdge;
+		if (enteringNode[currentEdge] == startNode) {
+			getStart = true;
+			startEdge = currentEdge;
 			break;
 		}
 		if (closedList.find(currentEdge) != closedList.end()) continue;  // In closed list
 		closedList.insert(currentEdge);
-		auto costH = getEuclidianDistance(currentEdge, endPos);
+		auto costH = getEuclidianDistance(currentEdge, startPos);
 		for (const auto& connectedNode : enteringNode[currentEdge]->connectedNodes) {
 			const auto& connectedEdge = commonEdges[connectedNode.lock()][enteringNode[currentEdge]];
 			if (closedList.find(connectedEdge) != closedList.end()) continue;  // In closed list
-			float newCost = cost - costH + getEuclidianDistance(connectedEdge, currentEdge) + getEuclidianDistance(connectedEdge, endPos);
+			float newCost = cost - costH + getEuclidianDistance(connectedEdge, currentEdge) + getEuclidianDistance(connectedEdge, startPos);
 			if (lowestCost.find(connectedEdge) == lowestCost.end() || lowestCost[connectedEdge] > newCost) {
 				lowestCost[connectedEdge] = newCost;
 				lastEdge[connectedEdge] = currentEdge;
@@ -173,21 +176,21 @@ std::vector<glm::vec3> NavMesh::aStar(glm::vec3 startPos, glm::vec3 endPos, std:
 		}
 	}
 
-	if (!getEnd) {
+	if (!getStart) {
 		std::cerr << "A* failed: heap is empty before getting to the end!" << std::endl;
 		return path;
 	}
 
 	// Get shortest path
-	path.push_back(endPos);
-	auto currentEdge = endEdge;
+	auto currentEdge = startEdge;
 	while (lastEdge[currentEdge] != currentEdge) {
 		path.push_back((vertexPositions[currentEdge->vertexIndex1] + vertexPositions[currentEdge->vertexIndex2]) / 2.0f);
 		currentEdge = lastEdge[currentEdge];
 	}
 	//std::cout << "start edge vertex:" << currentEdge->vertexIndex1 << " " << currentEdge->vertexIndex2 << std::endl;
 	path.push_back((vertexPositions[currentEdge->vertexIndex1] + vertexPositions[currentEdge->vertexIndex2]) / 2.0f);
-	std::reverse(path.begin(), path.end());
+	path.push_back(endPos);
+	//std::reverse(path.begin(), path.end());
 
 	return path;
 }

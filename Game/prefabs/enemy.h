@@ -30,7 +30,7 @@ std::shared_ptr<GameObject> createChasingEnemy(std::shared_ptr<GameWorld> gameWo
 	std::shared_ptr<BehaviorComponent> behaviorComponent = std::make_shared<BehaviorComponent>();
 	std::shared_ptr<Selector> root = std::make_shared<Selector>();
 	std::shared_ptr<Sequence> backBaseSequence = std::make_shared<Sequence>();
-	std::shared_ptr<ScopeCondition> scopeCondition = std::make_shared<ScopeCondition>("character", 10);
+	std::shared_ptr<ScopeCondition> scopeCondition = std::make_shared<ScopeCondition>("character", 8);
 	std::shared_ptr<TrackAction> trackBase = std::make_shared<TrackAction>(pos);
 	std::shared_ptr<TrackAction> trackTarget = std::make_shared<TrackAction>("character");
 	backBaseSequence->addChild(scopeCondition);
@@ -80,7 +80,7 @@ std::shared_ptr<GameObject> createShootingEnemy(std::shared_ptr<GameWorld> gameW
 	// AI component
 	std::shared_ptr<BehaviorComponent> behaviorComponent = std::make_shared<BehaviorComponent>();
 	std::shared_ptr<Selector> root = std::make_shared<Selector>();
-	std::shared_ptr<ScopeCondition> scopeCondition = std::make_shared<ScopeCondition>("character", 10);
+	std::shared_ptr<ScopeCondition> scopeCondition = std::make_shared<ScopeCondition>("character", 8);
 	std::shared_ptr<BarrierCondition> barrierCondition = std::make_shared<BarrierCondition>("character");
 	std::shared_ptr<ShootAction> shootAction = std::make_shared<ShootAction>();
 	root->addChild(scopeCondition);

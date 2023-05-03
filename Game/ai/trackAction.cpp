@@ -28,33 +28,54 @@ void TrackAction::reset()
 
 BTStatus TrackAction::doAction(double seconds)
 {
-	if (trackObject) {
-		bool findTarget = pathfindingComponent->setDestination(targetTransform->getModelTransform()->getPos());
-		if (!findTarget) {
-			//std::cout << "no target" << std::endl;
-			status = BT_FAIL;
-		}
-		else {
-			auto pos = targetTransform->getModelTransform()->getPos();
-			status = BT_RUNNING;
-			if (pathfindingComponent->getTarget()) {
-				//std::cout << "get target" << std::endl;
-				status = BT_SUCCESS;
-			}
-		}
-	}
-	else {
-		if (status == BT_RUNNING) {
-			if (pathfindingComponent->getTarget()) status = BT_SUCCESS;
-		}
-		else {
+	if (status == BT_RUNNING) {
+		if (trackObject) {
+			targetPosition = targetTransform->getModelTransform()->getPos();
 			bool findTarget = pathfindingComponent->setDestination(targetPosition);
 			if (!findTarget) status = BT_FAIL;
 			else {
 				status = BT_RUNNING;
+				if (pathfindingComponent->getTarget()) status = BT_SUCCESS;
 			}
 		}
+		else {
+			if (pathfindingComponent->getTarget()) status = BT_SUCCESS;
+		}
 	}
+	else {
+		if (trackObject) targetPosition = targetTransform->getModelTransform()->getPos();
+		bool findTarget = pathfindingComponent->setDestination(targetPosition);
+		if (!findTarget) status = BT_FAIL;
+		else {
+			status = BT_RUNNING;
+		}
+	}
+	//if (trackObject) {
+	//	bool findTarget = pathfindingComponent->setDestination(targetTransform->getModelTransform()->getPos());
+	//	if (!findTarget) {
+	//		//std::cout << "no target" << std::endl;
+	//		status = BT_FAIL;
+	//	}
+	//	else {
+	//		status = BT_RUNNING;
+	//		if (pathfindingComponent->getTarget()) {
+	//			//std::cout << "get target" << std::endl;
+	//			status = BT_SUCCESS;
+	//		}
+	//	}
+	//}
+	//else {
+	//	if (status == BT_RUNNING) {
+	//		if (pathfindingComponent->getTarget()) status = BT_SUCCESS;
+	//	}
+	//	else {
+	//		bool findTarget = pathfindingComponent->setDestination(targetPosition);
+	//		if (!findTarget) status = BT_FAIL;
+	//		else {
+	//			status = BT_RUNNING;
+	//		}
+	//	}
+	//}
 	pathfindingComponent->isStop = false;
 
 	return status;
