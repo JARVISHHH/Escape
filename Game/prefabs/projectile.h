@@ -34,7 +34,7 @@ std::shared_ptr<GameObject> createProjectile(std::shared_ptr<GameWorld> gameWorl
 
 	// Add the gameObject to systems
 	gameWorld->getGameSystem<DrawSystem>("draw")->addComponent(drawComponent);
-	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(enemyObject, "projectile");
+	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(enemyObject, "enemy");
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(movingComponent);
 	gameWorld->addGameObject(enemyObject);
 

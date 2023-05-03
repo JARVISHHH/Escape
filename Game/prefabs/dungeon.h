@@ -9,7 +9,7 @@
 #include <corecrt_math_defines.h>
 
 #define EPSILON 0.00001
-#define HEIGHT 5
+#define HEIGHT 6
 
 void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode) {
 	if (mapNode == nullptr) return;
@@ -21,7 +21,9 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 			createSafeRoom(gameWorld, screen, mapNode);
 		}
 		else {
-			//createNormalRoom(gameWorld, screen, mapNode);
+			//auto pick = rand() % 10;
+			//if(pick < 5) createNormalRoom(gameWorld, screen, mapNode);
+			//else if (pick < 10) createTrapRoom(gameWorld, screen, mapNode);
 			createTrapRoom(gameWorld, screen, mapNode);
 		}
 		// Walls

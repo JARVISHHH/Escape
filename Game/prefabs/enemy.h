@@ -55,7 +55,7 @@ std::shared_ptr<GameObject> createChasingEnemy(std::shared_ptr<GameWorld> gameWo
 	gameWorld->getGameSystem<PhysicsSystem>("physics")->addGameObject(enemyObject);
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(pathfindingComponent);
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(behaviorComponent);
-	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(enemyObject);
+	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(enemyObject, "enemy");
 	gameWorld->addGameObject(enemyObject);
 
 	return enemyObject;
@@ -101,7 +101,7 @@ std::shared_ptr<GameObject> createShootingEnemy(std::shared_ptr<GameWorld> gameW
 	gameWorld->getGameSystem<DrawSystem>("draw")->addComponent(drawComponent);
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(shootComponent);
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(behaviorComponent);
-	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(enemyObject);
+	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(enemyObject, "enemy");
 	gameWorld->addGameObject(enemyObject);
 
 	return enemyObject;

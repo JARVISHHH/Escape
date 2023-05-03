@@ -31,14 +31,14 @@ BTStatus TrackAction::doAction(double seconds)
 	if (trackObject) {
 		bool findTarget = pathfindingComponent->setDestination(targetTransform->getModelTransform()->getPos());
 		if (!findTarget) {
-			std::cout << "no target" << std::endl;
+			//std::cout << "no target" << std::endl;
 			status = BT_FAIL;
 		}
 		else {
 			auto pos = targetTransform->getModelTransform()->getPos();
 			status = BT_RUNNING;
 			if (pathfindingComponent->getTarget()) {
-				std::cout << "get target" << std::endl;
+				//std::cout << "get target" << std::endl;
 				status = BT_SUCCESS;
 			}
 		}

@@ -7,7 +7,7 @@
 #include <Engine/Game/map/mapnode.h>
 
 #define EPSILON 0.00001
-#define HEIGHT 5
+#define HEIGHT 6
 #define HEIGHT_STAIR 0.5
 
 bool checkSame(float a, float b) {
