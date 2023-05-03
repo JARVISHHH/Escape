@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Game/components.h"
+#include <Game/gameComponents/characterHealth.h>
 
-std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld)
+std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld, glm::vec3 pos, std::shared_ptr<GameObject> gameHandlerObject)
 {
 	std::shared_ptr<GameObject> character = std::make_shared<GameObject>("character");
 
@@ -11,7 +12,7 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
 	modelTransform->scale(0.25);
-	modelTransform->translate(glm::vec3(0, 2, 1));
+	modelTransform->translate(pos);
 	gameWorld->getCamera()->setPos(modelTransform->getPos());
 	// Draw component
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
@@ -24,9 +25,9 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	// Collision component
 	std::shared_ptr<CylinderComponent> cylinderComponent = std::make_shared<CylinderComponent>();
 	// Collision response component
-	std::shared_ptr<CharacterCollisionResponse> collisionResponseComponent = std::make_shared<CharacterCollisionResponse>();
+	std::shared_ptr<CharacterCollisionResponse> collisionResponseComponent = std::make_shared<CharacterCollisionResponse>(gameHandlerObject);
 	// Health component
-	std::shared_ptr<HealthComponent> healthComponent = std::make_shared<HealthComponent>();
+	std::shared_ptr<CharacterHealth> healthComponent = std::make_shared<CharacterHealth>(10, gameHandlerObject);
 
 	//// Add components to game objects
 	character->addComponent(transformComponent);

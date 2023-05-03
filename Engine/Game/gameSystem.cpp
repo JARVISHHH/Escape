@@ -14,7 +14,7 @@ GameSystem::GameSystem(std::shared_ptr<GameWorld> gameWorld, std::string tag)
 
 GameSystem::~GameSystem()
 {
-	std::cout << "game system delete" << std::endl;
+	//std::cout << "game system delete" << std::endl;
 }
 
 void GameSystem::start()

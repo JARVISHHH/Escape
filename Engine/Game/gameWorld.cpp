@@ -21,7 +21,7 @@ GameWorld::GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> scr
 
 GameWorld::~GameWorld()
 {
-	std::cout << "game world delete" << std::endl;
+	//std::cout << "game world delete" << std::endl;
 }
 
 void GameWorld::start()

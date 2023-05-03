@@ -9,7 +9,7 @@ EnvironmentComponent::EnvironmentComponent(std::vector<std::shared_ptr<Triangle>
 
 EnvironmentComponent::~EnvironmentComponent()
 {
-	std::cout << "environment component delete" << std::endl;
+	//std::cout << "environment component delete" << std::endl;
 }
 
 void EnvironmentComponent::buildBoundingBox()

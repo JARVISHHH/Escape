@@ -12,7 +12,7 @@ MapNode::MapNode(std::shared_ptr<Map> map, glm::vec4 maxPoint, glm::vec4 minPoin
 
 MapNode::~MapNode()
 {
-	std::cout << "map node delete" << std::endl;
+	//std::cout << "map node delete" << std::endl;
 }
 
 bool MapNode::split(glm::vec3 minimumSize, float margine, int depth)
@@ -151,6 +151,12 @@ void MapNode::printNode()
 	if (rightChild != nullptr) rightChild->printNode();
 }
 
+std::shared_ptr<MapNode> MapNode::findBottomRight()
+{
+	if (rightChild == nullptr) return shared_from_this();
+	else return rightChild->findBottomRight();
+}
+
 std::shared_ptr<MapNode> MapNode::findBottomLeft()
 {
 	if (leftChild == nullptr && rightChild == nullptr) return shared_from_this();
@@ -161,9 +167,15 @@ std::shared_ptr<MapNode> MapNode::findBottomLeft()
 
 std::shared_ptr<MapNode> MapNode::findTopRight()
 {
-	std::cout << leftChild << " " << rightChild << std::endl;
+	//std::cout << leftChild << " " << rightChild << std::endl;
 	if (leftChild == nullptr && rightChild == nullptr) return shared_from_this();
 	// up down split
 	if (leftChild->aabb->getMinPoint()[0] - leftChild->margine != rightChild->aabb->getMaxPoint()[0] + rightChild->margine) return leftChild->findTopRight();
 	else return rightChild->findTopRight();
+}
+
+std::shared_ptr<MapNode> MapNode::findTopLeft()
+{
+	if (leftChild == nullptr) return shared_from_this();
+	else return leftChild->findTopLeft();
 }

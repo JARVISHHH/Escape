@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Game/prefabs/environment.h>
+#include <Game/prefabs/character.h>
 #include <Engine/Game/map/map.h>
 #include <Engine/Game/map/mapnode.h>
 
@@ -83,8 +84,6 @@ void createWall(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> sc
 	createEnvironment(gameWorld, screen, "wall", "wall", transform);
 }
 
-bool create = true;
-
 void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode) {
 	if (mapNode == nullptr) return;
 	createDungeon(gameWorld, screen, mapNode->leftChild);
@@ -99,12 +98,10 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		createEnvironment(gameWorld, screen, "box", "ground", transform);
 		mapNode->navMesh = std::make_shared<NavMesh>("./Resources/Meshes/plane.obj");
 		mapNode->navMesh->bake(transform->getModelMatrix());
-		//if (create) {
-		//	createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], center[1] + 1, center[2]));
-		//	//create = false;
-		//}
-		createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], center[1] + 1, center[2]));
-		//createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], center[1] + 2, center[2]), mapNode->navMesh);
+		if (!mapNode->safeRoom) {
+			createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], center[1] + 1.5, center[2]));
+			createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], center[1] + 2, center[2]), mapNode->navMesh);
+		}
 		// Walls
 		for (int i = 0; i < mapNode->gapEnds.size(); i++) {
 			auto end = mapNode->gapEnds[i];
@@ -124,7 +121,7 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 	}
 }
 
-void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<Map> map) {
+void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<Map> map, std::shared_ptr<GameObject> gameHandlerObject) {
 	for (auto& connector : map->getConnectors()) {
 		// Floor
 		glm::vec3 source = connector.first->room->getCenter(), target = connector.second->room->getCenter();
@@ -173,5 +170,16 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		transform->translate(center + glm::vec3(0, 3, 0));
 		createEnvironment(gameWorld, screen, "plane", "ground", transform);
 	}
+	// create character
+	auto characterRoom = map->mapRoot->findTopLeft();
+	characterRoom->safeRoom = true;
+	createCharacter(gameWorld, glm::vec3(characterRoom->room->getCenter()) + glm::vec3(0, 1, 0), gameHandlerObject);
+
+	// create goal
+	auto goalRoom = map->mapRoot->findTopRight();
+	goalRoom->safeRoom = true;
+	createGoal(gameWorld, glm::vec3(goalRoom->room->getCenter()) + glm::vec3(0, 1, 0));
+
+	// create rooms
 	createDungeon(gameWorld, screen, map->mapRoot);
 }

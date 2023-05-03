@@ -10,7 +10,7 @@ std::shared_ptr<GameObject> createGameHandler(std::shared_ptr<GameWorld> gameWor
 	// Create components
 	// Transform Component
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
-	std::shared_ptr<GameHandlerComponent> gameHandlerComponent = std::make_shared<GameHandlerComponent>("character", maxTime);
+	std::shared_ptr<GameHandlerComponent> gameHandlerComponent = std::make_shared<GameHandlerComponent>(maxTime);
 
 	// Add components to game objects
 	gameHandler->addComponent(transformComponent);

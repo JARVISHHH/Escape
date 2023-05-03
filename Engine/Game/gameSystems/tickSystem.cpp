@@ -13,7 +13,7 @@ TickSystem::TickSystem(std::shared_ptr<GameWorld> gameWorld)
 
 TickSystem::~TickSystem()
 {
-	std::cout << "tick system delete" << std::endl;
+	//std::cout << "tick system delete" << std::endl;
 }
 
 void TickSystem::update(double seconds)

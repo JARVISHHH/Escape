@@ -67,19 +67,22 @@ void GameScreen::init()
 	gameWorld->addGameSystem(collisionSystem);
 	gameWorld->addGameSystem(tickSystem);
 
+	// Create game handler
+	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 60);
+
 	// Generate map
 	std::shared_ptr<Map> map = std::make_shared<Map>(gameWorld);
 	map->generateMap();
 	//map->printMap();
-	createDungeon(gameWorld, shared_from_this(), map);
+	createDungeon(gameWorld, shared_from_this(), map, gameHandler);
 	
 	// Create NavMesh
 	//navMesh = std::make_shared<NavMesh>("./Resources/Meshes/groundNav.obj");
 	//navMesh->bake();
 
 	// Create game object
-	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 60);
-	std::shared_ptr<GameObject> character = createCharacter(gameWorld);
+	
+	//std::shared_ptr<GameObject> character = createCharacter(gameWorld);
 	//std::shared_ptr<GameObject> goalObject = createGoal(gameWorld, glm::vec3(11, 5, 0));
 	//std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "map");
 	std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "box", "grass");

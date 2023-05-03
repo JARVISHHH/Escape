@@ -8,5 +8,5 @@ NavMeshEdge::NavMeshEdge(int vertexIndex1, int vertexIndex2)
 
 NavMeshEdge::~NavMeshEdge()
 {
-	std::cout << "navmesh edge delete" << std::endl;
+	//std::cout << "navmesh edge delete" << std::endl;
 }

@@ -2,9 +2,15 @@
 
 #include "Engine/Game/components/physicsComponent.h"
 
+CharacterCollisionResponse::CharacterCollisionResponse(std::shared_ptr<GameObject> gameHandlerObject)
+	:gameHandlerObject(gameHandlerObject)
+{
+}
+
 void CharacterCollisionResponse::start()
 {
 	healthComponent = getGameObject()->getComponent<HealthComponent>("health");
+	gameHandler = gameHandlerObject->getComponent<GameHandlerComponent>("gameHandler");
 }
 
 void CharacterCollisionResponse::responseCollision(std::shared_ptr<CollisionResponseComponent> otherComponent, glm::vec3 mtv)
@@ -16,8 +22,7 @@ void CharacterCollisionResponse::responseCollision(std::shared_ptr<CollisionResp
 	}
 
 	if (otherComponent->getGameObject()->getTag().compare("goal") == 0) {
-		getGameObject()->getGameWorld()->setWin(true);
-		getGameObject()->getGameWorld()->setFinish(true);
+		gameHandler->endGame(true);
 	}
 	else if (otherComponent->getGameObject()->getTag().compare("enemy") == 0) {
 		healthComponent->damage(2);

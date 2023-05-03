@@ -39,6 +39,5 @@ void ShootComponent::setStop(bool stop)
 void ShootComponent::shoot()
 {
 	auto direction = glm::normalize(targetTransform->getModelTransform()->getPos() - transform->getModelTransform()->getPos());
-	std::cout << "shoot " << direction[0] << " " << direction[1] << " " << direction[2] << std::endl;
 	createProjectile(getGameObject()->getGameWorld(), "cylinder", "monomi", transform->getModelTransform()->getPos(), glm::normalize(direction));
 }

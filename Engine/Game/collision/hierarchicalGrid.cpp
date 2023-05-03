@@ -21,7 +21,7 @@ HierarchicalGrid::HierarchicalGrid(int level, std::shared_ptr<AABB> aabb)
 
 HierarchicalGrid::~HierarchicalGrid()
 {
-	std::cout << "HierarchicalGrid delete grid nodes: " << nodesNum << std::endl;
+	//std::cout << "HierarchicalGrid delete grid nodes: " << nodesNum << std::endl;
 }
 
 void HierarchicalGrid::split(std::shared_ptr<GridNode> node)

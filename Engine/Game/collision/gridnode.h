@@ -15,7 +15,7 @@ public:
 		aabb = std::make_shared<AABB>();
 	}
 	~GridNode() {
-		std::cout << "grid node delete" << std::endl;
+		//std::cout << "grid node delete" << std::endl;
 	}
 
 	void collide(std::shared_ptr<GridNode> node) {

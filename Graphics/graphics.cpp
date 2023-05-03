@@ -89,8 +89,8 @@ std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string fil
         throw std::runtime_error(warn + err);
     }
 
-    std::cout << "warn: " << warn << std::endl;
-    std::cout << "err: " << err << std::endl;
+    //std::cout << "warn: " << warn << std::endl;
+    //std::cout << "err: " << err << std::endl;
 
     int numTriangles = 0;
     for(size_t s = 0; s < shapes.size(); s++){

@@ -15,7 +15,7 @@ BVH::BVH(std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponen
 
 BVH::~BVH()
 {
-	std::cout << "bvh delete" << std::endl;
+	//std::cout << "bvh delete" << std::endl;
 }
 
 std::shared_ptr<BVHNode> BVH::buildRoot()

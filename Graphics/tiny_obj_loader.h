@@ -2815,7 +2815,7 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
       token += 6;
       std::string namebuf = parseString(&token);
 
-      std::cout << "material: " << namebuf << std::endl;
+      //std::cout << "material: " << namebuf << std::endl;
 
       int newMaterialId = -1;
       std::map<std::string, int>::const_iterator it =

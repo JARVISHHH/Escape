@@ -8,7 +8,7 @@ Map::Map(std::shared_ptr<GameWorld> gameWorld, int maxDepth)
 
 Map::~Map()
 {
-	std::cout << "map delete" << std::endl;
+	//std::cout << "map delete" << std::endl;
 }
 
 void Map::generateMap()

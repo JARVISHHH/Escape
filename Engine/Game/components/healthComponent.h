@@ -8,12 +8,12 @@ public:
 
 	void update(double seconds) override;
 
-	bool damage(int damageNumber);
+	virtual bool damage(int damageNumber);
 	bool heal(int healNumber);
 
 	float getCurrentHealth() { return currentHealth; }
 
-private:
+protected:
 	float maxHealth;
 	float currentHealth;
 

@@ -9,7 +9,7 @@ GameObject::GameObject(std::string tag)
 
 GameObject::~GameObject()
 {
-	std::cout << "game object delete" << std::endl;
+	//std::cout << "game object delete" << std::endl;
 }
 
 void GameObject::start()

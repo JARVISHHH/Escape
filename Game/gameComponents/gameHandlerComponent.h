@@ -12,7 +12,7 @@ enum GameState {
 
 class GameHandlerComponent : public GameComponent {
 public:
-	GameHandlerComponent(std::string targetTag, float maxTime = 60);
+	GameHandlerComponent(float maxTime = 60);
 
 	void start() override;
 	void update(double seconds) override;
@@ -27,9 +27,6 @@ private:
 	float leftTime;
 
 	std::string result = "";
-
-	std::string targetTag;
-	std::shared_ptr<HealthComponent> target;
 
 	int score = 0;
 };

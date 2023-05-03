@@ -1,13 +1,12 @@
 #include "gameHandlerComponent.h"
 
-GameHandlerComponent::GameHandlerComponent(std::string targetTag, float maxTime)
-	: GameComponent("gameHandler"), targetTag(targetTag), maxTime(maxTime), leftTime(maxTime)
+GameHandlerComponent::GameHandlerComponent(float maxTime)
+	: GameComponent("gameHandler"), maxTime(maxTime), leftTime(maxTime)
 {
 	gameState = GameState::OnHold;
 }
 
 void GameHandlerComponent::start() {
-	target = getGameObject()->getGameWorld()->getGameObject(targetTag)->getComponent<HealthComponent>("health");
 	gameState = GameState::Running;
 	getGameObject()->getGameWorld()->setIsStop(false);
 }
@@ -16,9 +15,6 @@ void GameHandlerComponent::update(double seconds)
 {
 	if (gameState != GameState::Running) return;
 	if (leftTime <= 0) {
-		endGame(true);
-	}
-	else if (target->getCurrentHealth() <= 0) {
 		endGame(false);
 	}
 	else {

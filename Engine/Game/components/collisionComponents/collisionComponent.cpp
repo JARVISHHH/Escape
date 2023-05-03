@@ -12,7 +12,7 @@ CollisionComponent::CollisionComponent()
 
 CollisionComponent::~CollisionComponent()
 {
-	std::cout << "collisionComponent delete" << std::endl;
+	//std::cout << "collisionComponent delete" << std::endl;
 }
 
 std::shared_ptr<CollisionInfo> CollisionComponent::getEnvironmentClosestCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents)

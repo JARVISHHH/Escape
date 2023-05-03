@@ -9,7 +9,7 @@ TransformComponent::TransformComponent() : GameComponent("transform")
 
 TransformComponent::~TransformComponent()
 {
-	std::cout << "transform component delete" << std::endl;
+	//std::cout << "transform component delete" << std::endl;
 }
 
 void TransformComponent::start()

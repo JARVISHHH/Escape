@@ -8,7 +8,7 @@ class BVHNode {
 public:
 	BVHNode() {};
 	BVHNode(std::shared_ptr<AABB> aabb) { boundingBox = aabb; }
-	~BVHNode() { std::cout << "BVHNode delete" << std::endl; }
+	//~BVHNode() { std::cout << "BVHNode delete" << std::endl; }
 
 	std::shared_ptr<AABB> boundingBox;
 	std::shared_ptr<BVHNode> left = nullptr;

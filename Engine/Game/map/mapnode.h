@@ -17,8 +17,10 @@ public:
 	void assign(glm::vec3 minimumSize);
 
 	std::shared_ptr<MapNode> connect();
+	std::shared_ptr<MapNode> findBottomRight();
 	std::shared_ptr<MapNode> findBottomLeft();
 	std::shared_ptr<MapNode> findTopRight();
+	std::shared_ptr<MapNode> findTopLeft();
 
 	glm::vec3 intersect(glm::vec3 origin, glm::vec3 direction);
 
@@ -30,9 +32,10 @@ public:
 	std::shared_ptr<MapNode> leftChild = nullptr, rightChild = nullptr;
 	std::shared_ptr<NavMesh> navMesh;
 
-	//std::vector<std::pair<glm::vec3, glm::vec3>> gaps;
 	std::vector<glm::vec3> gapStarts;
 	std::vector<glm::vec3> gapEnds;
+
+	bool safeRoom = false;
 
 protected:
 
