@@ -96,21 +96,56 @@ void createSafeRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
 }
 
-void createNormalRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode) {
+void createMixEnemies(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode, std::shared_ptr<ModelTransform> transform) {
+	mapNode->navMesh = std::make_shared<NavMesh>("./Resources/Meshes/plane.obj");
+	mapNode->navMesh->bake(transform->getModelMatrix());
+	std::shared_ptr<Map> roomMap = std::make_shared<Map>(mapNode->room, glm::vec3(1, 1, 1), 0, 3);
+	roomMap->generateMap();
+	for (auto leaf : roomMap->leaves) {
+		if ((rand() % 4) == 0) createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + 1, leaf->getAABB()->getCenter()[2]), mapNode->navMesh);
+		if ((rand() % 4) == 0) createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + HEIGHT - 2, leaf->getAABB()->getCenter()[2]));
+	}
+}
+
+void createShootingEnemies(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode, std::shared_ptr<ModelTransform> transform) {
+	mapNode->navMesh = std::make_shared<NavMesh>("./Resources/Meshes/plane.obj");
+	mapNode->navMesh->bake(transform->getModelMatrix());
+	std::shared_ptr<Map> roomMap = std::make_shared<Map>(mapNode->room, glm::vec3(1, 1, 1), 0, 3);
+	roomMap->generateMap();
+	for (auto leaf : roomMap->leaves) {
+		if ((rand() % 4) == 0) createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + HEIGHT - 2, leaf->getAABB()->getCenter()[2]));
+	}
+}
+
+void createChasingEnemies(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode, std::shared_ptr<ModelTransform> transform) {
+	mapNode->navMesh = std::make_shared<NavMesh>("./Resources/Meshes/plane.obj");
+	mapNode->navMesh->bake(transform->getModelMatrix());
+	std::shared_ptr<Map> roomMap = std::make_shared<Map>(mapNode->room, glm::vec3(1, 1, 1), 0, 3);
+	roomMap->generateMap();
+	for (auto leaf : roomMap->leaves) {
+		if ((rand() % 4) == 0) createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + 1, leaf->getAABB()->getCenter()[2]), mapNode->navMesh);
+	}
+}
+
+void createEnemyRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode) {
 	auto center = (mapNode->room->getMaxPoint() + mapNode->room->getMinPoint()) / 2.0f;
 	auto size = (mapNode->room->getMaxPoint() - mapNode->room->getMinPoint()) / 2.0f;
 	auto transform = std::make_shared<ModelTransform>();
 	transform->scale(glm::vec3(size[0], 0.005f, size[2]));
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
-	mapNode->navMesh = std::make_shared<NavMesh>("./Resources/Meshes/plane.obj");
-	mapNode->navMesh->bake(transform->getModelMatrix());
-	createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 1.5, center[2]));
-	createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 2, center[2]), mapNode->navMesh);
+
+	int pick = rand() % 10;
+	if (pick < 4) createChasingEnemies(gameWorld, screen, mapNode, transform);
+	else if (pick < 8) createShootingEnemies(gameWorld, screen, mapNode, transform);
+	else if (pick < 10) createMixEnemies(gameWorld, screen, mapNode, transform);
+	//createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 1.5, center[2]));
+	//createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 2, center[2]), mapNode->navMesh);
 	
 	transform->translate(glm::vec3(0, HEIGHT, 0));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
 }
+
 
 void createPlatform(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode) {
 	if (mapNode == nullptr) return;

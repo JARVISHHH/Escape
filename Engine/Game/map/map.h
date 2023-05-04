@@ -10,7 +10,7 @@ public:
 	Map(std::shared_ptr<AABB> aabb, glm::vec3 minimumSize = glm::vec3(7.5, 5, 7.5), float margine = 0.5, int maxDepth = 4);
 	~Map();
 
-	void generateMap();
+	void generateMap(bool generateRoom = true, bool connectRoom = true);
 	int getMaxDepth() { return maxDepth; }
 
 	void addConnector(std::pair<std::shared_ptr<MapNode>, std::shared_ptr<MapNode>> connector);
@@ -19,6 +19,7 @@ public:
 	void printMap();
 
 	std::shared_ptr<MapNode> mapRoot;
+	std::vector<std::shared_ptr<MapNode>> leaves;
 
 protected:
 
@@ -35,4 +36,5 @@ private:
 	void splitSpace();
 	void assignRoom();
 	void connect();
+	void getLeaves();
 };

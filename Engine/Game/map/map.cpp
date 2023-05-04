@@ -11,12 +11,13 @@ Map::~Map()
 	//std::cout << "map delete" << std::endl;
 }
 
-void Map::generateMap()
+void Map::generateMap(bool generateRoom, bool connectRoom)
 {
 	mapRoot = std::make_shared<MapNode>(shared_from_this(), aabb);
 	splitSpace();
-	assignRoom();
-	connect();
+	getLeaves();
+	if(generateRoom) assignRoom();
+	if(generateRoom && connectRoom) connect();
 }
 
 void Map::splitSpace()
@@ -33,14 +34,14 @@ void Map::connect()
 {
 	if (mapRoot != nullptr) {
 		connectors.clear();
-		//std::shared_ptr<MapNode> left = nullptr, right = nullptr;
-		//if (mapRoot->leftChild != nullptr) left = mapRoot->leftChild->connect(nullptr);
-		//if (mapRoot->rightChild != nullptr) {
-		//	mapRoot->rightChild->connect(nullptr);
-		//	right = mapRoot->rightChild->findBottomLeft();
-		//}
-		//if (left != nullptr && right != nullptr) left->connect(right);
 		mapRoot->connect();
+	}
+}
+
+void Map::getLeaves()
+{
+	if (mapRoot != nullptr) {
+		mapRoot->getLeaves(leaves);
 	}
 }
 

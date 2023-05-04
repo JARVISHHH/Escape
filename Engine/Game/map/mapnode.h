@@ -16,6 +16,8 @@ public:
 
 	void assign(glm::vec3 minimumSize);
 
+	void getLeaves(std::vector<std::shared_ptr<MapNode>>& leaves);
+
 	std::shared_ptr<MapNode> connect();
 	std::shared_ptr<MapNode> findBottomRight();
 	std::shared_ptr<MapNode> findBottomLeft();

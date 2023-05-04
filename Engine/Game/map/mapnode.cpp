@@ -99,6 +99,13 @@ void MapNode::assign(glm::vec3 minimumSize)
 	}
 }
 
+void MapNode::getLeaves(std::vector<std::shared_ptr<MapNode>>& leaves)
+{
+	if (leftChild != nullptr) leftChild->getLeaves(leaves);
+	if (rightChild != nullptr) rightChild->getLeaves(leaves);
+	if (leftChild == nullptr && rightChild == nullptr) leaves.push_back(shared_from_this());
+}
+
 std::shared_ptr<MapNode> MapNode::connect()
 {
 	if (leftChild == nullptr && rightChild == nullptr) return shared_from_this();

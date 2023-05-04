@@ -22,7 +22,7 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		}
 		else {
 			auto pick = rand() % 10;
-			if(pick < 5) createNormalRoom(gameWorld, screen, mapNode);
+			if(pick < 5) createEnemyRoom(gameWorld, screen, mapNode);
 			else if (pick < 10) createTrapRoom(gameWorld, screen, mapNode);
 			//createTrapRoom(gameWorld, screen, mapNode);
 			//if (pick < 5) createTrapRoom(gameWorld, screen, mapNode);
