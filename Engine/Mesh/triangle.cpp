@@ -178,7 +178,7 @@ std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, 
 			res->contact = glm::inverse(transformMatrix) * res->contact;
 			res->center = glm::inverse(transformMatrix) * res->center;
 			res->normal = glm::normalize(res->center - res->contact);
-			std::cout << "collide with edges: " << res->center[0] << " " << res->center[1] << " " << res->center[2] << " " << std::endl;
+			//std::cout << "collide with edges: " << res->center[0] << " " << res->center[1] << " " << res->center[2] << " " << std::endl;
 		}
 		// Sphere-vertices collision
 		if (intersectVertices(sphereSpaceRay, res)) {

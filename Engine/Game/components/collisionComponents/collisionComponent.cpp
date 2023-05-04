@@ -157,10 +157,6 @@ std::shared_ptr<CollisionInfo> CollisionComponent::getEnvironmentClosestCollisio
 
 	//auto movingAABB = getAABB(ray);
 	auto movingAABB = CollisionComponent::getAABB(inverseTransformMatrix, ray);
-	//getAABB(ray)->printMaxPoint();
-	//movingAABB->printMaxPoint();
-	//getAABB(ray)->printMinPoint();
-	//movingAABB->printMinPoint();
 	auto sphereSpaceRay = std::make_shared<Ray>(inverseTransformMatrix * ray->origin, inverseTransformMatrix * ray->endPoint);
 	
 	auto thisCollision = bvh->getClosestCollision(inverseTransformMatrix, movingAABB, sphereSpaceRay);
@@ -222,7 +218,7 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 
 	for (int i = 0; i < 5; i++) {
 		auto c = getEnvironmentClosestCollision(inverseTransformMatrix, std::make_shared<Ray>(initialPos, nextPos), bvh);
-		if (c->t < 0 || c->t > 1) {
+		if (c->t <= 0 || c->t >= 1) {
 			//if (collisions.size() == 0) std::cout << "no collsion" << std::endl;
 			//else std::cout << "collision" << std::endl;
 			return { collisions, nextPos };

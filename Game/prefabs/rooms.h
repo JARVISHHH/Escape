@@ -90,10 +90,10 @@ void createSafeRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 	auto transform = std::make_shared<ModelTransform>();
 	transform->scale(glm::vec3(size[0], 0.005f, size[2]));
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
-	//createEnvironment(gameWorld, screen, "box", "ground", transform);
+	createEnvironment(gameWorld, screen, "box", "ground", transform);
 
 	transform->translate(glm::vec3(0, HEIGHT, 0));
-	//createEnvironment(gameWorld, screen, "box", "ground", transform);
+	createEnvironment(gameWorld, screen, "box", "ground", transform);
 }
 
 void createNormalRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode) {
@@ -130,24 +130,24 @@ void createTrapRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 	// Platforms
 	std::shared_ptr<Map> roomMap = std::make_shared<Map>(mapNode->room, glm::vec3(2, 0.5, 1.5), 0.5, 10);
 	roomMap->generateMap();
-	//createPlatform(gameWorld, screen, roomMap->mapRoot);
+	createPlatform(gameWorld, screen, roomMap->mapRoot);
 
 	// Spikes
-	//auto spikeTransform = std::make_shared<ModelTransform>();
-	//auto maxPoint = mapNode->room->getMaxPoint(), minPoint = mapNode->room->getMinPoint();
-	//int xNum = maxPoint[0] - minPoint[0], zNum = maxPoint[2] - minPoint[2];
-	//float xSize = (maxPoint[0] - minPoint[0]) / xNum, zSize = (maxPoint[2] - minPoint[2]) / zNum;
-	//spikeTransform->scale(glm::vec3(xSize, 1, zSize));
-	//spikeTransform->translate(glm::vec3(minPoint[0] + xSize / 2.0f, minPoint[1] + 0.05, minPoint[2] + zSize / 2.0f));
-	//for (float z = minPoint[2] + zSize / 2.0f; z < maxPoint[2]; z += zSize) {
-	//	int n = 0;
-	//	for (float x = minPoint[0] + xSize / 2.0f; x < maxPoint[0]; x += xSize) {
-	//		createSpike(gameWorld, screen, "spike", "", spikeTransform);
-	//		spikeTransform->translate(glm::vec3(xSize, 0, 0));
-	//		n++;
-	//	}
-	//	spikeTransform->translate(glm::vec3(-n * xSize, 0, zSize));
-	//}
+	auto spikeTransform = std::make_shared<ModelTransform>();
+	auto maxPoint = mapNode->room->getMaxPoint(), minPoint = mapNode->room->getMinPoint();
+	int xNum = maxPoint[0] - minPoint[0], zNum = maxPoint[2] - minPoint[2];
+	float xSize = (maxPoint[0] - minPoint[0]) / xNum, zSize = (maxPoint[2] - minPoint[2]) / zNum;
+	spikeTransform->scale(glm::vec3(xSize, 1, zSize));
+	spikeTransform->translate(glm::vec3(minPoint[0] + xSize / 2.0f, minPoint[1] + 0.05, minPoint[2] + zSize / 2.0f));
+	for (float z = minPoint[2] + zSize / 2.0f; z < maxPoint[2]; z += zSize) {
+		int n = 0;
+		for (float x = minPoint[0] + xSize / 2.0f; x < maxPoint[0]; x += xSize) {
+			createSpike(gameWorld, screen, "spike", "", spikeTransform);
+			spikeTransform->translate(glm::vec3(xSize, 0, 0));
+			n++;
+		}
+		spikeTransform->translate(glm::vec3(-n * xSize, 0, zSize));
+	}
 
 	// Stair
 	for (int i = 0; i < mapNode->gapStarts.size(); i++) {
@@ -169,5 +169,5 @@ void createTrapRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 	transform->scale(glm::vec3(size[0], 0.005f, size[2]));
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
 	transform->translate(glm::vec3(0, HEIGHT, 0));
-	//createEnvironment(gameWorld, screen, "box", "ground", transform);
+	createEnvironment(gameWorld, screen, "box", "ground", transform);
 }
