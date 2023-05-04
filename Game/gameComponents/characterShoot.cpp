@@ -1,4 +1,5 @@
 #include "characterShoot.h"
+#include <Game/prefabs/bullet.h>
 
 CharacterShoot::CharacterShoot()
 	:GameComponent("characterShoot")
@@ -20,4 +21,6 @@ void CharacterShoot::update(double seconds)
 
 void CharacterShoot::shoot()
 {
+	auto direction = camera->getLook();
+	createBullet(getGameObject()->getGameWorld(), "cylinder", "", camera->getPos(), glm::normalize(direction));
 }

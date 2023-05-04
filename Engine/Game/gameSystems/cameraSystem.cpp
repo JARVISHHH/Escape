@@ -17,7 +17,9 @@ void CameraSystem::update(double seconds)
 {
 	auto characterModelTransform = character->getComponent<TransformComponent>("transform")->getModelTransform();
 	auto characterPosition = characterModelTransform->getPos(), cameraPosition = camera->getPos();
-	camera->setPos(characterPosition + vector2Camera);
+	if (firstPerson) focus = characterPosition;
+	else focus = characterPosition + thirdPersonFoucsDiff;
+	camera->setPos(focus + focus2Camera);
 }
 
 void CameraSystem::mousePosEvent(double xpos, double ypos)
@@ -36,7 +38,8 @@ void CameraSystem::mousePosEvent(double xpos, double ypos)
 
 			auto characterModelTransform = character->getComponent<TransformComponent>("transform")->getModelTransform();
 			auto characterPosition = characterModelTransform->getPos(), cameraPosition = camera->getPos();
-			vector2Camera = -camera->getLook() * (glm::length(characterPosition - cameraPosition));
+			focus = characterPosition + thirdPersonFoucsDiff;
+			focus2Camera = -camera->getLook() * (glm::length(focus - cameraPosition));
 		}
 	}
 	previousMousePosition = { xpos, ypos };
@@ -44,15 +47,15 @@ void CameraSystem::mousePosEvent(double xpos, double ypos)
 
 void CameraSystem::scrollEvent(double distance)
 {
-	auto oldVector2Camera = vector2Camera, look = camera->getLook();
-	vector2Camera += look * (float)distance;
+	auto oldFocus2Camera = focus2Camera, look = camera->getLook();
+	focus2Camera += look * (float)distance;
 	if (firstPerson) {
-		if (distance >= 0) vector2Camera = glm::vec3(0, 0, 0);
+		if (distance >= 0) focus2Camera = glm::vec3(0, 0, 0);
 		else firstPerson = false;
 	}
 	else {
-		if (glm::dot(oldVector2Camera, vector2Camera) <= 0) {
-			vector2Camera = glm::vec3(0, 0, 0);
+		if (glm::dot(oldFocus2Camera, focus2Camera) <= 0) {
+			focus2Camera = glm::vec3(0, 0, 0);
 			firstPerson = true;
 		}
 	}

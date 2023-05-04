@@ -198,6 +198,7 @@ add_executable(${PROJECT_NAME}
     Game/prefabs/projectile.h
     Game/prefabs/rooms.h
     Game/prefabs/spike.h
+    Game/prefabs/bullet.h
 
     Game/ai/scopeCondition.h
     Game/ai/scopeCondition.cpp
@@ -224,6 +225,8 @@ add_executable(${PROJECT_NAME}
     Game/gameComponents/characterHealth.cpp
     Game/gameComponents/characterShoot.h
     Game/gameComponents/characterShoot.cpp
+    Game/gameComponents/bulletCollisionResponse.h
+    Game/gameComponents/bulletCollisionResponse.cpp
  )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})

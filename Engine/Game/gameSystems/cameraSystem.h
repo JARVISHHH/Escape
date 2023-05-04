@@ -21,7 +21,10 @@ protected:
 
 	float rotateSpeed = 0.005f;
 	glm::vec2 previousMousePosition = { 0, 0 };
-	glm::vec3 vector2Camera = { 0, 0, 0 };
+	glm::vec3 focus = {0, 0, 0};
+	glm::vec3 focus2Camera = { 0, 0, 0 };
+
+	glm::vec3 thirdPersonFoucsDiff = {0, 0.5, 0};
 
 	bool firstPerson = true;
 };
