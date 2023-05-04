@@ -1,7 +1,7 @@
 #include "triangle.h"
 #include <iostream>
 
-const float epsilon = 0.00001f;
+const float epsilon = 0.00000001f;
 
 Triangle::Triangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3)
 {
@@ -51,17 +51,18 @@ bool Triangle::isInside(std::vector<glm::vec4>& sphereSpacePos, glm::vec4 pos)
 	return true;
 }
 
-bool Triangle::intersectInterior(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo)
+bool Triangle::intersectInterior(std::shared_ptr<Ray> sphereSpaceRay, std::shared_ptr<CollisionInfo> collisionInfo)
 {
-	auto divisor = glm::dot(ray->direction, faceNormal);
+	auto divisor = glm::dot(sphereSpaceRay->direction, faceNormal);
 	if (std::abs(divisor) > epsilon) {
+		if (glm::dot(glm::normalize(sphereSpaceRay->direction), faceNormal) > 0) return false;
 		// Get intersection t
-		collisionInfo->t = glm::dot(this->v[0]->getPosition() - (ray->origin - faceNormal), faceNormal) / divisor;
+		collisionInfo->t = glm::dot(this->v[0]->getPosition() - (sphereSpaceRay->origin - faceNormal), faceNormal) / divisor;
 		// The triangle is in front of the ray
-		if (collisionInfo->t >= 0) {
+		if (collisionInfo->t >= 0 && collisionInfo->t <= 1) {
 			// Check Sphere-interior intersection
-			if (isInside(ray->origin - faceNormal + collisionInfo->t * ray->direction)) {
-				collisionInfo->contact = ray->origin - faceNormal + collisionInfo->t * ray->direction;
+			if (isInside(sphereSpaceRay->origin - faceNormal + collisionInfo->t * sphereSpaceRay->direction)) {
+				collisionInfo->contact = sphereSpaceRay->origin - faceNormal + collisionInfo->t * sphereSpaceRay->direction;
 				collisionInfo->center = collisionInfo->contact + faceNormal;
 				return true;
 			}
@@ -70,12 +71,12 @@ bool Triangle::intersectInterior(std::shared_ptr<Ray> ray, std::shared_ptr<Colli
 	return false;
 }
 
-bool Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo)
+bool Triangle::intersectEdges(std::shared_ptr<Ray> sphereSpaceRay, std::shared_ptr<CollisionInfo> collisionInfo)
 {
 	bool closer = false;
-	glm::vec3 A = glm::vec3(ray->origin), B = glm::vec3(ray->endPoint);
+	glm::vec3 A = glm::vec3(sphereSpaceRay->origin), B = glm::vec3(sphereSpaceRay->endPoint);
 	for (int i = 0; i < 3; i++) {
-		glm::vec3 C = glm::vec3(this->v[i]->getPosition()), D = glm::vec3(this->v[(i + 1) % 3]->getPosition());
+		glm::vec3 D = glm::vec3(this->v[i]->getPosition()), C = glm::vec3(this->v[(i + 1) % 3]->getPosition());
 		float a = std::pow(glm::length(glm::cross(B - A, D - C)), 2);
 		float b = 2 * glm::dot(glm::cross(B - A, D - C), glm::cross(A - C, D - C));
 		float c = std::pow(glm::length(glm::cross(A - C, D - C)), 2) - std::pow(glm::length(D - C), 2);
@@ -86,20 +87,20 @@ bool Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<Collisio
 
 		// Find the lesser value
 		float t1 = (-b + std::sqrt(delta)) / (2 * a), t2 = (-b - std::sqrt(delta)) / (2 * a);
-		float t = -1;
-		if (t1 >= 0) t = t < 0 ? t1 : std::min(t, t1);
-		if (t2 >= 0) t = t < 0 ? t2 : std::min(t, t2);
-		if (t < 0) continue;
+		float t = std::min(t1, t2);
+		//if (t1 >= 0) t = t < 0 ? t1 : std::min(t, t1);
+		//if (t2 >= 0) t = t < 0 ? t2 : std::min(t, t2);
+		if (t < 0 || t > 1) continue;
 
 		// Check if in the line segment
-		glm::vec3 P = glm::vec3(ray->origin + t * ray->direction);
+		glm::vec3 P = glm::vec3(A + t * (B - A));
 		auto temp = glm::dot(P - C, D - C);
 		if (temp > 0 && temp < std::pow(glm::length(D - C), 2)) {
 			if (collisionInfo->t < 0 || t < collisionInfo->t) {
 				closer = true;
 				collisionInfo->t = t;
-				float project = glm::dot(P - C, glm::normalize(D - C));
-				glm::vec3 contact = C + glm::normalize(D - C) * project;
+				float cosine = glm::dot(glm::normalize(P - C), glm::normalize(D - C));
+				glm::vec3 contact = C + glm::normalize(D - C) * cosine * glm::length(P - C);
 				collisionInfo->contact = glm::vec4(contact[0], contact[1], contact[2], 1);
 				collisionInfo->center = glm::vec4(P[0], P[1], P[2], 1);
 			}
@@ -109,36 +110,38 @@ bool Triangle::intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<Collisio
 	return closer;
 }
 
-bool Triangle::intersectVertices(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo)
+bool Triangle::intersectVertices(std::shared_ptr<Ray> sphereSpaceRay, std::shared_ptr<CollisionInfo> collisionInfo)
 {
 	bool closer = false;
 	for (int i = 0; i < 3; i++) {
 		glm::vec3 origin = glm::vec3(this->v[i]->getPosition());
-		float a = std::pow(glm::length(ray->direction), 2);
-		float b = 2 * glm::dot(glm::vec3(-ray->direction), origin - glm::vec3(ray->origin));
-		float c = std::pow(glm::length(origin - glm::vec3(ray->origin)), 2) - 1;
+		float a = glm::dot(-sphereSpaceRay->direction, -sphereSpaceRay->direction);
+		float b = 2 * glm::dot(glm::vec3(-sphereSpaceRay->direction), origin - glm::vec3(sphereSpaceRay->origin));
+		float c = glm::dot(origin - glm::vec3(sphereSpaceRay->origin), origin - glm::vec3(sphereSpaceRay->origin)) - 1;
 		float delta = b * b - 4 * a * c;
 		if (delta < 0) continue;
 
 		float t1 = (-b + std::sqrt(delta)) / (2 * a);
 		float t2 = (-b - std::sqrt(delta)) / (2 * a);
-		float t = -1;
-		if (t1 >= 0) t = t < 0 ? t1 : std::min(t, t1);
-		if (t2 >= 0) t = t < 0 ? t2 : std::min(t, t2);
-		if (t < 0) continue;
+		float t = std::min(t1, t2);
+		//if (t1 >= 0) t = t < 0 ? t1 : std::min(t, t1);
+		//if (t2 >= 0) t = t < 0 ? t2 : std::min(t, t2);
+		if (t < 0 || t > 1) continue;
 
 		if (collisionInfo->t < 0 || t < collisionInfo->t) {
 			closer = true;
 			collisionInfo->t = t;
 			collisionInfo->contact = this->v[i]->getPosition();
-			collisionInfo->center = collisionInfo->contact + ray->origin - (this->v[i]->getPosition() - t * ray->direction);
+			collisionInfo->center = collisionInfo->contact + sphereSpaceRay->origin - (this->v[i]->getPosition() - t * sphereSpaceRay->direction);
 		}
 	}
 	
 	return closer;
 }
 
-std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, glm::mat4x4 triangleTransformMatrix, std::shared_ptr<Ray> ray)
+// transformMatrix world space -> sphere space
+// triangleTransformMatrix triangle space -> world space
+std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, glm::mat4x4 triangleTransformMatrix, std::shared_ptr<Ray> sphereSpaceRay)
 {
 	auto res = std::make_shared<CollisionInfo>();
 
@@ -148,7 +151,7 @@ std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, 
 	calculateFaceNormal();
 
 	// Sphere-interior collision
-	if (intersectInterior(ray, res)) {
+	if (intersectInterior(sphereSpaceRay, res)) {
 		// Transform the triangle back to world space
 		for (int i = 0; i < 3; i++)
 			v[i]->setPosition(glm::inverse(transformMatrix) * v[i]->getPosition());
@@ -169,14 +172,16 @@ std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, 
 	else 
 	{
 		res->t = -1;
+		//std::cout << "try edges" << std::endl;
 		// Sphere-edges collision
-		if (intersectEdges(ray, res)) {
+		if (intersectEdges(sphereSpaceRay, res)) {
 			res->contact = glm::inverse(transformMatrix) * res->contact;
 			res->center = glm::inverse(transformMatrix) * res->center;
 			res->normal = glm::normalize(res->center - res->contact);
+			std::cout << "collide with edges: " << res->center[0] << " " << res->center[1] << " " << res->center[2] << " " << std::endl;
 		}
 		// Sphere-vertices collision
-		if (intersectVertices(ray, res)) {
+		if (intersectVertices(sphereSpaceRay, res)) {
 			res->contact = glm::inverse(transformMatrix) * res->contact;
 			res->center = glm::inverse(transformMatrix) * res->center;
 			res->normal = glm::normalize(res->center - res->contact);

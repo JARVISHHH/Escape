@@ -35,15 +35,27 @@ glm::vec3 CylinderComponent::checkCollision(std::shared_ptr<CylinderComponent> c
 	return MTV;
 }
 
-glm::mat4x4 CylinderComponent::getTransformMatrix()
+glm::mat4x4 CylinderComponent::getInverseTransformMatrix(bool curPos, glm::vec3 pos)
 {
 	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
-	glm::mat4x4 transformMatrix = glm::inverse(transformComponent->getModelTransform()->getModelMatrix());
-	transformMatrix = glm::mat4x4(2, 0, 0, 0,
+	std::shared_ptr<ModelTransform> modelTransform;
+	if (curPos) modelTransform = transformComponent->getModelTransform();
+	else {
+		modelTransform = std::make_shared<ModelTransform>();
+		modelTransform->copy(transformComponent->getModelTransform());
+		modelTransform->setPos(pos);
+	}
+	glm::mat4x4 inverseTransformMatrix = glm::inverse(modelTransform->getModelMatrix());
+	inverseTransformMatrix = glm::mat4x4(2, 0, 0, 0,
 								  0, 2, 0, 0,
 								  0, 0, 2, 0,
-								  0, 0, 0, 1) * transformMatrix;
-	return transformMatrix;
+								  0, 0, 0, 1) * inverseTransformMatrix;
+
+	//transformMatrix = glm::mat4x4(0.5, 0, 0, 0,
+	//							0, 0.5, 0, 0,
+	//							0, 0, 0.5, 0,
+	//							0, 0, 0, 1) * transformMatrix;
+	return inverseTransformMatrix;
 }
 
 std::shared_ptr<AABB> CylinderComponent::getAABB()
@@ -114,65 +126,8 @@ void CylinderComponent::updateOnGround()
 	glm::vec3 source = transformComponent->getModelTransform()->getPos();
 	glm::vec3 target = source + glm::vec3(0, -1, 0);
 	//target[1] += (target - source)[1];
-	auto collisionInfo = collisionSystem.lock()->environmentRayCast(shared_from_this(), source, target, getTransformMatrix());
+	auto collisionInfo = collisionSystem.lock()->environmentRayCast(shared_from_this(), source, target, getInverseTransformMatrix());
 	//std::cout << collisionInfo->t << std::endl;
 	if (std::abs(collisionInfo->t) > 0.01) transformComponent->setOnGround(false);
 	else transformComponent->setOnGround(true);
-}
-
-std::shared_ptr<AABB> CylinderComponent::getAABB(std::shared_ptr<ModelTransform> modelTransform) {
-	std::vector<glm::vec4> points(8);
-	points[0] = { 0.5, 0.5, 0.5, 1 };
-	points[1] = { -0.5, 0.5, 0.5, 1 };
-	points[2] = { -0.5, 0.5, -0.5, 1 };
-	points[3] = { 0.5, 0.5, -0.5, 1 };
-	points[4] = { 0.5, -0.5, 0.5, 1 };
-	points[5] = { -0.5, -0.5, 0.5, 1 };
-	points[6] = { -0.5, -0.5, -0.5, 1 };
-	points[7] = { 0.5, -0.5, -0.5, 1 };
-
-	for (int i = 0; i < 8; i++) {
-		points[i] = modelTransform->getModelMatrix() * points[i];
-	}
-
-	auto maxPoint = points[0], minPoint = points[0];
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 3; j++) {
-			maxPoint[j] = std::max(maxPoint[j], points[i][j]);
-			minPoint[j] = std::min(minPoint[j], points[i][j]);
-		}
-	}
-
-	return std::make_shared<AABB>(maxPoint, minPoint);
-}
-
-std::shared_ptr<AABB> CylinderComponent::getAABB(std::shared_ptr<ModelTransform> modelTransform, std::shared_ptr<Ray> ray)
-{
-	std::vector<glm::vec4> points(8);
-	std::vector<glm::vec4> worldPoints(16);
-	points[0] = { 0.5, 0.5, 0.5, 1 };
-	points[1] = { -0.5, 0.5, 0.5, 1 };
-	points[2] = { -0.5, 0.5, -0.5, 1 };
-	points[3] = { 0.5, 0.5, -0.5, 1 };
-	points[4] = { 0.5, -0.5, 0.5, 1 };
-	points[5] = { -0.5, -0.5, 0.5, 1 };
-	points[6] = { -0.5, -0.5, -0.5, 1 };
-	points[7] = { 0.5, -0.5, -0.5, 1 };
-
-	for (int i = 0; i < 8; i++) {
-		worldPoints[i] = modelTransform->getModelMatrix() * points[i] + ray->direction;
-	}
-	for (int i = 8; i < 16; i++) {
-		worldPoints[i] = modelTransform->getModelMatrix() * points[i - 8];
-	}
-
-	auto maxPoint = worldPoints[0], minPoint = worldPoints[0];
-	for (int i = 0; i < 16; i++) {
-		for (int j = 0; j < 3; j++) {
-			maxPoint[j] = std::max(maxPoint[j], worldPoints[i][j]);
-			minPoint[j] = std::min(minPoint[j], worldPoints[i][j]);
-		}
-	}
-
-	return std::make_shared<AABB>(maxPoint, minPoint);
 }

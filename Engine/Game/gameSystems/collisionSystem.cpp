@@ -86,7 +86,7 @@ void CollisionSystem::doCollision()
 		}
 	}
 
-	updateEntityComponentPairs();
+	//updateEntityComponentPairs();
 
 	// Check collision between environments
 	for (auto iter = entityComponentPairs.begin(); iter != entityComponentPairs.end(); iter++) {
@@ -101,6 +101,8 @@ void CollisionSystem::doCollision()
 			pairs[i]->first->updateOnGround();
 		}
 	}
+
+	//std::cout << "end collision" << std::endl;
 }
 
 void CollisionSystem::notifyEnvironmentCollision(std::string layer, int index, std::vector<std::shared_ptr<CollisionInfo>>& collisions, glm::vec3 curPos)

@@ -35,7 +35,7 @@ public:
     void setMinPoint(glm::vec4 minPoint) { this->minPoint = minPoint; this->center = (this->maxPoint + this->minPoint) / 2.0f;}
 
     bool checkCollision(std::shared_ptr<AABB> movingAABB);
-    std::shared_ptr<CollisionInfo> getCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray);
+    std::shared_ptr<CollisionInfo> getCollision(glm::mat4x4 transformMatrix, std::shared_ptr<Ray> sphereSpaceRay);
 
 private:
     std::weak_ptr<EnvironmentComponent> environmentComponent;

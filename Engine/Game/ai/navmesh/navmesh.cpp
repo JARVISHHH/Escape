@@ -190,7 +190,6 @@ std::vector<glm::vec3> NavMesh::aStar(glm::vec3 startPos, glm::vec3 endPos, std:
 	//std::cout << "start edge vertex:" << currentEdge->vertexIndex1 << " " << currentEdge->vertexIndex2 << std::endl;
 	path.push_back((vertexPositions[currentEdge->vertexIndex1] + vertexPositions[currentEdge->vertexIndex2]) / 2.0f);
 	path.push_back(endPos);
-	//std::reverse(path.begin(), path.end());
 
 	return path;
 }

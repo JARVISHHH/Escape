@@ -22,7 +22,7 @@ bool BarrierCondition::checkCondition(double seconds)
 	auto modelTransform = std::make_shared<ModelTransform>();
 	modelTransform->scale(0.05);
 	modelTransform->translate(source);
-	auto collisionInfo = collisionSystem->environmentRayCast(CylinderComponent::getAABB(modelTransform, std::make_shared<Ray>(source, target)), source, target, glm::inverse(modelTransform->getModelMatrix()));
+	auto collisionInfo = collisionSystem->environmentRayCast(CollisionComponent::getAABB(modelTransform, std::make_shared<Ray>(source, target)), source, target, glm::inverse(modelTransform->getModelMatrix()));
 	//std::cout << "source " << source[0] << " " << source[1] << " " << source[2] << std::endl;
 	//std::cout << "target " << target[0] << " " << target[1] << " " << target[2] << std::endl;
 	//std::cout << collisionInfo->t << std::endl;

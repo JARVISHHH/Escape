@@ -15,5 +15,5 @@ public:
 	std::shared_ptr<BVHNode> right = nullptr;
 	std::vector<std::shared_ptr<AABB>> aabbs;
 
-	std::shared_ptr<CollisionInfo> getCollision(glm::mat4x4& transformMatrix, std::shared_ptr<AABB> movingAABB, std::shared_ptr<Ray> sphereSpaceRay);
+	std::shared_ptr<CollisionInfo> getCollision(glm::mat4x4 transformMatrix, std::shared_ptr<AABB> movingAABB, std::shared_ptr<Ray> sphereSpaceRay);
 };

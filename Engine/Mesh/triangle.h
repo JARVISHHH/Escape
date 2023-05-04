@@ -20,10 +20,10 @@ public:
 	// All these positions and rays should be in sphere space
 	bool isInside(glm::vec4 pos);
 	bool isInside(std::vector<glm::vec4>& sphereSpacePos, glm::vec4 pos);
-	bool intersectInterior(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo);
-	bool intersectEdges(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo);
-	bool intersectVertices(std::shared_ptr<Ray> ray, std::shared_ptr<CollisionInfo> collisionInfo);
-	std::shared_ptr<CollisionInfo> intersect(glm::mat4x4 transformMatrix, glm::mat4x4 triangleTransformMatrix, std::shared_ptr<Ray> ray);
+	bool intersectInterior(std::shared_ptr<Ray> sphereSpaceRay, std::shared_ptr<CollisionInfo> collisionInfo);
+	bool intersectEdges(std::shared_ptr<Ray> sphereSpaceRay, std::shared_ptr<CollisionInfo> collisionInfo);
+	bool intersectVertices(std::shared_ptr<Ray> sphereSpaceRay, std::shared_ptr<CollisionInfo> collisionInfo);
+	std::shared_ptr<CollisionInfo> intersect(glm::mat4x4 transformMatrix, glm::mat4x4 triangleTransformMatrix, std::shared_ptr<Ray> sphereSpaceRay);
 
 private:
 	std::vector<std::shared_ptr<Vertex>> v;

@@ -44,6 +44,7 @@ GameScreen::GameScreen()
 	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
 	addEnvironmentMesh("box", "./Resources/Meshes/box.obj");
 	addEnvironmentMesh("spike", "./Resources/Meshes/spike.obj");
+	addEnvironmentMesh("test", "./Resources/Meshes/test.obj");
 }
 
 void GameScreen::init()
@@ -69,7 +70,7 @@ void GameScreen::init()
 	gameWorld->addGameSystem(tickSystem);
 
 	// Create game handler
-	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 60);
+	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 600);
 
 	// Generate map
 	std::shared_ptr<Map> map = std::make_shared<Map>(gameWorld->getAABB());
@@ -83,9 +84,11 @@ void GameScreen::init()
 
 	// Create game object
 	
-	//std::shared_ptr<GameObject> character = createCharacter(gameWorld);
+	//std::shared_ptr<GameObject> character = createCharacter(gameWorld, glm::vec3(0, 3, 0), gameHandler);
 	//std::shared_ptr<GameObject> goalObject = createGoal(gameWorld, glm::vec3(11, 5, 0));
-	//std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "map");
+	//std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "test", "grass");
+	//auto transform = std::shared_ptr<ModelTransform>();
+	//transform->translate
 	//std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "box", "grass");
 	//std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "ground", "ground");
 	//std::shared_ptr<GameObject> chasingEnemy = createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
@@ -117,12 +120,6 @@ void GameScreen::update(double seconds) {
 		return;
 	}
 	if (!active) return;
-	//time += seconds;
-	//if (time >= fallingNumber * 2) {
-	//	fallFalling();
-	//	fallingNumber++;
-	//}
-	//checkResult();
 	if(gameWorld != nullptr)
 		gameWorld->update(seconds);
 }
@@ -143,14 +140,3 @@ void GameScreen::draw() {
 	//Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Score: " + std::to_string(score), glm::ivec2(0, 440), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
 	//Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Coming in time: " + std::to_string(std::max(0.0f, maxTime - time)) + "s", glm::ivec2(0, 470), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
 }
-
-
-//void GameScreen::checkResult()
-//{
-//	if (gameWorld->isFinish()) {
-//		active = false;
-//		if(gameWorld->istWin()) result = "You win!";
-//		else result = "You lose!";
-//		return;
-//	}
-//}

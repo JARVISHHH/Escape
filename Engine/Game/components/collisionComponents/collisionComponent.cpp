@@ -2,6 +2,8 @@
 #include <Engine/Game/components/transformComponent.h>
 #include <Engine/Game/collision/gridnode.h>
 
+#include <Engine/Game/components/collisionComponents/cylinderComponent.h>
+
 const float EPSILON = 0.0000001;
 
 CollisionComponent::CollisionComponent()
@@ -15,29 +17,154 @@ CollisionComponent::~CollisionComponent()
 	//std::cout << "collisionComponent delete" << std::endl;
 }
 
-std::shared_ptr<CollisionInfo> CollisionComponent::getEnvironmentClosestCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents)
+std::shared_ptr<AABB> CollisionComponent::getAABB(std::shared_ptr<ModelTransform> modelTransform) {
+	std::vector<glm::vec4> points(8);
+	points[0] = { 0.5, 0.5, 0.5, 1 };
+	points[1] = { -0.5, 0.5, 0.5, 1 };
+	points[2] = { -0.5, 0.5, -0.5, 1 };
+	points[3] = { 0.5, 0.5, -0.5, 1 };
+	points[4] = { 0.5, -0.5, 0.5, 1 };
+	points[5] = { -0.5, -0.5, 0.5, 1 };
+	points[6] = { -0.5, -0.5, -0.5, 1 };
+	points[7] = { 0.5, -0.5, -0.5, 1 };
+
+	for (int i = 0; i < 8; i++) {
+		points[i] = modelTransform->getModelMatrix() * points[i];
+	}
+
+	auto maxPoint = points[0], minPoint = points[0];
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 3; j++) {
+			maxPoint[j] = std::max(maxPoint[j], points[i][j]);
+			minPoint[j] = std::min(minPoint[j], points[i][j]);
+		}
+	}
+
+	return std::make_shared<AABB>(maxPoint, minPoint);
+}
+
+// For environment collision
+std::shared_ptr<AABB> CollisionComponent::getAABB(glm::mat4x4 inverseTransformMatrix) {
+	std::vector<glm::vec4> points(8);
+	points[0] = { 1, 1, 1, 1 };
+	points[1] = { -1, 1, 1, 1 };
+	points[2] = { -1, 1, -1, 1 };
+	points[3] = { 1, 1, -1, 1 };
+	points[4] = { 1, -1, 1, 1 };
+	points[5] = { -1, -1, 1, 1 };
+	points[6] = { -1, -1, -1, 1 };
+	points[7] = { 1, -1, -1, 1 };
+
+	auto transformMatrix = glm::inverse(inverseTransformMatrix);
+
+	for (int i = 0; i < 8; i++) {
+		points[i] = transformMatrix * points[i];
+	}
+
+	auto maxPoint = points[0], minPoint = points[0];
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 3; j++) {
+			maxPoint[j] = std::max(maxPoint[j], points[i][j]);
+			minPoint[j] = std::min(minPoint[j], points[i][j]);
+		}
+	}
+
+	return std::make_shared<AABB>(maxPoint, minPoint);
+}
+
+std::shared_ptr<AABB> CollisionComponent::getAABB(std::shared_ptr<ModelTransform> modelTransform, std::shared_ptr<Ray> ray)
+{
+	std::vector<glm::vec4> points(8);
+	std::vector<glm::vec4> worldPoints(16);
+	points[0] = { 0.5, 0.5, 0.5, 1 };
+	points[1] = { -0.5, 0.5, 0.5, 1 };
+	points[2] = { -0.5, 0.5, -0.5, 1 };
+	points[3] = { 0.5, 0.5, -0.5, 1 };
+	points[4] = { 0.5, -0.5, 0.5, 1 };
+	points[5] = { -0.5, -0.5, 0.5, 1 };
+	points[6] = { -0.5, -0.5, -0.5, 1 };
+	points[7] = { 0.5, -0.5, -0.5, 1 };
+
+	for (int i = 0; i < 8; i++) {
+		worldPoints[i] = modelTransform->getModelMatrix() * points[i] + ray->direction;
+	}
+	for (int i = 8; i < 16; i++) {
+		worldPoints[i] = modelTransform->getModelMatrix() * points[i - 8];
+	}
+
+	auto maxPoint = worldPoints[0], minPoint = worldPoints[0];
+	for (int i = 0; i < 16; i++) {
+		for (int j = 0; j < 3; j++) {
+			maxPoint[j] = std::max(maxPoint[j], worldPoints[i][j]);
+			minPoint[j] = std::min(minPoint[j], worldPoints[i][j]);
+		}
+	}
+
+	return std::make_shared<AABB>(maxPoint, minPoint);
+}
+
+// For environment collision
+std::shared_ptr<AABB> CollisionComponent::getAABB(glm::mat4x4 inverseTransformMatrix, std::shared_ptr<Ray> ray)
+{
+	std::vector<glm::vec4> points(8);
+	std::vector<glm::vec4> worldPoints(16);
+	points[0] = { 1, 1, 1, 1 };
+	points[1] = { -1, 1, 1, 1 };
+	points[2] = { -1, 1, -1, 1 };
+	points[3] = { 1, 1, -1, 1 };
+	points[4] = { 1, -1, 1, 1 };
+	points[5] = { -1, -1, 1, 1 };
+	points[6] = { -1, -1, -1, 1 };
+	points[7] = { 1, -1, -1, 1 };
+
+	auto transformMatrix = glm::inverse(inverseTransformMatrix);
+
+	for (int i = 0; i < 8; i++) {
+		worldPoints[i] = transformMatrix * points[i] + ray->direction;
+	}
+	for (int i = 8; i < 16; i++) {
+		worldPoints[i] = transformMatrix * points[i - 8];
+	}
+
+	auto maxPoint = worldPoints[0], minPoint = worldPoints[0];
+	for (int i = 0; i < 16; i++) {
+		for (int j = 0; j < 3; j++) {
+			maxPoint[j] = std::max(maxPoint[j], worldPoints[i][j]);
+			minPoint[j] = std::min(minPoint[j], worldPoints[i][j]);
+		}
+	}
+
+	return std::make_shared<AABB>(maxPoint, minPoint);
+}
+
+std::shared_ptr<CollisionInfo> CollisionComponent::getEnvironmentClosestCollision(glm::mat4x4 inverseTransformMatrix, std::shared_ptr<Ray> ray, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents)
 {
 	auto res = std::make_shared<CollisionInfo>();
 
-	auto sphereSpaceRay = std::make_shared<Ray>(transformMatrix * ray->origin, transformMatrix * ray->endPoint);
+	auto sphereSpaceRay = std::make_shared<Ray>(inverseTransformMatrix * ray->origin, inverseTransformMatrix * ray->endPoint);
 
 	for (auto environmentComponent : environmentComponents) {
-		auto thisCollision = environmentComponent->getClosestCollision(transformMatrix, sphereSpaceRay);
+		auto thisCollision = environmentComponent->getClosestCollision(inverseTransformMatrix, sphereSpaceRay);
 		if (thisCollision->t >= 0 && (thisCollision->t < res->t || res->t < 0)) res = thisCollision;
 	}
 
 	return res;
 }
 
-std::shared_ptr<CollisionInfo> CollisionComponent::getEnvironmentClosestCollision(glm::mat4x4& transformMatrix, std::shared_ptr<Ray> ray, std::shared_ptr<BVH> bvh)
+std::shared_ptr<CollisionInfo> CollisionComponent::getEnvironmentClosestCollision(glm::mat4x4 inverseTransformMatrix, std::shared_ptr<Ray> ray, std::shared_ptr<BVH> bvh)
 {
 	auto res = std::make_shared<CollisionInfo>();
 
-	auto movingAABB = getAABB(ray);
-	auto sphereSpaceRay = std::make_shared<Ray>(transformMatrix * ray->origin, transformMatrix * ray->endPoint);
+	//auto movingAABB = getAABB(ray);
+	auto movingAABB = CollisionComponent::getAABB(inverseTransformMatrix, ray);
+	//getAABB(ray)->printMaxPoint();
+	//movingAABB->printMaxPoint();
+	//getAABB(ray)->printMinPoint();
+	//movingAABB->printMinPoint();
+	auto sphereSpaceRay = std::make_shared<Ray>(inverseTransformMatrix * ray->origin, inverseTransformMatrix * ray->endPoint);
 	
-	auto thisCollision = bvh->getClosestCollision(transformMatrix, movingAABB, sphereSpaceRay);
-	if (thisCollision != nullptr && thisCollision->t >= 0 && (thisCollision->t < res->t || res->t < 0)) res = thisCollision;
+	auto thisCollision = bvh->getClosestCollision(inverseTransformMatrix, movingAABB, sphereSpaceRay);
+	if (thisCollision != nullptr && thisCollision->t >= 0 && thisCollision->t <= 1 && (thisCollision->t < res->t || res->t < 0)) res = thisCollision;
 
 	return res;
 }
@@ -46,19 +173,19 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 {
 	auto ray = getGameObject()->getComponent<TransformComponent>("transform")->getRay();
 
-	if (glm::length(ray->direction) < EPSILON) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
+	if (glm::length(ray->direction) == 0) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
 
 	//std::cout << std::endl;
 	//std::cout << "start from: " << ray->origin[0] << " " << ray->origin[1] << " " << ray->origin[2] << std::endl;
 	//std::cout << "end to: " << ray->endPoint[0] << " " << ray->endPoint[1] << " " << ray->endPoint[2] << std::endl;
 
 	std::vector<std::shared_ptr<CollisionInfo>> collisions;
-	glm::mat4x4 transformMatrix = getTransformMatrix();
-	glm::mat4x4 inverseMatrix = glm::inverse(transformMatrix);
-	auto curPos = ray->origin, nextPos = ray->endPoint;
+	glm::mat4x4 inverseTransformMatrix = getInverseTransformMatrix(false, ray->origin);
+	auto initialPos = ray->origin, finalPos = ray->endPoint;
+	auto curPos = initialPos, nextPos = finalPos;
 
 	for (int i = 0; i < 3; i++) {
-		auto c = getEnvironmentClosestCollision(transformMatrix, std::make_shared<Ray>(curPos, nextPos), environmentComponents);
+		auto c = getEnvironmentClosestCollision(inverseTransformMatrix, std::make_shared<Ray>(initialPos, nextPos), environmentComponents);
 		//std::cout << "iteration: " << i << std::endl;
 		//if(c->t > 0) std::cout << "normal: " << c->normal[0] << " " << c->normal[1] << " " << c->normal[2] << std::endl;
 		//std::cout << "t: " << c->t << std::endl;
@@ -67,7 +194,7 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 			return { collisions, nextPos };
 		}
 		//curPos = c->center;
-		curPos = doNudge(transformMatrix, curPos, c, environmentComponents);
+		curPos = doNudge(curPos, c, environmentComponents);
 		auto d = nextPos - curPos;
 		auto dCorrected = d - glm::dot(d, c->normal) * c->normal;
 		nextPos = curPos + dCorrected;
@@ -83,33 +210,44 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 
 	if (glm::length(ray->direction) == 0) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
 
-	std::vector<std::shared_ptr<CollisionInfo>> collisions;
-	glm::mat4x4 transformMatrix = getTransformMatrix();
-	glm::mat4x4 inverseMatrix = glm::inverse(transformMatrix);
-	auto curPos = ray->origin, nextPos = ray->endPoint;
+	auto start = ray->origin;
+	auto end = ray->endPoint;
+	//std::cout << "start: " << start[0] << " " << start[1] << " " << start[2] << std::endl;
+	//std::cout << "end: " << end[0] << " " << end[1] << " " << end[2] << std::endl;
 
-	for (int i = 0; i < 3; i++) {
-		auto c = getEnvironmentClosestCollision(transformMatrix, std::make_shared<Ray>(curPos, nextPos), bvh);
+	std::vector<std::shared_ptr<CollisionInfo>> collisions;
+	glm::mat4x4 inverseTransformMatrix = getInverseTransformMatrix(false, ray->origin);
+	auto initialPos = ray->origin, finalPos = ray->endPoint;
+	auto curPos = initialPos, nextPos = finalPos;
+
+	for (int i = 0; i < 5; i++) {
+		auto c = getEnvironmentClosestCollision(inverseTransformMatrix, std::make_shared<Ray>(initialPos, nextPos), bvh);
 		if (c->t < 0 || c->t > 1) {
+			//if (collisions.size() == 0) std::cout << "no collsion" << std::endl;
+			//else std::cout << "collision" << std::endl;
 			return { collisions, nextPos };
 		}
-		curPos = doNudge(transformMatrix, curPos, c, bvh);
+		curPos = doNudge(curPos, c, bvh);
 		auto d = nextPos - curPos;
 		auto dCorrected = d - glm::dot(d, c->normal) * c->normal;
 		nextPos = curPos + dCorrected;
 		collisions.push_back(c);
 	}
 
+	//if (collisions.size() == 0) std::cout << "no collsion" << std::endl;
+	//else std::cout << "collision" << std::endl;
+
 	return { collisions, curPos };
 }
 
-glm::vec4 CollisionComponent::doNudge(glm::mat4x4& transformMatrix, glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents)
+glm::vec4 CollisionComponent::doNudge(glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents)
 {
 	auto nudge = collision->normal;
 	auto nudgedPos = collision->center + nudge * 0.001f;
 	for (int i = 0; i < 3; i++) {
 		//std::cout << "nudge check" << std::endl;
-		auto nudgeCollision = getEnvironmentClosestCollision(transformMatrix, std::make_shared<Ray>(curPos, nudgedPos), environmentComponents);
+		glm::mat4x4 inverseTransformMatrix = getInverseTransformMatrix(false, curPos);
+		auto nudgeCollision = getEnvironmentClosestCollision(inverseTransformMatrix, std::make_shared<Ray>(curPos, nudgedPos), environmentComponents);
 		//std::cout << "nudge finish" << std::endl;
 		if (nudgeCollision->t < 0 || nudgeCollision->t > 1) {
 			curPos = nudgedPos;
@@ -124,13 +262,14 @@ glm::vec4 CollisionComponent::doNudge(glm::mat4x4& transformMatrix, glm::vec4 cu
 	return curPos;
 }
 
-glm::vec4 CollisionComponent::doNudge(glm::mat4x4& transformMatrix, glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::shared_ptr<BVH> bvh)
+glm::vec4 CollisionComponent::doNudge(glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::shared_ptr<BVH> bvh)
 {
 	auto nudge = collision->normal;
 	auto nudgedPos = collision->center + nudge * 0.001f;
 	for (int i = 0; i < 3; i++) {
 		//std::cout << "nudge check" << std::endl;
-		auto nudgeCollision = getEnvironmentClosestCollision(transformMatrix, std::make_shared<Ray>(curPos, nudgedPos), bvh);
+		glm::mat4x4 inverseTransformMatrix = getInverseTransformMatrix(false, curPos);
+		auto nudgeCollision = getEnvironmentClosestCollision(inverseTransformMatrix, std::make_shared<Ray>(curPos, nudgedPos), bvh);
 		//std::cout << "nudge finish" << std::endl;
 		if (nudgeCollision->t < 0 || nudgeCollision->t > 1) {
 			curPos = nudgedPos;
