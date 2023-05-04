@@ -1,8 +1,8 @@
 #include "characterShoot.h"
 #include <Game/prefabs/bullet.h>
 
-CharacterShoot::CharacterShoot()
-	:GameComponent("characterShoot")
+CharacterShoot::CharacterShoot(std::shared_ptr<Camera> camera)
+	:GameComponent("characterShoot"), camera(camera)
 {
 }
 

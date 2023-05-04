@@ -4,7 +4,7 @@
 
 class CharacterShoot : public GameComponent {
 public:
-	CharacterShoot();
+	CharacterShoot(std::shared_ptr<Camera> camera);
 
 	void update(double seconds);
 

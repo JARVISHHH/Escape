@@ -2,6 +2,13 @@
 
 #include "Game/components.h"
 #include <Game/gameComponents/characterHealth.h>
+#include <Game/gameComponents/characterCollisionResponse.h>
+#include <Engine/Game/gameSystems/cameraSystem.h>
+#include <Engine/Game/gameSystems/drawSystem.h>
+#include <Engine/Game/gameSystems/physicsSystem.h>
+#include <Engine/Game/gameSystems/characterControllerSystem.h>
+#include <Engine/Game/gameSystems/tickSystem.h>
+#include <Game/gameComponents/characterShoot.h>
 
 std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld, glm::vec3 pos, std::shared_ptr<GameObject> gameHandlerObject)
 {
@@ -28,6 +35,8 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	std::shared_ptr<CharacterCollisionResponse> collisionResponseComponent = std::make_shared<CharacterCollisionResponse>(gameHandlerObject);
 	// Health component
 	std::shared_ptr<CharacterHealth> healthComponent = std::make_shared<CharacterHealth>(10, gameHandlerObject);
+	// Shootng component
+	std::shared_ptr<CharacterShoot> characterShoot = std::make_shared<CharacterShoot>(gameWorld->getCamera());
 
 	//// Add components to game objects
 	character->addComponent(transformComponent);
@@ -38,6 +47,7 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	character->addComponent(cylinderComponent);
 	character->addComponent(collisionResponseComponent);
 	character->addComponent(healthComponent);
+	character->addComponent(characterShoot);
 
 	gameWorld->getGameSystem<CameraSystem>("camera")->setCharacter(character);
 	gameWorld->getGameSystem<DrawSystem>("draw")->addComponent(drawComponent);
@@ -45,6 +55,7 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	gameWorld->getGameSystem<CharacterControllerSystem>("characterController")->setCharatcer(character);
 	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(character, "character");
 	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(healthComponent);
+	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(characterShoot);
 	gameWorld->addGameObject(character);
 
 	return character;
