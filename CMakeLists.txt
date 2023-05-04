@@ -222,6 +222,8 @@ add_executable(${PROJECT_NAME}
     Game/gameComponents/projectileCollisionResponse.cpp
     Game/gameComponents/characterHealth.h
     Game/gameComponents/characterHealth.cpp
+    Game/gameComponents/characterShoot.h
+    Game/gameComponents/characterShoot.cpp
  )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})

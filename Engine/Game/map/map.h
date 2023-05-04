@@ -7,7 +7,7 @@ class MapNode;
 
 class Map: public std::enable_shared_from_this<Map> {
 public:
-	Map(std::shared_ptr<AABB> aabb, glm::vec3 minimumSize = glm::vec3(7.5, 5, 7.5), float margine = 0.5, int maxDepth = 4);
+	Map(std::shared_ptr<AABB> aabb, glm::vec3 minimumSize = glm::vec3(7.5, 5, 7.5), float margine = 0.5, int maxDepth = 5);
 	~Map();
 
 	void generateMap(bool generateRoom = true, bool connectRoom = true);
