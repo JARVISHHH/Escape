@@ -28,6 +28,12 @@ void GameHandlerComponent::drawText()
 	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Remaining time: " + std::to_string((int)(leftTime + 1)) + "s", glm::ivec2(0, 470), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 1));
 }
 
+void GameHandlerComponent::killEnemy()
+{
+	killedEnemies++;
+	std::cout << "kill enemy ++" << std::endl;
+}
+
 void GameHandlerComponent::endGame(bool win)
 {
 	if (win) {

@@ -100,6 +100,7 @@ void GameScreen::init()
 	//collisionSystem->deleteLayerCollision("projectile", "enemy");
 	//collisionSystem->deleteLayerCollision("projectile", "projectile");
 	collisionSystem->deleteLayerCollision("enemy", "enemy");
+	collisionSystem->deleteLayerCollision("character", "character");
 
 	gameWorld->start();
 

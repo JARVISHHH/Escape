@@ -9,8 +9,10 @@
 #include <Game/ai/barrierCondition.h>
 #include <Game/gameComponents/shootComponent.h>
 #include <Game/ai/shootAction.h>
+#include <Game/gameComponents/enemyCollisionResponse.h>
+#include <Game/gameComponents/enemyHealth.h>
 
-std::shared_ptr<GameObject> createChasingEnemy(std::shared_ptr<GameWorld> gameWorld, std::string shape, std::string material, glm::vec3 pos, std::shared_ptr<NavMesh> navMesh)
+std::shared_ptr<GameObject> createChasingEnemy(std::shared_ptr<GameWorld> gameWorld, std::string shape, std::string material, glm::vec3 pos, std::shared_ptr<NavMesh> navMesh, std::shared_ptr<GameObject> gameHandlerObject)
 {
 	std::shared_ptr<GameObject> enemyObject = std::make_shared<GameObject>("enemy");
 
@@ -24,7 +26,9 @@ std::shared_ptr<GameObject> createChasingEnemy(std::shared_ptr<GameWorld> gameWo
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
 	// Collision component
 	std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>();
-	std::shared_ptr<CollisionResponseComponent> collisionResponse = std::make_shared<CollisionResponseComponent>(true);
+	std::shared_ptr<EnemyCollisionResponse> collisionResponse = std::make_shared<EnemyCollisionResponse>(true);
+	// Health component
+	std::shared_ptr<EnemyHealth> healthComponent = std::make_shared<EnemyHealth>(10, gameHandlerObject);
 	// AI component
 	std::shared_ptr<PathfindingComponent> pathfindingComponent = std::make_shared<PathfindingComponent>(navMesh);
 	std::shared_ptr<BehaviorComponent> behaviorComponent = std::make_shared<BehaviorComponent>();
@@ -46,6 +50,7 @@ std::shared_ptr<GameObject> createChasingEnemy(std::shared_ptr<GameWorld> gameWo
 	enemyObject->addComponent(drawComponent);
 	enemyObject->addComponent(collisionComponent);
 	enemyObject->addComponent(collisionResponse);
+	enemyObject->addComponent(healthComponent);
 	enemyObject->addComponent(pathfindingComponent);
 	enemyObject->addComponent(behaviorComponent);
 	//enemyObject->addComponent(enemyMovement);
@@ -61,7 +66,7 @@ std::shared_ptr<GameObject> createChasingEnemy(std::shared_ptr<GameWorld> gameWo
 	return enemyObject;
 }
 
-std::shared_ptr<GameObject> createShootingEnemy(std::shared_ptr<GameWorld> gameWorld, std::string shape, std::string material, glm::vec3 pos) {
+std::shared_ptr<GameObject> createShootingEnemy(std::shared_ptr<GameWorld> gameWorld, std::string shape, std::string material, glm::vec3 pos, std::shared_ptr<GameObject> gameHandlerObject) {
 	std::shared_ptr<GameObject> enemyObject = std::make_shared<GameObject>("enemy");
 
 	// Create components
@@ -74,7 +79,9 @@ std::shared_ptr<GameObject> createShootingEnemy(std::shared_ptr<GameWorld> gameW
 	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
 	// Collision component
 	std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>();
-	std::shared_ptr<CollisionResponseComponent> collisionResponse = std::make_shared<CollisionResponseComponent>(true);
+	std::shared_ptr<EnemyCollisionResponse> collisionResponse = std::make_shared<EnemyCollisionResponse>(true);
+	// Health component
+	std::shared_ptr<EnemyHealth> healthComponent = std::make_shared<EnemyHealth>(10, gameHandlerObject);
 	// Shoot component
 	std::shared_ptr<ShootComponent> shootComponent = std::make_shared<ShootComponent>("character", true);
 	// AI component
@@ -93,6 +100,7 @@ std::shared_ptr<GameObject> createShootingEnemy(std::shared_ptr<GameWorld> gameW
 	enemyObject->addComponent(drawComponent);
 	enemyObject->addComponent(collisionComponent);
 	enemyObject->addComponent(collisionResponse);
+	enemyObject->addComponent(healthComponent);
 	enemyObject->addComponent(shootComponent);
 	enemyObject->addComponent(behaviorComponent);
 	//enemyObject->addComponent(enemyMovement);

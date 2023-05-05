@@ -18,6 +18,7 @@ public:
 	void update(double seconds) override;
 	void drawText() override;
 
+	void killEnemy();
 	void endGame(bool win);
 
 private:
@@ -29,4 +30,5 @@ private:
 	std::string result = "";
 
 	int score = 0;
+	int killedEnemies = 0;
 };

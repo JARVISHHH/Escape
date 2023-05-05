@@ -11,10 +11,10 @@
 #define EPSILON 0.00001
 #define HEIGHT 6
 
-void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode) {
+void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode, std::shared_ptr<GameObject> gameHandlerObject) {
 	if (mapNode == nullptr) return;
-	createDungeon(gameWorld, screen, mapNode->leftChild);
-	createDungeon(gameWorld, screen, mapNode->rightChild);
+	createDungeon(gameWorld, screen, mapNode->leftChild, gameHandlerObject);
+	createDungeon(gameWorld, screen, mapNode->rightChild, gameHandlerObject);
 	if (mapNode->room != nullptr) {
 		// Floors && ceilings
 		if (mapNode->safeRoom) {
@@ -22,7 +22,7 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		}
 		else {
 			auto pick = rand() % 10;
-			if(pick < 5) createEnemyRoom(gameWorld, screen, mapNode);
+			if(pick < 5) createEnemyRoom(gameWorld, screen, mapNode, gameHandlerObject);
 			else if (pick < 10) createTrapRoom(gameWorld, screen, mapNode);
 		}
 		// Walls
@@ -108,7 +108,7 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 	createGoal(gameWorld, glm::vec3(goalRoomCenter[0], goalRoom->room->getMinPoint()[1] + 1, goalRoomCenter[2]) + glm::vec3(0, 1, 0));
 
 	// create rooms
-	createDungeon(gameWorld, screen, map->mapRoot);
+	createDungeon(gameWorld, screen, map->mapRoot, gameHandlerObject);
 	auto transform = std::make_shared<ModelTransform>();
 	transform->translate(glm::vec3(gameWorld->getAABB()->getCenter()[0], gameWorld->getAABB()->getMinPoint()[1], gameWorld->getAABB()->getCenter()[2]));
 	//createEnvironment(gameWorld, screen, "ground", "ground", transform);
