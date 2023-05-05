@@ -36,6 +36,35 @@ void GameObject::setGameWorld(std::shared_ptr<GameWorld> gameWorld)
 	this->gameWorld = gameWorld;
 }
 
+std::shared_ptr<GameObject> GameObject::getGameObject()
+{
+	return gameObject.lock();
+}
+
+void GameObject::setGameObject(std::shared_ptr<GameObject> gameObject)
+{
+	this->gameObject = gameObject;
+}
+
+bool GameObject::addGameObject(std::shared_ptr<GameObject> gameObject)
+{
+	gameObjects.push_back(gameObject);
+	if (gameObject->getGameObject() != nullptr)
+		gameObject->getGameObject()->removeGameObject(gameObject);
+	gameObject->setGameObject(shared_from_this());
+	return true;
+}
+
+bool GameObject::removeGameObject(std::shared_ptr<GameObject> gameObject)
+{
+	int i = 0;
+	while (i < gameObjects.size()) {
+		if (gameObjects[i] == gameObject) gameObjects.erase(gameObjects.begin() + i);
+		else i++;
+	}
+	return true;
+}
+
 bool GameObject::addComponent(std::shared_ptr<GameComponent> component)
 {
 	component->setGameObject(shared_from_this());
@@ -64,6 +93,8 @@ std::shared_ptr<Camera> GameObject::getCamera()
 void GameObject::setActiveStatus(bool activeStatus)
 {
 	this->activeStatus = activeStatus;
+	for (auto gameObject : gameObjects)
+		gameObject->setActiveStatus(activeStatus);
 }
 
 bool GameObject::getActiveStatus()

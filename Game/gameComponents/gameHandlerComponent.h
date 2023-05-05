@@ -19,6 +19,7 @@ public:
 	void drawText() override;
 
 	void killEnemy();
+	void addScore(int score);
 	void endGame(bool win);
 
 private:

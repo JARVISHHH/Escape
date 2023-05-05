@@ -22,5 +22,5 @@ void CharacterShoot::update(double seconds)
 void CharacterShoot::shoot()
 {
 	auto direction = camera->getLook();
-	createBullet(getGameObject()->getGameWorld(), "cylinder", "", camera->getPos(), glm::normalize(direction));
+	createBullet(getGameObject()->getGameWorld(), "cylinder", "", camera->getPos(), glm::normalize(direction), bulletTag);
 }

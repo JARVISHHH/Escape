@@ -8,6 +8,8 @@ public:
 
 	void update(double seconds);
 
+	std::string bulletTag = "bullet";
+
 private:
 	std::shared_ptr<Camera> camera;
 	int shootKey = GLFW_MOUSE_BUTTON_LEFT;

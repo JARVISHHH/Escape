@@ -199,6 +199,7 @@ add_executable(${PROJECT_NAME}
     Game/prefabs/rooms.h
     Game/prefabs/spike.h
     Game/prefabs/bullet.h
+    Game/prefabs/treasure.h
 
     Game/ai/scopeCondition.h
     Game/ai/scopeCondition.cpp

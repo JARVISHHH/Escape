@@ -37,9 +37,11 @@ GameScreen::GameScreen()
 	Global::graphics.addMaterial("wall", "Resources/Images/wall.jpg");
 	Global::graphics.addMaterial("ground", "Resources/Images/ground.png");
 
-	addEnvironmentMesh("building", "./Resources/Meshes/building.obj");
+	Global::graphics.addShape("coin", "./Resources/Meshes/coin.obj");
+	Global::graphics.addShape("health", "./Resources/Meshes/health.obj");
+	Global::graphics.addShape("bullet", "./Resources/Meshes/ninja_star.obj");
+
 	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
-	addEnvironmentMesh("map", "./Resources/Meshes/map.obj");
 	addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj");
 	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
 	addEnvironmentMesh("box", "./Resources/Meshes/box.obj");

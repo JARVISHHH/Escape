@@ -8,8 +8,8 @@
 #include <Game/gameComponents/bulletCollisionResponse.h>
 #include <Game/gameComponents/movingComponent.h>
 
-std::shared_ptr<GameObject> createBullet(std::shared_ptr<GameWorld> gameWorld, std::string shape, std::string material, glm::vec3 pos, glm::vec3 direction) {
-	std::shared_ptr<GameObject> bulletObject = std::make_shared<GameObject>("bullet");
+std::shared_ptr<GameObject> createBullet(std::shared_ptr<GameWorld> gameWorld, std::string shape, std::string material, glm::vec3 pos, glm::vec3 direction, std::string bulletTag) {
+	std::shared_ptr<GameObject> bulletObject = std::make_shared<GameObject>(bulletTag);
 
 	// Create components
 	// Transform Component

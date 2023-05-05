@@ -20,6 +20,12 @@ public:
 	std::shared_ptr<GameWorld> getGameWorld();
 	void setGameWorld(std::shared_ptr<GameWorld> gameWorld);
 
+	std::shared_ptr<GameObject> getGameObject();
+	void setGameObject(std::shared_ptr<GameObject> gameObject);
+
+	bool addGameObject(std::shared_ptr<GameObject> gameObject);
+	bool removeGameObject(std::shared_ptr<GameObject> gameObject);
+
 	template <class T> bool addComponent();
 	bool addComponent(std::shared_ptr<GameComponent> component);
 	bool removeComponent(std::string tag, std::shared_ptr<GameComponent> component);
@@ -34,6 +40,8 @@ public:
 protected:
 	std::string tag;
 	std::weak_ptr<GameWorld> gameWorld;
+	std::weak_ptr<GameObject> gameObject;
+	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	std::unordered_map<std::string, std::vector<std::shared_ptr<GameComponent>>> components;
 	bool activeStatus = true;
 };

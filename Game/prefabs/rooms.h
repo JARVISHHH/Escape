@@ -2,6 +2,7 @@
 
 #include <Game/prefabs/environment.h>
 #include <Game/prefabs/spike.h>
+#include <Game/prefabs/treasure.h>
 
 #include <Engine/Game/map/map.h>
 #include <Engine/Game/map/mapnode.h>
@@ -133,12 +134,12 @@ void createEnemyRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Scree
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
 
-	/*int pick = rand() % 10;
+	int pick = rand() % 10;
 	if (pick < 4) createChasingEnemies(gameWorld, screen, mapNode, transform, gameHandlerObject);
 	else if (pick < 8) createShootingEnemies(gameWorld, screen, mapNode, transform, gameHandlerObject);
-	else if (pick < 10) createMixEnemies(gameWorld, screen, mapNode, transform, gameHandlerObject);*/
+	else if (pick < 10) createMixEnemies(gameWorld, screen, mapNode, transform, gameHandlerObject);
 	//createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 1.5, center[2]));
-	createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 2, center[2]), mapNode->navMesh, gameHandlerObject);
+	//createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 2, center[2]), mapNode->navMesh, gameHandlerObject);
 	
 	transform->translate(glm::vec3(0, HEIGHT, 0));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
@@ -216,5 +217,7 @@ void createTreasureRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Sc
 	transform->translate(glm::vec3(0, HEIGHT, 0));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
 
-	// TODO
+	glm::vec3 direction = glm::normalize(mapNode->gapEnds[0] - mapNode->gapStarts[0]);
+	if(rand() % 4) createDoubleTreasure(gameWorld, glm::vec3(mapNode->room->getCenter()[0], mapNode->room->getMinPoint()[1] + 0.5, mapNode->room->getCenter()[2]), direction);
+	else createTripleTreasure(gameWorld, glm::vec3(mapNode->room->getCenter()[0], mapNode->room->getMinPoint()[1] + 0.5, mapNode->room->getCenter()[2]), direction);
 }

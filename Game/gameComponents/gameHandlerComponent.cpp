@@ -34,6 +34,11 @@ void GameHandlerComponent::killEnemy()
 	std::cout << "kill enemy ++" << std::endl;
 }
 
+void GameHandlerComponent::addScore(int score)
+{
+	this->score += score;
+}
+
 void GameHandlerComponent::endGame(bool win)
 {
 	if (win) {
