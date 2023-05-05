@@ -44,6 +44,7 @@ void CollisionSystem::doCollision()
 							auto collisionComponent2 = pairs2[j]->first;
 							glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
 							if (glm::length(mtv) == 0) continue;  // No collision
+							std::cout << "collision" << std::endl;
 							notifyCollision(layer1, layer2, i, j, mtv);
 						}
 					}
@@ -56,6 +57,7 @@ void CollisionSystem::doCollision()
 							auto collisionComponent2 = pairs2[j]->first;
 							glm::vec3 mtv = collisionComponent1->checkCollision(collisionComponent2);
 							if (glm::length(mtv) == 0) continue;  // No collision
+							std::cout << "collision" << std::endl;
 							notifyCollision(layer1, layer2, i, j, mtv);
 						}
 					}

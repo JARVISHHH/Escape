@@ -27,6 +27,7 @@ public:
     void clear();
 
     void copy(std::shared_ptr<ModelTransform> modelTranform);
+    void transform(std::shared_ptr<ModelTransform> modelTranform);
 
 private:
     glm::vec3 m_pos;

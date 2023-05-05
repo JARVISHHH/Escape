@@ -1,6 +1,16 @@
 #include "cylinderComponent.h"
 #include <Engine/Game/components/transformComponent.h>
 
+CylinderComponent::CylinderComponent()
+	:CollisionComponent()
+{
+}
+
+CylinderComponent::CylinderComponent(std::shared_ptr<ModelTransform> modelTransform)
+	:CollisionComponent(modelTransform)
+{
+}
+
 glm::vec3 CylinderComponent::checkCollision(std::shared_ptr<CollisionComponent> component)
 {
 	return -component->checkCollision(std::static_pointer_cast<CylinderComponent>((shared_from_this())));
@@ -18,14 +28,15 @@ glm::vec3 calculateCircleMtv(glm::vec4 circleCenterA, glm::vec4 circleCenterB, f
 }
 
 glm::vec3 CylinderComponent::checkCollision(std::shared_ptr<CylinderComponent> component) {
-	auto transformComponentA = getGameObject()->getComponent<TransformComponent>("transform");
-	auto transformComponentB = component->getGameObject()->getComponent<TransformComponent>("transform");
-	auto modelMatrixA = transformComponentA->getModelTransform()->getModelMatrix(), modelMatrixB = transformComponentB->getModelTransform()->getModelMatrix();
-	auto circleCenterA = modelMatrixA * glm::vec4(0, 0, 0, 1), circleCenterB = modelMatrixB * glm::vec4(0, 0, 0, 1);
-	float radiusA = transformComponentA->getModelTransform()->getScale().x * 0.5, radiusB = transformComponentB->getModelTransform()->getScale().x * 0.5;
+	//auto transformComponentA = getGameObject()->getComponent<TransformComponent>("transform");
+	//auto transformComponentB = component->getGameObject()->getComponent<TransformComponent>("transform");
+	auto transformA = getTransform(), transformB = component->getTransform();
+	auto transformMatrixA = getTransformMatrix(), transformMatrixB = component->getTransformMatrix();
+	auto circleCenterA = transformMatrixA * glm::vec4(0, 0, 0, 1), circleCenterB = transformMatrixB * glm::vec4(0, 0, 0, 1);
+	float radiusA = transformA->getScale().x * 0.5, radiusB = transformB->getScale().x * 0.5;
 	if (pow(circleCenterA.x - circleCenterB.x, 2) + pow(circleCenterA.z - circleCenterB.z, 2) >= pow(radiusA + radiusB, 2)) return glm::vec3(0, 0, 0);
-	float topA = (modelMatrixA * glm::vec4(0, 0.5, 0, 1)).y, bottomA = (modelMatrixA * glm::vec4(0, -0.5, 0, 1)).y;
-	float topB = (modelMatrixB * glm::vec4(0, 0.5, 0, 1)).y, bottomB = (modelMatrixB * glm::vec4(0, -0.5, 0, 1)).y;
+	float topA = (transformMatrixA * glm::vec4(0, 0.5, 0, 1)).y, bottomA = (transformMatrixA * glm::vec4(0, -0.5, 0, 1)).y;
+	float topB = (transformMatrixB * glm::vec4(0, 0.5, 0, 1)).y, bottomB = (transformMatrixB * glm::vec4(0, -0.5, 0, 1)).y;
 	if (topA < bottomA) std::swap(topA, bottomA);
 	if (topB < bottomB) std::swap(topB, bottomB);
 	if (bottomA > topB || bottomB > topA) return glm::vec3(0, 0, 0);
@@ -38,23 +49,15 @@ glm::vec3 CylinderComponent::checkCollision(std::shared_ptr<CylinderComponent> c
 glm::mat4x4 CylinderComponent::getInverseTransformMatrix(bool curPos, glm::vec3 pos)
 {
 	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
-	std::shared_ptr<ModelTransform> modelTransform;
-	if (curPos) modelTransform = transformComponent->getModelTransform();
-	else {
-		modelTransform = std::make_shared<ModelTransform>();
-		modelTransform->copy(transformComponent->getModelTransform());
-		modelTransform->setPos(pos);
-	}
-	glm::mat4x4 inverseTransformMatrix = glm::inverse(modelTransform->getModelMatrix());
+	std::shared_ptr<ModelTransform> transform = std::make_shared<ModelTransform>();
+	auto transformMatrix = transformComponent->getModelTransform()->getModelMatrix() * modelTransform->getModelMatrix();
+	if (!curPos) transform->translate(pos - glm::vec3(transformMatrix * glm::vec4(0, 0, 0, 1)));
+	glm::mat4x4 inverseTransformMatrix = glm::inverse(transform->getModelMatrix() * transformMatrix);
 	inverseTransformMatrix = glm::mat4x4(2, 0, 0, 0,
 								  0, 2, 0, 0,
 								  0, 0, 2, 0,
 								  0, 0, 0, 1) * inverseTransformMatrix;
 
-	//transformMatrix = glm::mat4x4(0.5, 0, 0, 0,
-	//							0, 0.5, 0, 0,
-	//							0, 0, 0.5, 0,
-	//							0, 0, 0, 1) * transformMatrix;
 	return inverseTransformMatrix;
 }
 
@@ -71,8 +74,9 @@ std::shared_ptr<AABB> CylinderComponent::getAABB()
 	points[7] = { 0.5, -0.5, -0.5, 1 };
 
 	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
+	glm::mat4x4 transformMatrix = transformComponent->getModelTransform()->getModelMatrix() * modelTransform->getModelMatrix();
 	for (int i = 0; i < 8; i++) {
-		points[i] = transformComponent->getModelTransform()->getModelMatrix() * points[i];
+		points[i] = transformMatrix * points[i];
 	}
 
 	auto maxPoint = points[0], minPoint = points[0];
@@ -86,6 +90,7 @@ std::shared_ptr<AABB> CylinderComponent::getAABB()
 	return std::make_shared<AABB>(maxPoint, minPoint);
 }
 
+// ray indicates the position of the game objects
 std::shared_ptr<AABB> CylinderComponent::getAABB(std::shared_ptr<Ray> ray)
 {
 	std::vector<glm::vec4> points(8);
@@ -100,13 +105,14 @@ std::shared_ptr<AABB> CylinderComponent::getAABB(std::shared_ptr<Ray> ray)
 	points[7] = { 0.5, -0.5, -0.5, 1 };
 
 	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
+	glm::mat4x4 transformMatrix = transformComponent->getModelTransform()->getModelMatrix() * modelTransform->getModelMatrix();
 	auto curPos3 = transformComponent->getModelTransform()->getPos();
 	auto curPos = glm::vec4(curPos3[0], curPos3[1], curPos3[2], 1);
 	for (int i = 0; i < 8; i++) {
-		worldPoints[i] = transformComponent->getModelTransform()->getModelMatrix() * points[i] + ray->endPoint - curPos;
+		worldPoints[i] = transformMatrix * points[i] + ray->endPoint - curPos;
 	}
 	for (int i = 8; i < 16; i++) {
-		worldPoints[i] = transformComponent->getModelTransform()->getModelMatrix() * points[i - 8] + ray->origin - curPos;
+		worldPoints[i] = transformMatrix * points[i - 8] + ray->origin - curPos;
 	}
 
 	auto maxPoint = worldPoints[0], minPoint = worldPoints[0];
@@ -123,9 +129,9 @@ std::shared_ptr<AABB> CylinderComponent::getAABB(std::shared_ptr<Ray> ray)
 void CylinderComponent::updateOnGround()
 {
 	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
-	glm::vec3 source = transformComponent->getModelTransform()->getPos();
+	glm::mat4x4 transformMatrix = transformComponent->getModelTransform()->getModelMatrix() * modelTransform->getModelMatrix();
+	glm::vec3 source = transformMatrix * glm::vec4(0, 0, 0, 1);
 	glm::vec3 target = source + glm::vec3(0, -1, 0);
-	//target[1] += (target - source)[1];
 	auto collisionInfo = collisionSystem.lock()->environmentRayCast(shared_from_this(), source, target, getInverseTransformMatrix());
 	//std::cout << collisionInfo->t << std::endl;
 	if (std::abs(collisionInfo->t) > 0.01) transformComponent->setOnGround(false);

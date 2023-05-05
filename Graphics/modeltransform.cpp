@@ -85,3 +85,10 @@ void ModelTransform::copy(std::shared_ptr<ModelTransform> modelTranform)
     m_scale = modelTranform->getScale();
     m_rotation = modelTranform->getRotation();
 }
+
+void ModelTransform::transform(std::shared_ptr<ModelTransform> modelTranform)
+{
+    scale(modelTranform->getScale());
+    rotate(modelTranform->getRotation());
+    translate(modelTranform->getPos());
+}

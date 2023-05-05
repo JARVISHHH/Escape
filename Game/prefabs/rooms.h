@@ -133,12 +133,12 @@ void createEnemyRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Scree
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
 
-	int pick = rand() % 10;
+	/*int pick = rand() % 10;
 	if (pick < 4) createChasingEnemies(gameWorld, screen, mapNode, transform, gameHandlerObject);
 	else if (pick < 8) createShootingEnemies(gameWorld, screen, mapNode, transform, gameHandlerObject);
-	else if (pick < 10) createMixEnemies(gameWorld, screen, mapNode, transform, gameHandlerObject);
+	else if (pick < 10) createMixEnemies(gameWorld, screen, mapNode, transform, gameHandlerObject);*/
 	//createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 1.5, center[2]));
-	//createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 2, center[2]), mapNode->navMesh);
+	createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 2, center[2]), mapNode->navMesh, gameHandlerObject);
 	
 	transform->translate(glm::vec3(0, HEIGHT, 0));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);

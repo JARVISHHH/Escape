@@ -11,6 +11,7 @@ class GridNode;
 class CollisionComponent : public std::enable_shared_from_this<CollisionComponent>, public GameComponent {
 public:
 	CollisionComponent();
+	CollisionComponent(std::shared_ptr<ModelTransform> modelTransform);
 	~CollisionComponent();
 
 	virtual glm::vec3 checkCollision(std::shared_ptr<CollisionComponent> component) = 0;
@@ -25,6 +26,10 @@ public:
 	static std::shared_ptr<AABB> getAABB(glm::mat4x4 inverseTransformMatrix);
 	static std::shared_ptr<AABB> getAABB(glm::mat4x4 inverseTransformMatrix, std::shared_ptr<Ray> ray);
 
+	std::shared_ptr<ModelTransform> getTransform();
+	glm::mat4x4 getTransformMatrix();
+	std::shared_ptr<Ray> getRay();
+
 	virtual void updateOnGround() = 0;
 
 	std::shared_ptr<CollisionInfo> getEnvironmentClosestCollision(glm::mat4x4 inverseTransformMatrix, std::shared_ptr<Ray> ray, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents);
@@ -36,6 +41,7 @@ public:
 	glm::vec4 doNudge(glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents);
 	glm::vec4 doNudge(glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::shared_ptr<BVH> bvh);
 
+	std::shared_ptr<ModelTransform> modelTransform = std::make_shared<ModelTransform>();  // Transform in object space
 	std::weak_ptr<GridNode> gridNode;
 	std::weak_ptr<CollisionSystem> collisionSystem;
 };

@@ -6,6 +6,9 @@
 
 class CylinderComponent : public CollisionComponent {
 public:
+	CylinderComponent();
+	CylinderComponent(std::shared_ptr<ModelTransform> modelTransform);
+
 	glm::vec3 checkCollision(std::shared_ptr<CollisionComponent> component) override;
 	glm::vec3 checkCollision(std::shared_ptr<CylinderComponent> component) override;
 

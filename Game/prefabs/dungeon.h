@@ -17,6 +17,8 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 	createDungeon(gameWorld, screen, mapNode->rightChild, gameHandlerObject);
 	if (mapNode->room != nullptr) {
 		// Floors && ceilings
+		//createSafeRoom(gameWorld, screen, mapNode);
+		//createEnemyRoom(gameWorld, screen, mapNode, gameHandlerObject);
 		if (mapNode->safeRoom) {
 			createSafeRoom(gameWorld, screen, mapNode);
 		}
