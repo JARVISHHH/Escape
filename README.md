@@ -14,7 +14,7 @@ scores: more time + kill more enemies + get some special pickups
 
 Character
 
-- [ ] shooting? - really quick bullets, no need to draw out, can have some particle effects to indicate shooting and hitting
+- [x] shooting? - really quick bullets, no need to draw out, can have some particle effects to indicate shooting and hitting
 
 Enemy - try to change their shapes
 

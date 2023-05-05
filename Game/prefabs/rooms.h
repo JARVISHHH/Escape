@@ -108,8 +108,6 @@ void createMixEnemies(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Scre
 }
 
 void createShootingEnemies(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode, std::shared_ptr<ModelTransform> transform, std::shared_ptr<GameObject> gameHandlerObject) {
-	mapNode->navMesh = std::make_shared<NavMesh>("./Resources/Meshes/plane.obj");
-	mapNode->navMesh->bake(transform->getModelMatrix());
 	std::shared_ptr<Map> roomMap = std::make_shared<Map>(mapNode->room, glm::vec3(1, 1, 1), 0, 3);
 	roomMap->generateMap();
 	for (auto leaf : roomMap->leaves) {
@@ -205,4 +203,18 @@ void createTrapRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
 	transform->translate(glm::vec3(0, HEIGHT, 0));
 	createEnvironment(gameWorld, screen, "box", "ground", transform);
+}
+
+void createTreasureRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode, std::shared_ptr<GameObject> gameHandlerObject) {
+	auto center = (mapNode->room->getMaxPoint() + mapNode->room->getMinPoint()) / 2.0f;
+	auto size = (mapNode->room->getMaxPoint() - mapNode->room->getMinPoint()) / 2.0f;
+	auto transform = std::make_shared<ModelTransform>();
+	transform->scale(glm::vec3(size[0], 0.005f, size[2]));
+	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
+	createEnvironment(gameWorld, screen, "box", "ground", transform);
+
+	transform->translate(glm::vec3(0, HEIGHT, 0));
+	createEnvironment(gameWorld, screen, "box", "ground", transform);
+
+	// TODO
 }
