@@ -9,6 +9,8 @@ public:
 	void start() override;
 	void update(double seconds) override;
 
+	glm::vec3 getDirection();
+
 private:
 	glm::vec3 direction;
 	float speed;

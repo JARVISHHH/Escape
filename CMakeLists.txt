@@ -37,7 +37,7 @@ add_subdirectory(${GLFW_SOURCE_DIR})
 add_subdirectory(${GLM_SOURCE_DIR})
 add_subdirectory(${FREETYPE_SOURCE_DIR})
 
-add_library(StaticGLEW STATIC ${GLEW_SOURCE_DIR}/src/glew.c "Engine/Game/components/behaviorComponent.h")
+add_library(StaticGLEW STATIC ${GLEW_SOURCE_DIR}/src/glew.c)
 
 include_directories(${GLFW_SOURCE_DIR}/include
                     ${GLFW_SOURCE_DIR}/deps

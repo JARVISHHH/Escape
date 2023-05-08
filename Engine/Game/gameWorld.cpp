@@ -45,6 +45,8 @@ void GameWorld::update(double seconds)
 	while (totalTime > 0) {
 		if (totalTime > maxTimeStep) seconds = maxTimeStep;
 		else seconds = totalTime;
+		auto particelSystem = getGameSystem<ParticleSystem>("particle");
+		if (particelSystem != nullptr) particelSystem->update(seconds);
 		auto characterControllerSystem = getGameSystem<CharacterControllerSystem>("characterController");
 		if (characterControllerSystem != nullptr) characterControllerSystem->update(seconds);
 		auto physicsSystem = getGameSystem<PhysicsSystem>("physics");

@@ -25,6 +25,7 @@
 #include <Game/prefabs/dungeon.h>
 
 #include <corecrt_math_defines.h>
+#include <Engine/Game/gameSystems/particleSystem.h>
 
 extern std::shared_ptr<App> app;
 
@@ -62,6 +63,7 @@ void GameScreen::init()
 	std::shared_ptr<CameraSystem> cameraSystem = std::make_shared<CameraSystem>(camera);
 	collisionSystem = std::make_shared<CollisionSystem>(gameWorld, 6);
 	std::shared_ptr<TickSystem> tickSystem = std::make_shared<TickSystem>();
+	std::shared_ptr<ParticleSystem> particleSystem = std::make_shared<ParticleSystem>();
 
 	// Add systems to game world
 	gameWorld->addGameSystem(drawSystem);
@@ -70,6 +72,7 @@ void GameScreen::init()
 	gameWorld->addGameSystem(cameraSystem);
 	gameWorld->addGameSystem(collisionSystem);
 	gameWorld->addGameSystem(tickSystem);
+	gameWorld->addGameSystem(particleSystem);
 
 	// Create game handler
 	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 600);

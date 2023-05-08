@@ -15,3 +15,8 @@ void MovingComponent::update(double seconds)
 	auto curPos = transform->getModelTransform()->getPos();
 	transform->getModelTransform()->setPos(curPos + (float)seconds * speed * direction);
 }
+
+glm::vec3 MovingComponent::getDirection()
+{
+	return direction;
+}

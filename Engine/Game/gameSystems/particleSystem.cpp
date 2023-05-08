@@ -22,7 +22,10 @@ void ParticleSystem::update(double seconds)
 		}
 
 		particle.lifeRemaining -= seconds;
-		particle.position += particle.velocity * (float)seconds;
+
+		float life = particle.lifeRemaining / particle.lifeTime;
+		auto velocity = glm::lerp(particle.velocityEnd, particle.velocityBegin, life);
+		particle.position += velocity * (float)seconds;
 	}
 }
 
@@ -38,6 +41,7 @@ void ParticleSystem::draw()
 		float life = particle.lifeRemaining / particle.lifeTime;
 
 		glm::vec4 color = glm::lerp(particle.colorEnd, particle.colorBegin, life);
+		//color = particle.colorEnd;
 		color.a = color.a * life;
 
 		glm::vec3 size = glm::lerp(particle.sizeEnd, particle.sizeBegin, life);
@@ -46,7 +50,9 @@ void ParticleSystem::draw()
 		modelTransform->scale(2.0f * size);
 		modelTransform->translate(particle.position);
 		Global::graphics.setUniform4fv("u_Color", color);
-		Global::graphics.drawShape(Global::graphics.getShape("quad"), modelTransform, nullptr);
+		Global::graphics.drawShape(Global::graphics.getShape("sphere"), modelTransform, nullptr);
+	
+		//std::cout << "draw" << std::endl;
 	}
 }
 
@@ -57,9 +63,10 @@ void ParticleSystem::emit(const Particle& particleInfo) {
 	particle.position = particleInfo.position;
 	
 	// Velocity
-	particle.velocity = particleInfo.velocity;
+	particle.velocityBegin = particleInfo.velocityBegin;
+	particle.velocityEnd = particle.velocityEnd;
 	for (int i = 0; i < 3; i++) {
-		particle.velocity[i] += particleInfo.velocity[i] * (Random::Float() - 0.5f);
+		particle.velocityBegin[i] += particleInfo.velocityBegin[i] * (Random::Float() - 0.5f);
 	}
 
 	// Color

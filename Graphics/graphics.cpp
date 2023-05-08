@@ -37,7 +37,7 @@ void Graphics::initialize(){
 
     addShader("phong", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/phong.vert", "Resources/Shaders/phong.frag"});
     addShader("text", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/text.vert", "Resources/Shaders/text.frag"});
-    addShader("particle", { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER }, { "Resources/Shaders/particle.vert", "Resources/Shaders/particle.frag" });
+    addShader("particle", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/particle.vert", "Resources/Shaders/particle.frag"});
     bindShader("phong");
     
     addMaterial("default", glm::vec3(1));

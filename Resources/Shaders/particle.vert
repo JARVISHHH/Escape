@@ -1,5 +1,6 @@
 #version 330 core
-layout (location = 0) in vec3 pos; // <vec2 pos, vec2 tex>
+
+layout (location = 0) in vec3 pos;
 
 uniform mat4 model, view, projection;
 

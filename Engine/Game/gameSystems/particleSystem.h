@@ -6,7 +6,9 @@
 
 struct Particle {
 	glm::vec3 position;
-	glm::vec3 velocity;
+
+	glm::vec3 velocityBegin;
+	glm::vec3 velocityEnd;
 
 	glm::vec4 colorBegin;
 	glm::vec4 colorEnd;
