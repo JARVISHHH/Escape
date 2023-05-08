@@ -37,6 +37,7 @@ void Graphics::initialize(){
 
     addShader("phong", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/phong.vert", "Resources/Shaders/phong.frag"});
     addShader("text", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/text.vert", "Resources/Shaders/text.frag"});
+    addShader("particle", { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER }, { "Resources/Shaders/particle.vert", "Resources/Shaders/particle.frag" });
     bindShader("phong");
     
     addMaterial("default", glm::vec3(1));
@@ -333,6 +334,11 @@ void Graphics::setLights(std::vector<std::shared_ptr<Light>> lights){
 
 void Graphics::clearLights(){
     m_active_shader->clearLights();
+}
+
+void Graphics::setUniform4fv(const GLchar* uniform, glm::vec4 value)
+{
+    m_active_shader->setUniform4fv(uniform, value);
 }
 
 void Graphics::setWindowSize(glm::ivec2 windowSize){

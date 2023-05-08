@@ -11,6 +11,7 @@
 #include <Engine/Game/gameSystems/tickSystem.h>
 #include <Engine/Game/collision/hierarchicalGrid.h>
 #include <Engine/Game/components/transformComponent.h>
+#include <Engine/Game/gameSystems/particleSystem.h>
 
 
 GameWorld::GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> screen)
@@ -64,6 +65,8 @@ void GameWorld::draw()
 {
 	auto drawSystem = getGameSystem<DrawSystem>("draw");
 	if (drawSystem != nullptr) drawSystem->draw();
+	auto particelSystem = getGameSystem<ParticleSystem>("particle");
+	if (particelSystem != nullptr) particelSystem->draw();
 }
 
 void GameWorld::mousePosEvent(double xpos, double ypos)

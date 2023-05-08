@@ -117,3 +117,9 @@ void Shader::setTextUniforms(float screenWidth, float screenHeight, glm::vec3 co
     glUniformMatrix4fv(glGetUniformLocation(m_handle, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     glUniform3f(glGetUniformLocation(m_handle, "textColor"), color.r, color.g, color.b);
 }
+
+void Shader::setUniform4fv(const GLchar* uniform, glm::vec4 value)
+{
+    auto uniformLocation = glGetUniformLocation(m_handle, uniform);
+    glUniform4fv(uniformLocation, 1, glm::value_ptr(value));
+}

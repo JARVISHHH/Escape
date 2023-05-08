@@ -60,6 +60,8 @@ public:
     void setLights(std::vector<std::shared_ptr<Light>> lights);
     void clearLights();
 
+    void setUniform4fv(const GLchar* uniform, glm::vec4 value);
+
     void initializeGLEW();
 
     void setWindowSize(glm::ivec2 windowSize);

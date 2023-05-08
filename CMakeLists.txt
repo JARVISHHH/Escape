@@ -90,6 +90,17 @@ add_executable(${PROJECT_NAME}
     Graphics/GLWrappers/vao.cpp
     Graphics/tiny_obj_loader.h
 
+    Engine/random.h
+    Engine/random.cpp
+
+    Engine/Game/gameSystems/particleSystem.h
+    Engine/Game/gameSystems/particleSystem.cpp
+
+    Engine/Mesh/vertex.h
+    Engine/Mesh/vertex.cpp
+    Engine/Mesh/triangle.h
+    Engine/Mesh/triangle.cpp
+
     Engine/Game/gameComponent.h
     Engine/Game/gameComponent.cpp
     Engine/Game/gameObject.h
@@ -150,11 +161,6 @@ add_executable(${PROJECT_NAME}
     Engine/Game/collision/hierarchicalGrid.cpp
     Engine/Game/collision/gridnode.h
     Engine/Game/collision/gridnode.cpp
-
-    Engine/Mesh/vertex.h
-    Engine/Mesh/vertex.cpp
-    Engine/Mesh/triangle.h
-    Engine/Mesh/triangle.cpp
 
     Engine/Game/ai/navmesh/navmesh.h
     Engine/Game/ai/navmesh/navmesh.cpp

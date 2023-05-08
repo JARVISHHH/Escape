@@ -23,6 +23,8 @@ public:
     void clearLights();
     void setTextUniforms(float screenWidth, float screenHeight, glm::vec3 color);
 
+    void setUniform4fv(const GLchar* uniform, glm::vec4 value);
+
 private:
     GLuint m_handle;
 };
