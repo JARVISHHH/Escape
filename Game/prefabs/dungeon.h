@@ -30,7 +30,6 @@ void createDungeonRooms(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Sc
 				if (rand() % 2) {
 					createTreasureRoom(gameWorld, screen, mapNode, gameHandlerObject);
 					createdTreasure = true;
-					continue;
 				}
 			}
 			else {
