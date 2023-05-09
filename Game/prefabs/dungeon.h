@@ -11,6 +11,21 @@
 #define EPSILON 0.00001
 #define HEIGHT 6
 
+void createLight(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<Map> map) {
+	if (map == nullptr) return;
+	auto& mapNodes = map->leaves;
+	std::vector<std::shared_ptr<Light>> lights;
+	lights.reserve(mapNodes.size());
+	for (auto mapNode : mapNodes) {
+		auto room = mapNode->room;
+		glm::vec3 pos = glm::vec3(room->getCenter()[0], room->getMinPoint()[1] + HEIGHT / 2, room->getCenter()[2]);
+		auto light = std::make_shared<Light>(LightType::POINT, pos);
+		lights.push_back(light);
+	}
+	Global::graphics.bindShader("phong");
+	Global::graphics.setLights(lights);
+}
+
 void createDungeonRooms(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<Map> map, std::shared_ptr<GameObject> gameHandlerObject) {
 	if (map == nullptr) return;
 	bool createdTreasure = false;
@@ -126,4 +141,7 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 	//auto transform = std::make_shared<ModelTransform>();
 	//transform->translate(glm::vec3(gameWorld->getAABB()->getCenter()[0], gameWorld->getAABB()->getMinPoint()[1], gameWorld->getAABB()->getCenter()[2]));
 	//createEnvironment(gameWorld, screen, "ground", "ground", transform);
+
+	// create lighst
+	createLight(gameWorld, screen, map);
 }
