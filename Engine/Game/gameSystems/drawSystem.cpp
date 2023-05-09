@@ -22,7 +22,7 @@ void DrawSystem::draw()
 void DrawSystem::drawPhong()
 {
 	Global::graphics.bindShader("phong");
-	Global::graphics.setGlobalData(glm::vec3(0.5f));
+	Global::graphics.setGlobalData(glm::vec3(0.15f, 1.0f, 1.0f));
 	Global::graphics.setCameraData(getGameWorld()->getCamera());
 	for (auto component : components) {
 		component->drawPhong();
