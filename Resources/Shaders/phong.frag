@@ -28,7 +28,7 @@ uniform vec3 worldSpace_lightDir[16]; //Light Directions
 uniform int numLights; // Max number of lights = 16
 
 // Shadow uniform
-uniform sampler2D depthMaps;
+uniform sampler2D depthMaps[16];
 
 out vec4 fragColor;
 
