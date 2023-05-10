@@ -4,7 +4,7 @@ in vec3 worldSpace_pos;
 in vec3 worldSpace_norm;
 in vec2 tex_coord;
 
-in vec4 lightSpace_pos;
+in vec4 lightSpace_pos[16];
 
 // Object Material Data
 uniform int colorSource; // 0 = solid color (objColor), 1 = texture color (objTexture), 2 = per-vertex color (vertColor)
