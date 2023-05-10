@@ -4,7 +4,7 @@ in vec3 worldSpace_pos;
 in vec3 worldSpace_norm;
 in vec2 tex_coord;
 
-in vec4 lightSpace_pos[16];
+in vec4 lightSpace_pos;
 
 // Object Material Data
 uniform int colorSource; // 0 = solid color (objColor), 1 = texture color (objTexture), 2 = per-vertex color (vertColor)
@@ -28,7 +28,7 @@ uniform vec3 worldSpace_lightDir[16]; //Light Directions
 uniform int numLights; // Max number of lights = 16
 
 // Shadow uniform
-uniform sampler2D depthMaps[16];
+uniform sampler2D depthMaps;
 
 out vec4 fragColor;
 

@@ -58,13 +58,15 @@ void Graphics::initialize(){
         auto& depthMap = depthMaps[i];
         glActiveTexture(GL_TEXTURE0 + i + 1);
         glGenTextures(1, &depthMap);
+        //std::cout << depthMap << " " << depthMaps[i] << std::endl;
         glBindTexture(GL_TEXTURE_2D, depthMap);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
             SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
@@ -72,6 +74,7 @@ void Graphics::initialize(){
         glReadBuffer(GL_NONE);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
+    std::cout << "Initialized shadow FBOs and textures" << std::endl;
     
     bindShader("phong");
     
@@ -251,10 +254,10 @@ void Graphics::setShadow(int index)
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBOs[index]);
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
     glClear(GL_DEPTH_BUFFER_BIT);                   
-    float near_plane = 1.0f, far_plane = 100.f;
-    glm::mat4 lightProjection = glm::perspective(1.f, 1.f, near_plane, far_plane);
+    float near_plane = 0.1f, far_plane = 100.f;
+    glm::mat4 lightProjection = glm::perspective(45.f, 1.f, near_plane, far_plane);
     glm::mat4 lightView = glm::lookAt(lights[index]->getPos(),
-                          lights[index]->getPos() + glm::vec3(0.0f, -1.0f, 0.0f),
+                          lights[index]->getPos() + glm::vec3(0.0f, -5.0f, 0.0f),
                           glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 lightSpaceMatrix = lightProjection * lightView;
     Debug::checkGLError();
@@ -268,12 +271,12 @@ void Graphics::bindShadow()
 {
     // Matrices
     float near_plane = 0.1f, far_plane = 100.f;
-    glm::mat4 lightProjection = glm::perspective(1.f, 1.f, near_plane, far_plane);
+    glm::mat4 lightProjection = glm::perspective(45.f, 1.f, near_plane, far_plane);
     glm::mat4 lightSpaceMatrix[16];
     for (int i = 0; i < 16; i++) lightSpaceMatrix[i] = glm::mat4(1.0f);
     for (int i = 0; i < lights.size(); i++) {
         glm::mat4 lightView = glm::lookAt(lights[i]->getPos(),
-                                          lights[i]->getPos() + glm::vec3(0.0f, -1.0f, 0.0f),
+                                          lights[i]->getPos() + glm::vec3(0.0f, -5.0f, 0.0f),
                                           glm::vec3(0.0f, 1.0f, 0.0f));
         lightSpaceMatrix[i] = lightProjection * lightView;
     }
@@ -289,8 +292,8 @@ void Graphics::bindShadow()
     GLint samplers[16];
     for (int i = 0; i < 16; i++) {
         samplers[i] = i + 1;
-        //glActiveTexture(GL_TEXTURE0 + i + 1);
-        //glBindTexture(GL_TEXTURE_2D, depthMaps[i]);
+        glActiveTexture(GL_TEXTURE0 + i + 1);
+        glBindTexture(GL_TEXTURE_2D, depthMaps[i]);
     }
     glUniform1iv(samplerLocation, 16, samplers);
     Debug::checkGLError();

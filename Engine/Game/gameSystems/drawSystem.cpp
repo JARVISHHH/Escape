@@ -31,8 +31,8 @@ void DrawSystem::drawPhong()
 		for (auto component : components) {
 			component->drawPhong();
 		}
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// Phong
 	Global::graphics.bindShader("phong");

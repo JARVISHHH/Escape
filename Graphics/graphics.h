@@ -89,6 +89,6 @@ private:
     std::shared_ptr<Shader> m_active_shader;
 
     std::vector<std::shared_ptr<Light>> lights;
-    std::vector<unsigned int> depthMapFBOs;
-    std::vector<unsigned int> depthMaps;
+    std::vector<GLuint> depthMapFBOs;
+    std::vector<GLuint> depthMaps;
 };
