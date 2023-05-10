@@ -4,6 +4,8 @@ in vec3 worldSpace_pos;
 in vec3 worldSpace_norm;
 in vec2 tex_coord;
 
+in vec4 lightSpace_pos[16];
+
 // Object Material Data
 uniform int colorSource; // 0 = solid color (objColor), 1 = texture color (objTexture), 2 = per-vertex color (vertColor)
 uniform vec3 objColor;
@@ -23,7 +25,10 @@ uniform vec3 lightColor[16];
 uniform vec3 lightFunction[16]; // Attenuation coefficients
 uniform vec3 worldSpace_lightPos[16]; //Light Positions
 uniform vec3 worldSpace_lightDir[16]; //Light Directions
-uniform int numLights; // Max number of lights = 8
+uniform int numLights; // Max number of lights = 16
+
+// Shadow uniform
+uniform sampler2D depthMaps[16];
 
 out vec4 fragColor;
 
@@ -71,6 +76,23 @@ float computeSpecularIntensity(vec3 worldSpace_toLight, vec3 worldSpace_toEye) {
     return pow(max(dot(worldSpace_toLightReflected, worldSpace_toEye), 0), shininess);
 }
 
+float shadowCalculation(int index) {
+    vec4 fragPosLightSpace = lightSpace_pos[index];
+
+    // perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(depthMaps[index], projCoords.xy).x; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // check whether current frag pos is in shadow
+    float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
+
+    return shadow;
+}
+
 void main() {
     // Declare ambient, diffuse, and specular terms
     vec3 ambi = vec3(coeffs.x);
@@ -85,6 +107,8 @@ void main() {
     // Compute per-light diffuse and specular contribution
     for(int i = 0; i<numLights; i+= 1){
 
+        float shadow = shadowCalculation(i);
+
         // get direction vector to light based on light type
         vec3 worldSpace_toLight = getToLight(i);
 
@@ -94,8 +118,8 @@ void main() {
         float att = attenuationFactor(i);
 
 
-        diff = diff + diffuse_intensity * lightColor[i] * att;
-        spec = spec + specular_intensity * lightColor[i] * att;
+        diff = diff + diffuse_intensity * lightColor[i] * att * (1.0 - shadow);
+        spec = spec + specular_intensity * lightColor[i] * att * (1.0 - shadow);
     }
 
     // Apply global coefficients and object color to the diffuse and specular components

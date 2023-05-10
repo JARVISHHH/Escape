@@ -23,6 +23,8 @@ public:
 	void mousePosEvent(double xpos, double ypos);
 	void scrollEvent(double distance);
 	void windowResizeEvent(int width, int height);
+	void setFramebufferSize();
+	void setFramebufferSize(int width, int height);
 
 	// Game system related
 	template <class T> bool addGameSystem();  // Add a new game system
@@ -55,6 +57,7 @@ protected:
 	std::unordered_map<std::string, std::vector<std::shared_ptr<GameObject>>> gameObjects;
 
 	std::shared_ptr<Camera> camera;
+	int frameBufferWidth, frameBufferHeight;
 
 	std::shared_ptr<AABB> aabb = std::make_shared<AABB>(glm::vec4(20, 10, 20, 1), glm::vec4(-20, -5, -20, 1));
 

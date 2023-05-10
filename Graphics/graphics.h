@@ -39,6 +39,10 @@ public:
     void drawShape(std::shared_ptr<Shape> myShape, std::shared_ptr<ModelTransform> modelTransform, std::shared_ptr<Material> material = nullptr);
     void drawShape(std::shared_ptr<Shape> myShape, glm::mat4 modelMatrix, std::shared_ptr<Material> material = nullptr);
 
+    // Shadow
+    void setShadow(int index);
+    void bindShadow();
+
     // Obj-loading method
     std::vector<float> getObjData(std::string filepath);
     
@@ -58,6 +62,7 @@ public:
     void setGlobalData(glm::vec3 globalCoeffs);
 
     void setLights(std::vector<std::shared_ptr<Light>> lights);
+    std::vector<std::shared_ptr<Light>>& getLights();
     void clearLights();
 
     void setUniform4fv(const GLchar* uniform, glm::vec4 value);
@@ -82,4 +87,8 @@ private:
     std::map<std::string, std::shared_ptr<Font>> m_fonts;
 
     std::shared_ptr<Shader> m_active_shader;
+
+    std::vector<std::shared_ptr<Light>> lights;
+    std::vector<unsigned int> depthMapFBOs;
+    std::vector<unsigned int> depthMaps;
 };

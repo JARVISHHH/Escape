@@ -131,10 +131,6 @@ void GameScreen::update(double seconds) {
 }
 
 void GameScreen::draw() {
-	// Set background color
-	Global::graphics.setClearColor(glm::vec3(0.0f, 0.2f, 0.8f));
-	Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	// Phong
 	if (gameWorld != nullptr)
 		gameWorld->draw();

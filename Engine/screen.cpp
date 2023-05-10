@@ -56,6 +56,7 @@ void Screen::scrollEvent(double distance) {
 
 void Screen::framebufferResizeEvent(int width, int height) {
 	Global::graphics.setFramebufferSize(glm::ivec2(width, height));
+	if (gameWorld != nullptr) gameWorld->setFramebufferSize(width, height);
 }
 
 void Screen::windowResizeEvent(int width, int height) {

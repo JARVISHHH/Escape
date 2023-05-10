@@ -4,6 +4,8 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 
+const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+
 Graphics::Graphics():
     m_textRenderer(std::make_shared<TextRenderer>())
 {
@@ -38,6 +40,39 @@ void Graphics::initialize(){
     addShader("phong", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/phong.vert", "Resources/Shaders/phong.frag"});
     addShader("text", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/text.vert", "Resources/Shaders/text.frag"});
     addShader("particle", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/particle.vert", "Resources/Shaders/particle.frag"});
+    addShader("shadow", { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER }, { "Resources/Shaders/shadow.vert", "Resources/Shaders/shadow.frag" });
+    
+    // Shadow
+    depthMapFBOs.resize(16);
+    glGenFramebuffers(16, depthMapFBOs.data());
+    depthMaps.resize(16);
+
+    std::cout << "depthMapFBOs: ";
+    for (int i = 0; i < 16; i++) {
+        std::cout << depthMapFBOs[i] << " ";
+    }
+    std::cout << std::endl;
+
+    for (int i = 0; i < 16; i++) {
+        auto& depthMapFBO = depthMapFBOs[i];
+        auto& depthMap = depthMaps[i];
+        glActiveTexture(GL_TEXTURE0 + i + 1);
+        glGenTextures(1, &depthMap);
+        glBindTexture(GL_TEXTURE_2D, depthMap);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+            SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+        glDrawBuffer(GL_NONE);
+        glReadBuffer(GL_NONE);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+    
     bindShader("phong");
     
     addMaterial("default", glm::vec3(1));
@@ -211,6 +246,56 @@ void Graphics::drawShape(std::shared_ptr<Shape> myShape, glm::mat4 modelMatrix, 
     myShape->draw();
 }
 
+void Graphics::setShadow(int index)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBOs[index]);
+    glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+    glClear(GL_DEPTH_BUFFER_BIT);                   
+    float near_plane = 1.0f, far_plane = 100.f;
+    glm::mat4 lightProjection = glm::perspective(1.f, 1.f, near_plane, far_plane);
+    glm::mat4 lightView = glm::lookAt(lights[index]->getPos(),
+                          lights[index]->getPos() + glm::vec3(0.0f, -1.0f, 0.0f),
+                          glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+    Debug::checkGLError();
+    auto lightSpaceMatrixLocation = glGetUniformLocation(m_active_shader->getHandle(), "lightSpaceMatrix");
+    Debug::checkGLError();
+    glUniformMatrix4fv(lightSpaceMatrixLocation, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+    Debug::checkGLError();
+}
+
+void Graphics::bindShadow()
+{
+    // Matrices
+    float near_plane = 0.1f, far_plane = 100.f;
+    glm::mat4 lightProjection = glm::perspective(1.f, 1.f, near_plane, far_plane);
+    glm::mat4 lightSpaceMatrix[16];
+    for (int i = 0; i < 16; i++) lightSpaceMatrix[i] = glm::mat4(1.0f);
+    for (int i = 0; i < lights.size(); i++) {
+        glm::mat4 lightView = glm::lookAt(lights[i]->getPos(),
+                                          lights[i]->getPos() + glm::vec3(0.0f, -1.0f, 0.0f),
+                                          glm::vec3(0.0f, 1.0f, 0.0f));
+        lightSpaceMatrix[i] = lightProjection * lightView;
+    }
+    Debug::checkGLError();
+    auto lightSpaceMatrixLocation = glGetUniformLocation(m_active_shader->getHandle(), "lightSpaceMatrix");
+    Debug::checkGLError();
+    glUniformMatrix4fv(lightSpaceMatrixLocation, 16, GL_FALSE, glm::value_ptr(lightSpaceMatrix[0]));
+    Debug::checkGLError();
+
+    // Texture
+    auto samplerLocation = glGetUniformLocation(m_active_shader->getHandle(), "depthMaps");
+    Debug::checkGLError();
+    GLint samplers[16];
+    for (int i = 0; i < 16; i++) {
+        samplers[i] = i + 1;
+        //glActiveTexture(GL_TEXTURE0 + i + 1);
+        //glBindTexture(GL_TEXTURE_2D, depthMaps[i]);
+    }
+    glUniform1iv(samplerLocation, 16, samplers);
+    Debug::checkGLError();
+}
+
 std::vector<float> Graphics::getObjData(std::string filepath){
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
@@ -330,10 +415,17 @@ void Graphics::setGlobalData(glm::vec3 globalCoeffs){
 
 void Graphics::setLights(std::vector<std::shared_ptr<Light>> lights){
     m_active_shader->setLights(lights);
+    this->lights = lights;
+}
+
+std::vector<std::shared_ptr<Light>>& Graphics::getLights()
+{
+    return lights;
 }
 
 void Graphics::clearLights(){
     m_active_shader->clearLights();
+    lights.clear();
 }
 
 void Graphics::setUniform4fv(const GLchar* uniform, glm::vec4 value)

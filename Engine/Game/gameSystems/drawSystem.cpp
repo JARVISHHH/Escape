@@ -2,6 +2,8 @@
 #include "drawSystem.h"
 #include "Engine/Game/components/drawComponent.h"
 
+const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+
 DrawSystem::DrawSystem() : GameSystem("draw")
 {
 	
@@ -21,9 +23,35 @@ void DrawSystem::draw()
 
 void DrawSystem::drawPhong()
 {
+	// Shaodw
+	Global::graphics.bindShader("shadow");
+	auto& lights = Global::graphics.getLights();
+	for (int i = 0; i < lights.size(); i++) {
+		Global::graphics.setShadow(i);
+		for (auto component : components) {
+			component->drawPhong();
+		}
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// Phong
 	Global::graphics.bindShader("phong");
+	Debug::checkGLError();
+	getGameWorld()->setFramebufferSize();
+	Debug::checkGLError();
+	// Set background color
+	Global::graphics.setClearColor(glm::vec3(0.0f, 0.2f, 0.8f));
+	Debug::checkGLError();
+	Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	Debug::checkGLError();
+	// Set uniform
 	Global::graphics.setGlobalData(glm::vec3(0.15f, 1.0f, 1.0f));
+	Debug::checkGLError();
 	Global::graphics.setCameraData(getGameWorld()->getCamera());
+	Debug::checkGLError();
+	// Set shadow maps
+	Global::graphics.bindShadow();
+	// Draw objects
 	for (auto component : components) {
 		component->drawPhong();
 	}

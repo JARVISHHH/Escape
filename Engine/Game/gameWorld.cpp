@@ -89,6 +89,17 @@ void GameWorld::windowResizeEvent(int width, int height)
 	if (cameraSystem != nullptr) cameraSystem->windowResizeEvent(width, height);
 }
 
+void GameWorld::setFramebufferSize()
+{
+	Global::graphics.setFramebufferSize(glm::ivec2(frameBufferWidth, frameBufferHeight));
+}
+
+void GameWorld::setFramebufferSize(int width, int height)
+{
+	frameBufferWidth = width;
+	frameBufferHeight = height;
+}
+
 bool GameWorld::addGameSystem(std::shared_ptr<GameSystem> gameSystem)
 {
 	gameSystems[gameSystem->getTag()] = gameSystem;
