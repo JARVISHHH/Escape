@@ -2,8 +2,6 @@
 #include "drawSystem.h"
 #include "Engine/Game/components/drawComponent.h"
 
-const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-
 DrawSystem::DrawSystem() : GameSystem("draw")
 {
 	

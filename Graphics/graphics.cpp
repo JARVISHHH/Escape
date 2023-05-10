@@ -4,7 +4,7 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 
-const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 
 Graphics::Graphics():
     m_textRenderer(std::make_shared<TextRenderer>())
@@ -255,10 +255,10 @@ void Graphics::setShadow(int index)
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
     glClear(GL_DEPTH_BUFFER_BIT);                   
     float near_plane = 0.1f, far_plane = 100.f;
-    glm::mat4 lightProjection = glm::perspective(45.f, 1.f, near_plane, far_plane);
+    glm::mat4 lightProjection = glm::perspective(1.f, 1.f, near_plane, far_plane);
     glm::mat4 lightView = glm::lookAt(lights[index]->getPos(),
                           lights[index]->getPos() + glm::vec3(0.0f, -1.0f, 0.0f),
-                          glm::vec3(1.0f, 0.0f, 0.0f));
+                          glm::vec3(-1.0f, 0.0f, 0.0f));
     glm::mat4 lightSpaceMatrix = lightProjection * lightView;
     Debug::checkGLError();
     auto lightSpaceMatrixLocation = glGetUniformLocation(m_active_shader->getHandle(), "lightSpaceMatrix");
@@ -271,13 +271,13 @@ void Graphics::bindShadow()
 {
     // Matrices
     float near_plane = 0.1f, far_plane = 100.f;
-    glm::mat4 lightProjection = glm::perspective(45.f, 1.f, near_plane, far_plane);
+    glm::mat4 lightProjection = glm::perspective(1.f, 1.f, near_plane, far_plane);
     glm::mat4 lightSpaceMatrix[16];
     for (int i = 0; i < 16; i++) lightSpaceMatrix[i] = glm::mat4(1.0f);
     for (int i = 0; i < lights.size(); i++) {
         glm::mat4 lightView = glm::lookAt(lights[i]->getPos(),
                                           lights[i]->getPos() + glm::vec3(0.0f, -1.0f, 0.0f),
-                                          glm::vec3(1.0f, 0.0f, 0.0f));
+                                          glm::vec3(-1.0f, 0.0f, 0.0f));
         lightSpaceMatrix[i] = lightProjection * lightView;
     }
     Debug::checkGLError();
