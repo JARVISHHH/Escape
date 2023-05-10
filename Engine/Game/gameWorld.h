@@ -14,7 +14,7 @@ class AABB;
 class GameWorld : public std::enable_shared_from_this<GameWorld>
 {
 public:
-	GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> screen);
+	GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> screen, int frameBufferWidth = 640, int frameBufferHeight = 480);
 	~GameWorld();
 
 	void start();

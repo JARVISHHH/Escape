@@ -14,10 +14,10 @@
 #include <Engine/Game/gameSystems/particleSystem.h>
 
 
-GameWorld::GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> screen)
+GameWorld::GameWorld(std::shared_ptr<Camera> camera, std::shared_ptr<Screen> screen, int frameBufferWidth, int frameBufferHeight)
+	:camera(camera), screen(screen), frameBufferWidth(frameBufferWidth), frameBufferHeight(frameBufferHeight)
 {
-	this->camera = camera;
-	this->screen = screen;
+
 }
 
 GameWorld::~GameWorld()
@@ -27,6 +27,8 @@ GameWorld::~GameWorld()
 
 void GameWorld::start()
 {
+	setFramebufferSize(frameBufferWidth, frameBufferHeight);
+
 	for (auto it = gameObjects.begin(); it != gameObjects.end(); it++) {
 		for (const auto& gameObject : it->second) {
 			gameObject->start();

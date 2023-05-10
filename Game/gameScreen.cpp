@@ -54,7 +54,7 @@ void GameScreen::init()
 {
 	auto camera = std::make_shared<Camera>();
 
-	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this());
+	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this(), width, height);
 
 	// Create systems
 	drawSystem = std::make_shared<DrawSystem>();
@@ -82,13 +82,8 @@ void GameScreen::init()
 	map->generateMap();
 	//map->printMap();
 	createDungeon(gameWorld, shared_from_this(), map, gameHandler);
-	
-	// Create NavMesh
-	//navMesh = std::make_shared<NavMesh>("./Resources/Meshes/groundNav.obj");
-	//navMesh->bake();
 
 	// Create game object
-	
 	//std::shared_ptr<GameObject> character = createCharacter(gameWorld, glm::vec3(0, 3, 0), gameHandler);
 	//std::shared_ptr<GameObject> goalObject = createGoal(gameWorld, glm::vec3(11, 5, 0));
 	//std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "test", "grass");
