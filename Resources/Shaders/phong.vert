@@ -25,6 +25,6 @@ void main() {
 
     gl_Position = projection*view*model*vec4(pos, 1.0);
 
-    for(int i = 0; i < 16; i++) 
+    for(int i = 0; i < 16; i++)
         lightSpace_pos[i] = lightSpaceMatrix[i] * model * vec4(pos, 1.0);
 }

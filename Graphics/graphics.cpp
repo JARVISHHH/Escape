@@ -257,8 +257,8 @@ void Graphics::setShadow(int index)
     float near_plane = 0.1f, far_plane = 100.f;
     glm::mat4 lightProjection = glm::perspective(45.f, 1.f, near_plane, far_plane);
     glm::mat4 lightView = glm::lookAt(lights[index]->getPos(),
-                          lights[index]->getPos() + glm::vec3(0.0f, -5.0f, 0.0f),
-                          glm::vec3(0.0f, 1.0f, 0.0f));
+                          lights[index]->getPos() + glm::vec3(0.0f, -1.0f, 0.0f),
+                          glm::vec3(1.0f, 0.0f, 0.0f));
     glm::mat4 lightSpaceMatrix = lightProjection * lightView;
     Debug::checkGLError();
     auto lightSpaceMatrixLocation = glGetUniformLocation(m_active_shader->getHandle(), "lightSpaceMatrix");
@@ -276,8 +276,8 @@ void Graphics::bindShadow()
     for (int i = 0; i < 16; i++) lightSpaceMatrix[i] = glm::mat4(1.0f);
     for (int i = 0; i < lights.size(); i++) {
         glm::mat4 lightView = glm::lookAt(lights[i]->getPos(),
-                                          lights[i]->getPos() + glm::vec3(0.0f, -5.0f, 0.0f),
-                                          glm::vec3(0.0f, 1.0f, 0.0f));
+                                          lights[i]->getPos() + glm::vec3(0.0f, -1.0f, 0.0f),
+                                          glm::vec3(1.0f, 0.0f, 0.0f));
         lightSpaceMatrix[i] = lightProjection * lightView;
     }
     Debug::checkGLError();

@@ -36,7 +36,7 @@ GameScreen::GameScreen()
 	Global::graphics.addMaterial("monomi", "Resources/Images/monomi.png");
 	Global::graphics.addMaterial("learn", "Resources/Images/learn.jpg");
 	Global::graphics.addMaterial("wall", "Resources/Images/wall.jpg");
-	Global::graphics.addMaterial("ground", "Resources/Images/ground.png");
+	Global::graphics.addMaterial("ground", "Resources/Images/grass.png");
 
 	Global::graphics.addShape("coin", "./Resources/Meshes/coin.obj");
 	Global::graphics.addShape("health", "./Resources/Meshes/health.obj");
