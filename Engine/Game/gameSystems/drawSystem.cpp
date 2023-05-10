@@ -22,7 +22,7 @@ void DrawSystem::draw()
 void DrawSystem::drawPhong()
 {
 	// Shaodw
-	Global::graphics.bindShader("shadow");
+	Global::graphics.bindShader("pointShadow");
 	auto& lights = Global::graphics.getLights();
 	for (int i = 0; i < lights.size(); i++) {
 		Global::graphics.setShadow(i);
@@ -31,24 +31,21 @@ void DrawSystem::drawPhong()
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
+	Debug::checkGLError();
 
 	// Phong
 	Global::graphics.bindShader("phong");
-	Debug::checkGLError();
 	getGameWorld()->setFramebufferSize();
-	Debug::checkGLError();
 	// Set background color
 	Global::graphics.setClearColor(glm::vec3(0.0f, 0.2f, 0.8f));
-	Debug::checkGLError();
 	Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	Debug::checkGLError();
 	// Set uniform
 	Global::graphics.setGlobalData(glm::vec3(0.15f, 1.0f, 1.0f));
-	Debug::checkGLError();
 	Global::graphics.setCameraData(getGameWorld()->getCamera());
 	Debug::checkGLError();
 	// Set shadow maps
 	Global::graphics.bindShadow();
+	Debug::checkGLError();
 	// Draw objects
 	for (auto component : components) {
 		component->drawPhong();

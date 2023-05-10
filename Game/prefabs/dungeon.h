@@ -18,7 +18,7 @@ void createLight(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> s
 	lights.reserve(mapNodes.size());
 	for (auto mapNode : mapNodes) {
 		auto room = mapNode->room;
-		glm::vec3 pos = glm::vec3(room->getCenter()[0], room->getMinPoint()[1] + HEIGHT - 0.6, room->getCenter()[2]);
+		glm::vec3 pos = glm::vec3(room->getCenter()[0], room->getMinPoint()[1] + HEIGHT / 2, room->getCenter()[2]);
 		auto light = std::make_shared<Light>(LightType::POINT, pos, glm::vec3(5.0f));
 		lights.push_back(light);
 	}

@@ -91,4 +91,5 @@ private:
     std::vector<std::shared_ptr<Light>> lights;
     std::vector<GLuint> depthMapFBOs;
     std::vector<GLuint> depthMaps;
+    std::vector<GLuint> depthCubeMaps;
 };
