@@ -452,6 +452,11 @@ void Graphics::setUniform4fv(const GLchar* uniform, glm::vec4 value)
     m_active_shader->setUniform4fv(uniform, value);
 }
 
+void Graphics::setUniformFloat(const GLchar* uniform, float value)
+{
+    m_active_shader->setUniformFloat(uniform, value);
+}
+
 void Graphics::setWindowSize(glm::ivec2 windowSize){
     m_windowSize = windowSize;
 }

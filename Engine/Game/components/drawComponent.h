@@ -20,7 +20,12 @@ public:
 	void setShape(std::string shapeType);
 	void setMaterial(std::string materialName);
 
+	float getAlpha();
+	void setAlpha(float alpha);
+
 protected:
 	std::shared_ptr<Shape> shape = nullptr;
 	std::shared_ptr<Material> material = nullptr;
+
+	float alpha = 1.0f;
 };

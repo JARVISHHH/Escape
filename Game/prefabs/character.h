@@ -38,7 +38,7 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	// Shootng component
 	std::shared_ptr<CharacterShoot> characterShoot = std::make_shared<CharacterShoot>(gameWorld->getCamera());
 
-	//// Add components to game objects
+	// Add components to game objects
 	character->addComponent(transformComponent);
 	character->addComponent(drawComponent);
 	character->addComponent(physicsComponent);

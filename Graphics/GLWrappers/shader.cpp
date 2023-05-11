@@ -103,7 +103,7 @@ void Shader::setLights(std::vector<std::shared_ptr<Light>> lights){
     Debug::checkGLError();
     glUniform3fv(glGetUniformLocation(m_handle, "worldSpace_lightPos"), numLights, worldSpace_lightPos.data());
     Debug::checkGLError();
-    std::cout<<worldSpace_lightDir[0]<<std::endl;
+    //std::cout<<worldSpace_lightDir[0]<<std::endl;
     glUniform3fv(glGetUniformLocation(m_handle, "worldSpace_lightDir"), numLights, worldSpace_lightDir.data());
     Debug::checkGLError();
 }
@@ -122,4 +122,10 @@ void Shader::setUniform4fv(const GLchar* uniform, glm::vec4 value)
 {
     auto uniformLocation = glGetUniformLocation(m_handle, uniform);
     glUniform4fv(uniformLocation, 1, glm::value_ptr(value));
+}
+
+void Shader::setUniformFloat(const GLchar* uniform, float value)
+{
+    auto uniformLocation = glGetUniformLocation(m_handle, uniform);
+    glUniform1f(uniformLocation, value);
 }

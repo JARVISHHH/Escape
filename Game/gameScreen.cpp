@@ -26,6 +26,7 @@
 
 #include <corecrt_math_defines.h>
 #include <Engine/Game/gameSystems/particleSystem.h>
+#include <Game/prefabs/lights.h>
 
 extern std::shared_ptr<App> app;
 
@@ -82,6 +83,7 @@ void GameScreen::init()
 	map->generateMap();
 	//map->printMap();
 	createDungeon(gameWorld, shared_from_this(), map, gameHandler);
+	createLights(gameWorld, map);
 
 	// Create game object
 	//std::shared_ptr<GameObject> character = createCharacter(gameWorld, glm::vec3(0, 3, 0), gameHandler);

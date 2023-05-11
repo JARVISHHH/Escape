@@ -12,6 +12,7 @@ uniform vec3 objColor;
 uniform sampler2D objTexture;
 in vec3 vertColor;
 uniform float shininess;
+uniform float alpha;  // Object alpha value
 
 // Camera uniform
 uniform vec3 worldSpace_camPos;
@@ -146,15 +147,15 @@ void main() {
 
     // Apply correct object color
     if (colorSource == 0 ) {
-        fragColor = vec4(tempColor * objColor, 1.0);
+        fragColor = vec4(tempColor * objColor, alpha);
     } 
     else if (colorSource == 1){
-        fragColor = vec4(tempColor * vec3(texture(objTexture, tex_coord)), 1.0);
+        fragColor = vec4(tempColor * vec3(texture(objTexture, tex_coord)), alpha);
     }
     else if (colorSource == 2) {
-        fragColor = vec4(tempColor * vertColor, 1.0);
+        fragColor = vec4(tempColor * vertColor, alpha);
     }
     else{
-        fragColor = vec4(tempColor, 1.0);
+        fragColor = vec4(tempColor, alpha);
     }
 }

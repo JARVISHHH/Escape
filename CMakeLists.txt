@@ -206,6 +206,7 @@ add_executable(${PROJECT_NAME}
     Game/prefabs/spike.h
     Game/prefabs/bullet.h
     Game/prefabs/treasure.h
+    Game/prefabs/lights.h
 
     Game/ai/scopeCondition.h
     Game/ai/scopeCondition.cpp
@@ -238,6 +239,8 @@ add_executable(${PROJECT_NAME}
     Game/gameComponents/enemyCollisionResponse.cpp
     Game/gameComponents/enemyHealth.h
     Game/gameComponents/enemyHealth.cpp
+    Game/gameComponents/lightComponent.h
+    Game/gameComponents/lightComponent.cpp
  )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})

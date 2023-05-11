@@ -16,6 +16,8 @@ public:
 	void addConnector(std::pair<std::shared_ptr<MapNode>, std::shared_ptr<MapNode>> connector);
 	std::vector<std::pair<std::shared_ptr<MapNode>, std::shared_ptr<MapNode>>>& getConnectors();
 
+	std::shared_ptr<MapNode> findNode(std::shared_ptr<GameObject> object);
+
 	void printMap();
 
 	std::shared_ptr<MapNode> mapRoot;

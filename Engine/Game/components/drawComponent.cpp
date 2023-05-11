@@ -25,6 +25,7 @@ void DrawComponent::drawPhong()
 	//auto pos = transformComponent->getModelTransform()->getPos();
 	//if (gameObject->getTag() == "character")
 	//	std::cout << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
+	Global::graphics.setUniformFloat("alpha", alpha);
 	Global::graphics.drawShape(shape, transformComponent->getModelTransform(), material);
 }
 
@@ -36,4 +37,14 @@ void DrawComponent::setShape(std::string shapeType)
 void DrawComponent::setMaterial(std::string materialName)
 {
 	if (materialName.compare("") != 0) material = Global::graphics.getMaterial(materialName);
+}
+
+float DrawComponent::getAlpha()
+{
+	return alpha;
+}
+
+void DrawComponent::setAlpha(float alpha)
+{
+	this->alpha = alpha;
 }

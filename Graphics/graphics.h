@@ -66,6 +66,7 @@ public:
     void clearLights();
 
     void setUniform4fv(const GLchar* uniform, glm::vec4 value);
+    void setUniformFloat(const GLchar* uniform, float value);
 
     void initializeGLEW();
 

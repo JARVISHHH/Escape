@@ -1,5 +1,6 @@
 #include "map.h"
 #include "mapnode.h"
+#include <Engine/Game/components/collisionComponents/collisionComponent.h>
 
 Map::Map(std::shared_ptr<AABB> aabb, glm::vec3 minimumSize, float margine, int maxDepth)
 	:aabb(aabb), minimumSize(minimumSize), margine(margine), maxDepth(maxDepth)
@@ -53,6 +54,16 @@ void Map::addConnector(std::pair<std::shared_ptr<MapNode>, std::shared_ptr<MapNo
 std::vector<std::pair<std::shared_ptr<MapNode>, std::shared_ptr<MapNode>>>& Map::getConnectors()
 {
 	return connectors;
+}
+
+std::shared_ptr<MapNode> Map::findNode(std::shared_ptr<GameObject> object)
+{
+	for (auto& mapNode : leaves) {
+		if(mapNode->getAABB()->checkCollision(object->getComponent<CollisionComponent>("collision")->getAABB()))
+			return mapNode;
+	}
+
+	return nullptr;
 }
 
 void Map::printMap()
