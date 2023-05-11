@@ -118,20 +118,19 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		createEnvironment(gameWorld, screen, "plane", "ground", transform);
 	}
 
-	// create character
+	// create rooms
 	auto characterRoom = map->mapRoot->findTopLeft();
 	characterRoom->safeRoom = true;
-	auto characterRoomCenter = characterRoom->room->getCenter();
-	createCharacter(gameWorld, glm::vec3(characterRoomCenter[0], characterRoom->room->getMinPoint()[1] + 2, characterRoomCenter[2]) + glm::vec3(0, 1, 0), gameHandlerObject);
-
-	// create goal
 	auto goalRoom = map->mapRoot->findTopRight();
 	goalRoom->safeRoom = true;
+	createDungeonRooms(gameWorld, screen, map, gameHandlerObject);
+
+	// create character
+	auto characterRoomCenter = characterRoom->room->getCenter();
+	createCharacter(gameWorld, glm::vec3(characterRoomCenter[0], characterRoom->room->getMinPoint()[1] + 2, characterRoomCenter[2]) + glm::vec3(0, 1, 0), gameHandlerObject);
+	// create goal
 	auto goalRoomCenter = goalRoom->room->getCenter();
 	createGoal(gameWorld, glm::vec3(goalRoomCenter[0], goalRoom->room->getMinPoint()[1] + 1, goalRoomCenter[2]) + glm::vec3(0, 1, 0));
-
-	// create rooms
-	createDungeonRooms(gameWorld, screen, map, gameHandlerObject);
 
 	// create lighst
 	//createLight(gameWorld, map);
