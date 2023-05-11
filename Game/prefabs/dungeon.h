@@ -38,17 +38,11 @@ void createDungeonRooms(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Sc
 			createSafeRoom(gameWorld, screen, mapNode);
 		}
 		else {
-			if (!createdTreasure && mapNode->gapStarts.size() == 1) {
-				//createTreasureRoom(gameWorld, screen, mapNode, gameHandlerObject);
-				//createdTreasure = true;
-				//continue;
-				if (rand() % 2) {
-					createTreasureRoom(gameWorld, screen, mapNode, gameHandlerObject);
-					createdTreasure = true;
-				}
+			if (!createdTreasure && mapNode->gapStarts.size() == 1 && rand() % 2) {
+				createTreasureRoom(gameWorld, screen, mapNode, gameHandlerObject);
+				createdTreasure = true;
 			}
 			else {
-				//createTreasureRoom(gameWorld, screen, mapNode, gameHandlerObject);
 				auto pick = rand() % 10;
 				if (pick < 5) createEnemyRoom(gameWorld, screen, mapNode, gameHandlerObject);
 				else if (pick < 10) createTrapRoom(gameWorld, screen, mapNode);
