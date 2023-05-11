@@ -95,6 +95,7 @@ void MapNode::assign(glm::vec3 minimumSize)
 			auto pos = aabb->getMinPoint()[i] + (float)rand() / RAND_MAX * (total - roomSize);
 			minPoint[i] = pos, maxPoint[i] = minPoint[i] + roomSize;
 		}
+		minPoint[1] += 0.5;
 		room = std::make_shared<AABB>(maxPoint, minPoint);
 	}
 }
