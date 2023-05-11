@@ -18,10 +18,10 @@ void LightComponent::update(double seconds)
 	if (mapNode == nullptr) return;
 	std::vector<std::shared_ptr<Light>> lights;
 	lights.push_back(totalLights[mapNode]);
-	for (auto& connectors : map->getConnectors()) {
-		if (connectors.first == mapNode) lights.push_back(totalLights[connectors.second]);
-		if (connectors.second == mapNode) lights.push_back(totalLights[connectors.first]);
-	}
+	//for (auto& connectors : map->getConnectors()) {
+	//	if (connectors.first == mapNode) lights.push_back(totalLights[connectors.second]);
+	//	if (connectors.second == mapNode) lights.push_back(totalLights[connectors.first]);
+	//}
 	Global::graphics.bindShader("phong");
 	Global::graphics.setLights(lights);
 }
