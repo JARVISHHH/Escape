@@ -11,6 +11,11 @@ enum ColorSource{
     PER_VERTEX_COLOR
 };
 
+enum NormalSource {
+    ORIGINAL_NORMAL,
+    TEXTURE_NORMAL
+};
+
 class Material{
 public:
     Material(glm::vec3 color, float shininess = 1.f); //Constructor for setting SOLID_COLOR based material
@@ -21,6 +26,8 @@ public:
     // Functions for setting uniforms
     ColorSource getColorSource();
     void setColorSource(ColorSource source);
+    NormalSource getNormalSource();
+    void setNormalSource(NormalSource source);
     std::shared_ptr<Texture> getTexture();
     void setTexture(std::shared_ptr<Texture> texture);
     glm::vec3 getColor();
@@ -30,6 +37,7 @@ public:
 
 private:
     ColorSource m_colorSource;
+    NormalSource m_normalSource;
     std::shared_ptr<Texture> m_texture;
     glm::vec3 m_color;
     float m_shininess;

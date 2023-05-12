@@ -7,15 +7,12 @@ DrawComponent::DrawComponent() : GameComponent("draw")
 
 }
 
-DrawComponent::DrawComponent(std::string shapeType) : GameComponent("draw")
+DrawComponent::DrawComponent(std::string shapeType, std::string materialName, std::string materialNormalName) 
+	: GameComponent("draw")
 {
 	shape = Global::graphics.getShape(shapeType);
-}
-
-DrawComponent::DrawComponent(std::string shapeType, std::string materialName) : GameComponent("draw")
-{
-	shape = Global::graphics.getShape(shapeType);
-	if(materialName.compare("") != 0) material = Global::graphics.getMaterial(materialName);
+	if (materialName.compare("") != 0) material = Global::graphics.getMaterial(materialName);
+	if (materialNormalName.compare("") != 0) materialNormal = Global::graphics.getMaterial(materialNormalName);
 }
 
 void DrawComponent::drawPhong()
@@ -26,7 +23,7 @@ void DrawComponent::drawPhong()
 	//if (gameObject->getTag() == "character")
 	//	std::cout << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
 	Global::graphics.setUniformFloat("alpha", alpha);
-	Global::graphics.drawShape(shape, transformComponent->getModelTransform(), material);
+	Global::graphics.drawShape(shape, transformComponent->getModelTransform(), material, materialNormal);
 }
 
 void DrawComponent::setShape(std::string shapeType)

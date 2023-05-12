@@ -75,7 +75,7 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		if (target[2] > source[2]) angle = -angle;
 		transform->rotate(angle, glm::vec3(0, 1, 0));
 		transform->translate(glm::vec3(center[0], (connector.first->room->getMinPoint()[1] + connector.second->room->getMinPoint()[1]) / 2.0f, center[2]));
-		createEnvironment(gameWorld, screen, "plane", "ground", transform);
+		createEnvironment(gameWorld, screen, "plane", "ground", "", transform);
 
 		// Walls
 		// Get intersection
@@ -115,7 +115,7 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		transform->rotate(angle, glm::vec3(0, 1, 0));
 		transform->rotate(M_PI, glm::vec3(1, 0, 0));
 		transform->translate(glm::vec3(center[0], (connector.first->room->getMinPoint()[1] + connector.second->room->getMinPoint()[1]) / 2.0f, center[2]) + glm::vec3(0, HEIGHT, 0));
-		createEnvironment(gameWorld, screen, "plane", "ground", transform);
+		createEnvironment(gameWorld, screen, "plane", "ground", "", transform);
 	}
 
 	// create rooms

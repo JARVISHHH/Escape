@@ -8,6 +8,9 @@ layout (location = 3) in vec3 color;
 
 uniform mat4 model, view, projection;
 
+uniform int normalSource;
+uniform sampler2D normalMap;
+
 uniform mat4 lightSpaceMatrix[16];
 
 out vec3 worldSpace_pos;
@@ -19,7 +22,8 @@ out vec4 lightSpace_pos[16];
 
 void main() {
     worldSpace_pos = vec3(model * vec4(pos, 1.0));
-    worldSpace_norm = vec3(transpose(inverse(model))*vec4(norm, 0.0));
+    if(normalSource == 1) worldSpace_norm = vec3(transpose(inverse(model))*vec4(normalize(norm + (texture(normalMap, uv).rgb * 2.0 - 1.0) * 0), 0.0));
+    else worldSpace_norm = vec3(transpose(inverse(model))*vec4(norm, 0.0));
     tex_coord = uv;
     vertColor = color;
 

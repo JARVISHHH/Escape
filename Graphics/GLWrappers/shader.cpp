@@ -40,6 +40,21 @@ void Shader::setMaterial(std::shared_ptr<Material> material){
     glUniform1f(glGetUniformLocation(m_handle, "shininess"), shininess);
 }
 
+void Shader::setNormalMap(std::shared_ptr<Material> material)
+{
+    NormalSource normal_source = material->getNormalSource();
+    switch (normal_source) {
+    case NormalSource::ORIGINAL_NORMAL:
+        glUniform1i(glGetUniformLocation(m_handle, "normalSource"), 0);
+        break;
+    case NormalSource::TEXTURE_NORMAL:
+        glUniform1i(glGetUniformLocation(m_handle, "normalSource"), 1);
+        material->getTexture()->bind();
+        glUniform1i(glGetUniformLocation(m_handle, "normalMap"), material->getTexture()->getTexUnitUint());
+        break;
+    }
+}
+
 void Shader::setCamera(std::shared_ptr<Camera> camera){
     glUniformMatrix4fv(glGetUniformLocation(m_handle, "view"), 1, GL_FALSE, glm::value_ptr(camera->getView()[0]));
     glUniformMatrix4fv(glGetUniformLocation(m_handle, "projection"), 1, GL_FALSE, glm::value_ptr(camera->getProjection()[0]));

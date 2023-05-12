@@ -82,7 +82,7 @@ void createWall(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> sc
 	if (end[2] > start[2]) angle = -angle;
 	transform->rotate(angle, glm::vec3(0, 1, 0));
 	transform->translate((start + end) / 2.0f + glm::vec3(0, height / 2, 0));
-	createEnvironment(gameWorld, screen, "wall", "wall", transform);
+	createEnvironment(gameWorld, screen, "wall", "wall", "wallNormal", transform);
 }
 
 void createSafeRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode) {
@@ -91,10 +91,10 @@ void createSafeRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 	auto transform = std::make_shared<ModelTransform>();
 	transform->scale(glm::vec3(size[0], 0.005f, size[2]));
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
-	createEnvironment(gameWorld, screen, "box", "ground", transform);
+	createEnvironment(gameWorld, screen, "box", "ground", "", transform);
 
 	transform->translate(glm::vec3(0, HEIGHT, 0));
-	createEnvironment(gameWorld, screen, "box", "ground", transform);
+	createEnvironment(gameWorld, screen, "box", "ground", "", transform);
 }
 
 void createMixEnemies(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode, std::shared_ptr<ModelTransform> transform, std::shared_ptr<GameObject> gameHandlerObject) {
@@ -132,7 +132,7 @@ void createEnemyRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Scree
 	auto transform = std::make_shared<ModelTransform>();
 	transform->scale(glm::vec3(size[0], 0.005f, size[2]));
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
-	createEnvironment(gameWorld, screen, "box", "ground", transform);
+	createEnvironment(gameWorld, screen, "box", "ground", "", transform);
 
 	int pick = rand() % 10;
 	if (pick < 4) createChasingEnemies(gameWorld, screen, mapNode, transform, gameHandlerObject);
@@ -142,7 +142,7 @@ void createEnemyRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Scree
 	//createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 2, center[2]), mapNode->navMesh, gameHandlerObject);
 	
 	transform->translate(glm::vec3(0, HEIGHT, 0));
-	createEnvironment(gameWorld, screen, "box", "ground", transform);
+	createEnvironment(gameWorld, screen, "box", "ground", "", transform);
 }
 
 
@@ -156,7 +156,7 @@ void createPlatform(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 		auto transform = std::make_shared<ModelTransform>();
 		transform->scale(glm::vec3(size[0], 0.005f, size[2]));
 		transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 1.2 + (float)rand() / RAND_MAX * 1.3, center[2]));
-		createEnvironment(gameWorld, screen, "box", "ground", transform);
+		createEnvironment(gameWorld, screen, "box", "wall", "wallNormal", transform);
 	}
 }
 
@@ -203,7 +203,7 @@ void createTrapRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 	transform->scale(glm::vec3(size[0], 0.005f, size[2]));
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
 	transform->translate(glm::vec3(0, HEIGHT, 0));
-	createEnvironment(gameWorld, screen, "box", "ground", transform);
+	createEnvironment(gameWorld, screen, "box", "ground", "", transform);
 }
 
 void createTreasureRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<MapNode> mapNode, std::shared_ptr<GameObject> gameHandlerObject) {
@@ -212,10 +212,10 @@ void createTreasureRoom(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Sc
 	auto transform = std::make_shared<ModelTransform>();
 	transform->scale(glm::vec3(size[0], 0.005f, size[2]));
 	transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1], center[2]));
-	createEnvironment(gameWorld, screen, "box", "ground", transform);
+	createEnvironment(gameWorld, screen, "box", "ground", "", transform);
 
 	transform->translate(glm::vec3(0, HEIGHT, 0));
-	createEnvironment(gameWorld, screen, "box", "ground", transform);
+	createEnvironment(gameWorld, screen, "box", "ground", "", transform);
 
 	glm::vec3 direction = glm::normalize(mapNode->gapEnds[0] - mapNode->gapStarts[0]);
 	if(rand() % 4) createDoubleTreasure(gameWorld, glm::vec3(mapNode->room->getCenter()[0], mapNode->room->getMinPoint()[1] + 0.5, mapNode->room->getCenter()[2]), direction);

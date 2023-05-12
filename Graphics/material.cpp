@@ -2,6 +2,7 @@
 
 Material::Material(glm::vec3 color, float shininess):
     m_colorSource(ColorSource::SOLID_COLOR),
+    m_normalSource(NormalSource::ORIGINAL_NORMAL),
     m_color(color),
     m_shininess(shininess)
 {
@@ -17,6 +18,7 @@ Material::Material(float shininess):
 
 Material::Material(std::shared_ptr<Texture> texture, float shininess):
     m_colorSource(ColorSource::TEXTURE_COLOR),
+    m_normalSource(NormalSource::TEXTURE_NORMAL),
     m_texture(texture),
     m_shininess(shininess)
 {
@@ -33,6 +35,16 @@ ColorSource Material::getColorSource(){
 
 void Material::setColorSource(ColorSource source){
     m_colorSource = source;
+}
+
+NormalSource Material::getNormalSource()
+{
+    return m_normalSource;
+}
+
+void Material::setNormalSource(NormalSource source)
+{
+    m_normalSource = source;
 }
 
 std::shared_ptr<Texture> Material::getTexture(){

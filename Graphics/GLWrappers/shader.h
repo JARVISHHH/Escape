@@ -15,6 +15,7 @@ public:
     void unbind();
     GLuint getHandle();
     void setMaterial(std::shared_ptr<Material> material);
+    void setNormalMap(std::shared_ptr<Material> material);
     void setCamera(std::shared_ptr<Camera> camera);
     void setModelTransform(std::shared_ptr<ModelTransform> modelTransform);
     void setModelTransform(glm::mat4 modelMatrix);

@@ -59,7 +59,7 @@ void Graphics::initialize(){
     for (unsigned int i = 0; i < 16; i++) {
         auto& depthMapFBO = depthMapFBOs[i];
         auto& depthCubeMap = depthCubeMaps[i];
-        glActiveTexture(GL_TEXTURE0 + i + 1);
+        glActiveTexture(GL_TEXTURE0 + i + 2);
         glGenTextures(1, &depthCubeMap);
         glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubeMap);
         for (unsigned int j = 0; j < 6; j++) {
@@ -83,6 +83,7 @@ void Graphics::initialize(){
     bindShader("phong");
     
     addMaterial("default", glm::vec3(1));
+    addMaterial("defaultNormal", glm::vec3(0));
 
     std::cout<<"add font"<<std::endl;
     addFont("opensans", "Resources/Fonts/OpenSans.ttf");
@@ -231,23 +232,35 @@ std::shared_ptr<Shape> Graphics::getShape(std::string shapeName){
     return m_shapes.at(shapeName);
 }
 
-void Graphics::drawShape(std::shared_ptr<Shape> myShape, std::shared_ptr<ModelTransform> modelTransform, std::shared_ptr<Material> material){
+void Graphics::drawShape(std::shared_ptr<Shape> myShape, std::shared_ptr<ModelTransform> modelTransform, std::shared_ptr<Material> material, std::shared_ptr<Material> materialNormal){
     if(material == nullptr){
         m_active_shader->setMaterial(getMaterial("default"));
     }
     else{
         m_active_shader->setMaterial(material);
+    }
+    if (materialNormal == nullptr) {
+        m_active_shader->setNormalMap(getMaterial("defaultNormal"));
+    }
+    else {
+        m_active_shader->setNormalMap(materialNormal);
     }
     m_active_shader->setModelTransform(modelTransform);
     myShape->draw();
 }
 
-void Graphics::drawShape(std::shared_ptr<Shape> myShape, glm::mat4 modelMatrix, std::shared_ptr<Material> material){
+void Graphics::drawShape(std::shared_ptr<Shape> myShape, glm::mat4 modelMatrix, std::shared_ptr<Material> material, std::shared_ptr<Material> materialNormal){
     if(material == nullptr){
         m_active_shader->setMaterial(getMaterial("default"));
     }
     else{
         m_active_shader->setMaterial(material);
+    }
+    if (materialNormal == nullptr) {
+        m_active_shader->setNormalMap(getMaterial("defaultNormal"));
+    }
+    else {
+        m_active_shader->setNormalMap(materialNormal);
     }
     m_active_shader->setModelTransform(modelMatrix);
     myShape->draw();
@@ -383,6 +396,7 @@ std::vector<float> Graphics::getObjData(std::string filepath){
 std::shared_ptr<Material> Graphics::addMaterial(std::string materialName, glm::vec3 color, float shininess){
     std::shared_ptr<Material> newMaterial = std::make_shared<Material>(color, shininess);
     m_materials.insert({materialName, newMaterial});
+    std::cout << "Added new material: " << materialName << std::endl;
     return m_materials.at(materialName);
 }
 
@@ -399,6 +413,14 @@ std::shared_ptr<Material> Graphics::addMaterial(std::string materialName, std::s
     return m_materials.at(materialName);
 }
 
+std::shared_ptr<Material> Graphics::addMaterial(std::string materialName, std::string filePath, GLenum texUnit, float shininess)
+{
+    std::shared_ptr<Texture> newTexture = std::make_shared<Texture>(filePath, texUnit);
+    std::shared_ptr<Material> newMaterial = std::make_shared<Material>(newTexture, shininess);
+    m_materials.insert({ materialName, newMaterial });
+    return m_materials.at(materialName);
+}
+
 void Graphics::removeMaterial(std::string materialName){
     if(materialName != "default"){
         m_materials.erase(materialName);
@@ -406,6 +428,7 @@ void Graphics::removeMaterial(std::string materialName){
 }
 
 std::shared_ptr<Material> Graphics::getMaterial(std::string materialName){
+    //std::cout << "get material: " << materialName << " at: " << m_materials.at(materialName) << std::endl;
     return m_materials.at(materialName);
 }
 
