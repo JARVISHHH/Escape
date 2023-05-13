@@ -155,7 +155,7 @@ void createPlatform(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen
 		auto size = (mapNode->room->getMaxPoint() - mapNode->room->getMinPoint()) / 2.0f;
 		auto transform = std::make_shared<ModelTransform>();
 		transform->scale(glm::vec3(size[0], 0.05f, size[2]));
-		transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 1.0 + (float)rand() / RAND_MAX * 1.0, center[2]));
+		transform->translate(glm::vec3(center[0], mapNode->room->getMinPoint()[1] + 0.6 + (float)rand() / RAND_MAX * 0.6, center[2]));
 		createEnvironment(gameWorld, screen, "box", "platform", "platformNormal", transform);
 	}
 }
