@@ -12,18 +12,26 @@ DrawComponent::DrawComponent(std::string shapeType, std::string materialName, st
 {
 	shape = Global::graphics.getShape(shapeType);
 	if (materialName.compare("") != 0) material = Global::graphics.getMaterial(materialName);
-	if (materialNormalName.compare("") != 0) materialNormal = Global::graphics.getMaterial(materialNormalName);
+	if (materialNormalName.compare("") != 0) {
+		materialNormal = Global::graphics.getMaterial(materialNormalName);
+		std::cout << "material name: " << materialNormalName << std::endl;
+		std::cout << materialNormal->getTexture()->getTexUnitUint() << std::endl;
+	}
 }
 
 void DrawComponent::drawPhong()
 {
+	Debug::checkGLError();
 	std::shared_ptr<TransformComponent> transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
 	if (transformComponent == nullptr) return;
 	//auto pos = transformComponent->getModelTransform()->getPos();
 	//if (gameObject->getTag() == "character")
 	//	std::cout << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
+	Debug::checkGLError();
 	Global::graphics.setUniformFloat("alpha", alpha);
+	Debug::checkGLError();
 	Global::graphics.drawShape(shape, transformComponent->getModelTransform(), material, materialNormal);
+	Debug::checkGLError();
 }
 
 void DrawComponent::setShape(std::string shapeType)

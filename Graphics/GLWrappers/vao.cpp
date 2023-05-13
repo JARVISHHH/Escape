@@ -1,5 +1,6 @@
 #include "vao.h"
 #include <iostream>
+#include <Graphics/debug.h>
 
 VAO::VAO(std::shared_ptr<VBO> vbo, VAOAttrib attribs):
     m_vbo(vbo),
@@ -21,6 +22,9 @@ VAO::VAO(std::shared_ptr<VBO> vbo, VAOAttrib attribs):
     if(attribs & VAOAttrib::COLOR){
         m_vert_size += 3;
     }
+    if (attribs & VAOAttrib::TANGENT) {
+        m_vert_size += 6;
+    }
     
 
     //Attach layout to vbo depending on which of the above attributes it has
@@ -37,6 +41,10 @@ VAO::VAO(std::shared_ptr<VBO> vbo, VAOAttrib attribs):
     }
     if(attribs & VAOAttrib::COLOR){
         addAttribute(3, 3);
+    }
+    if (attribs & VAOAttrib::TANGENT) {
+        addAttribute(4, 3);
+        addAttribute(5, 3);
     }
 
     m_vbo->unbind();
@@ -57,7 +65,9 @@ void VAO::unbind(){
 
 void VAO::draw(){
     bind();
+    Debug::checkGLError();
     glDrawArrays(GL_TRIANGLES, 0, m_vbo->getLength()/m_vert_size);
+    Debug::checkGLError();
     unbind();
 }
 

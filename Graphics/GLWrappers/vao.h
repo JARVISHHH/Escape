@@ -7,7 +7,8 @@ enum class VAOAttrib{
     POS = 1,
     NORM = 2,
     UV = 4,
-    COLOR = 8
+    COLOR = 8,
+    TANGENT = 16,
 };
 
 inline VAOAttrib operator|(VAOAttrib lhs, VAOAttrib rhs){

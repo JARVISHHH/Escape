@@ -1,7 +1,7 @@
 #version 330 core
 // Uniforms for shape information
 in vec3 worldSpace_pos;
-in vec3 worldSpace_norm;
+in vec3 particular_norm;
 in vec2 tex_coord;
 
 in vec4 lightSpace_pos[16];
@@ -13,6 +13,9 @@ uniform sampler2D objTexture;
 in vec3 vertColor;
 uniform float shininess;
 uniform float alpha;  // Object alpha value
+uniform int fragNormalSource;
+in mat3 TBN;
+uniform sampler2D normalMap;
 
 // Camera uniform
 uniform vec3 worldSpace_camPos;
@@ -61,19 +64,19 @@ float attenuationFactor(int lightIndex) {
     return 1;
 }
 
-float computeDiffuseIntensity(vec3 worldSpace_toLight) {
+float computeDiffuseIntensity(vec3 worldSpace_toLight, vec3 worldSpace_norm) {
     // Dot product to get diffuse intensity
     return max(dot(worldSpace_toLight, normalize(worldSpace_norm)), 0);
 }
 
-float computeSpecularIntensity(vec3 worldSpace_toLight, vec3 worldSpace_toEye) {
+float computeSpecularIntensity(vec3 worldSpace_toLight, vec3 worldSpace_toEye, vec3 worldSpace_norm) {
     // Guard against pow weirdness when exponent is 0
     if (shininess == 0) {
         return 0;
     }
 
     //reflect toLight
-    vec3 worldSpace_toLightReflected = reflect(-worldSpace_toLight, normalize(worldSpace_norm));
+    vec3 worldSpace_toLightReflected = reflect(-worldSpace_toLight, normalize(particular_norm));
 
     //Compute specular intensity using toEye, reflected light, and shininess
     return pow(max(dot(worldSpace_toLightReflected, worldSpace_toEye), 0), shininess);
@@ -110,6 +113,19 @@ float shadowCalculation(int index) {
 }
 
 void main() {
+
+    vec3 worldSpace_norm = particular_norm;
+    if(fragNormalSource == 1) {
+        vec3 normal = texture(normalMap, tex_coord).rgb;
+        normal = normal * 2.0 - 1.0;   
+        if(length(TBN * normal) == 0) worldSpace_norm = particular_norm;
+        else worldSpace_norm = normalize(TBN * normal); 
+        // worldSpace_norm = particular_norm;
+    } else {
+        worldSpace_norm = particular_norm;
+    }
+    // worldSpace_norm = particular_norm;
+
     // Declare ambient, diffuse, and specular terms
     vec3 ambi = vec3(coeffs.x);
     vec3 diff = vec3(0.0);
@@ -128,8 +144,8 @@ void main() {
         // get direction vector to light based on light type
         vec3 worldSpace_toLight = getToLight(i);
 
-        float diffuse_intensity = computeDiffuseIntensity(worldSpace_toLight);
-        float specular_intensity = computeSpecularIntensity(worldSpace_toLight, worldSpace_toEye);
+        float diffuse_intensity = computeDiffuseIntensity(worldSpace_toLight, worldSpace_norm);
+        float specular_intensity = computeSpecularIntensity(worldSpace_toLight, worldSpace_toEye, worldSpace_norm);
 
         float att = attenuationFactor(i);
 

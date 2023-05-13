@@ -37,7 +37,7 @@ GameScreen::GameScreen()
 	Global::graphics.addMaterial("monomi", "Resources/Images/monomi.png");
 	Global::graphics.addMaterial("learn", "Resources/Images/learn.jpg");
 	Global::graphics.addMaterial("wall", "Resources/Images/brickwall.jpg");
-	Global::graphics.addMaterial("wallNormal", "Resources/Images/brickwall_normal.jpg", (GLenum)GL_TEXTURE1);
+	Global::graphics.addMaterial("wallNormal", "Resources/Images/brickwall_normal.jpg", GL_TEXTURE1, 1.f);
 	Global::graphics.addMaterial("ground", "Resources/Images/grass.png");
 
 	Global::graphics.addShape("coin", "./Resources/Meshes/coin.obj");

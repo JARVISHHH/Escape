@@ -1,4 +1,5 @@
 #include "material.h"
+#include <iostream>
 
 Material::Material(glm::vec3 color, float shininess):
     m_colorSource(ColorSource::SOLID_COLOR),
@@ -6,14 +7,15 @@ Material::Material(glm::vec3 color, float shininess):
     m_color(color),
     m_shininess(shininess)
 {
-
+    std::cout << "color material" << std::endl;
 }
 
 Material::Material(float shininess):
     m_colorSource(ColorSource::PER_VERTEX_COLOR),
+    m_normalSource(NormalSource::ORIGINAL_NORMAL),
     m_shininess(shininess)
 {
-
+    std::cout << "vertex material" << std::endl;
 }
 
 Material::Material(std::shared_ptr<Texture> texture, float shininess):
@@ -22,7 +24,7 @@ Material::Material(std::shared_ptr<Texture> texture, float shininess):
     m_texture(texture),
     m_shininess(shininess)
 {
-
+    std::cout << "texture material" << std::endl;
 }
 
 Material::~Material(){

@@ -24,16 +24,23 @@ void Shader::setMaterial(std::shared_ptr<Material> material){
     ColorSource color_source = material->getColorSource();
     switch(color_source){
         case ColorSource::SOLID_COLOR:
+            Debug::checkGLError();
             glUniform1i(glGetUniformLocation(m_handle, "colorSource"), 0);
+            Debug::checkGLError();
             glUniform3f(glGetUniformLocation(m_handle, "objColor"), material->getColor().r, material->getColor().g, material->getColor().b);
+            Debug::checkGLError();
             break;
         case ColorSource::TEXTURE_COLOR:
+            Debug::checkGLError();
             glUniform1i(glGetUniformLocation(m_handle, "colorSource"), 1);
+            Debug::checkGLError();
             material->getTexture()->bind();
             glUniform1i(glGetUniformLocation(m_handle, "objTexture"), material->getTexture()->getTexUnitUint());
+            Debug::checkGLError();
             break;
         case ColorSource::PER_VERTEX_COLOR:
             glUniform1i(glGetUniformLocation(m_handle, "colorSource"), 2);
+            Debug::checkGLError();
             break;
     }
     float shininess = material->getShininess();
@@ -45,12 +52,20 @@ void Shader::setNormalMap(std::shared_ptr<Material> material)
     NormalSource normal_source = material->getNormalSource();
     switch (normal_source) {
     case NormalSource::ORIGINAL_NORMAL:
-        glUniform1i(glGetUniformLocation(m_handle, "normalSource"), 0);
+        glUniform1i(glGetUniformLocation(m_handle, "vertNormalSource"), 0);
+        glUniform1i(glGetUniformLocation(m_handle, "fragNormalSource"), 0);
+        //std::cout << "add normal" << std::endl;
+        Debug::checkGLError();
         break;
     case NormalSource::TEXTURE_NORMAL:
-        glUniform1i(glGetUniformLocation(m_handle, "normalSource"), 1);
+        glUniform1i(glGetUniformLocation(m_handle, "vertNormalSource"), 1);
+        glUniform1i(glGetUniformLocation(m_handle, "fragNormalSource"), 1);
+        Debug::checkGLError();
         material->getTexture()->bind();
+        //std::cout << material->getTexture()->getTexUnitUint() << std::endl;
         glUniform1i(glGetUniformLocation(m_handle, "normalMap"), material->getTexture()->getTexUnitUint());
+        Debug::checkGLError();
+        //std::cout << "add normal" << std::endl;
         break;
     }
 }

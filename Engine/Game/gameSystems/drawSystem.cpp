@@ -26,6 +26,7 @@ void DrawSystem::drawPhong()
 	auto& lights = Global::graphics.getLights();
 	for (int i = 0; i < lights.size(); i++) {
 		Global::graphics.setShadow(i);
+		Debug::checkGLError();
 		for (auto component : components) {
 			component->drawPhong();
 		}

@@ -133,16 +133,14 @@ std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string fil
         throw std::runtime_error(warn + err);
     }
 
-    //std::cout << "warn: " << warn << std::endl;
-    //std::cout << "err: " << err << std::endl;
-
     int numTriangles = 0;
     for(size_t s = 0; s < shapes.size(); s++){
         numTriangles += shapes[s].mesh.num_face_vertices.size();
     }
 
+    float eachVertexSize = 17;
     std::vector<float> drawData;
-    drawData.resize(numTriangles * 3 * 8);
+    drawData.resize(numTriangles * 3 * eachVertexSize);
     std::vector<glm::vec3> collisionData;
     collisionData.resize(numTriangles * 3);
 
@@ -174,7 +172,7 @@ std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string fil
 
                 // Add collision position data
                 collisionData[j] = glm::vec3(attrib.vertices[3*idx.vertex_index], attrib.vertices[3*idx.vertex_index + 1], attrib.vertices[3*idx.vertex_index + 2]);
-                i += 8;
+                i += eachVertexSize;
                 j += 1;
             }
 
@@ -182,7 +180,35 @@ std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string fil
         }
     }
 
-    m_shapes.insert({shapeName, std::make_shared<Shape>(std::make_shared<VAO>(std::make_shared<VBO>(drawData), VAOAttrib::POS | VAOAttrib::NORM | VAOAttrib::UV))});
+    for (int j = 0; j < numTriangles; j++) {
+        int i = j * 3;
+        glm::vec3 v0 = glm::vec3(drawData[i * eachVertexSize], drawData[i * eachVertexSize + 1], drawData[i * eachVertexSize + 2]);
+        glm::vec3 v1 = glm::vec3(drawData[(i + 1) * eachVertexSize], drawData[(i + 1) * eachVertexSize + 1], drawData[(i + 1) * eachVertexSize + 2]);
+        glm::vec3 v2 = glm::vec3(drawData[(i + 2) * eachVertexSize], drawData[(i + 2) * eachVertexSize + 1], drawData[(i + 2) * eachVertexSize + 2]);
+    
+        glm::vec2 uv0 = glm::vec2(drawData[i * eachVertexSize + 6], drawData[i * eachVertexSize + 7]);
+        glm::vec2 uv1 = glm::vec2(drawData[(i + 1) * eachVertexSize + 6], drawData[(i + 1) * eachVertexSize + 7]);
+        glm::vec2 uv2 = glm::vec2(drawData[(i + 2) * eachVertexSize + 6], drawData[(i + 2) * eachVertexSize + 7]);
+
+        glm::vec3 deltaPos1 = v1 - v0;
+        glm::vec3 deltaPos2 = v2 - v0;
+
+        glm::vec2 deltaUV1 = uv1 - uv0;
+        glm::vec2 deltaUV2 = uv2 - uv0;
+
+        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+        glm::vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+        glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+
+        for (int k = 0; k < 3; k++) {
+            for (int l = 0; l < 3; l++) {
+                drawData[(i + k) * eachVertexSize + 11 + l] = tangent[l];
+                drawData[(i + k) * eachVertexSize + 14 + l] = bitangent[l];
+            }
+        }
+    }
+
+    m_shapes.insert({shapeName, std::make_shared<Shape>(std::make_shared<VAO>(std::make_shared<VBO>(drawData), VAOAttrib::POS | VAOAttrib::NORM | VAOAttrib::UV | VAOAttrib::COLOR | VAOAttrib::TANGENT))});
 
     return collisionData;
 }
@@ -233,20 +259,25 @@ std::shared_ptr<Shape> Graphics::getShape(std::string shapeName){
 }
 
 void Graphics::drawShape(std::shared_ptr<Shape> myShape, std::shared_ptr<ModelTransform> modelTransform, std::shared_ptr<Material> material, std::shared_ptr<Material> materialNormal){
+    Debug::checkGLError();
     if(material == nullptr){
         m_active_shader->setMaterial(getMaterial("default"));
     }
     else{
         m_active_shader->setMaterial(material);
     }
+    Debug::checkGLError();
     if (materialNormal == nullptr) {
         m_active_shader->setNormalMap(getMaterial("defaultNormal"));
     }
     else {
         m_active_shader->setNormalMap(materialNormal);
     }
+    Debug::checkGLError();
     m_active_shader->setModelTransform(modelTransform);
+    Debug::checkGLError();
     myShape->draw();
+    Debug::checkGLError();
 }
 
 void Graphics::drawShape(std::shared_ptr<Shape> myShape, glm::mat4 modelMatrix, std::shared_ptr<Material> material, std::shared_ptr<Material> materialNormal){
@@ -257,6 +288,7 @@ void Graphics::drawShape(std::shared_ptr<Shape> myShape, glm::mat4 modelMatrix, 
         m_active_shader->setMaterial(material);
     }
     if (materialNormal == nullptr) {
+        std::cout << "defaultNormal";
         m_active_shader->setNormalMap(getMaterial("defaultNormal"));
     }
     else {
@@ -317,8 +349,8 @@ void Graphics::bindShadow()
     Debug::checkGLError();
     GLint samplers[16];
     for (int i = 0; i < 16; i++) {
-        samplers[i] = i + 1;
-        glActiveTexture(GL_TEXTURE0 + i + 1);
+        samplers[i] = i + 2;
+        glActiveTexture(GL_TEXTURE0 + i + 2);
         glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubeMaps[i]);
     }
     glUniform1iv(samplerLocation, 16, samplers);

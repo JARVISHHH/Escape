@@ -19,6 +19,8 @@ Texture::Texture(int width, int height, GLenum texUnit, GLint internalFormat, GL
     glTexParameteri(m_texTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexImage2D(m_texTarget, 0, internalFormat, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     unbind();
+
+    std::cout << "unit: " << texUnit - GL_TEXTURE0 << std::endl;
 }
 
 Texture::Texture(std::string filepath, GLenum texUnit, GLint internalFormat, GLenum texTarget):
@@ -40,6 +42,8 @@ Texture::Texture(std::string filepath, GLenum texUnit, GLint internalFormat, GLe
     glTexImage2D(m_texTarget, 0, internalFormat, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     stbi_image_free(data);
     unbind();
+
+    std::cout << "unit: " << texUnit - GL_TEXTURE0 << std::endl;
 }
 
 Texture::~Texture(){
