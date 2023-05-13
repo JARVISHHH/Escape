@@ -12,11 +12,7 @@ DrawComponent::DrawComponent(std::string shapeType, std::string materialName, st
 {
 	shape = Global::graphics.getShape(shapeType);
 	if (materialName.compare("") != 0) material = Global::graphics.getMaterial(materialName);
-	if (materialNormalName.compare("") != 0) {
-		materialNormal = Global::graphics.getMaterial(materialNormalName);
-		std::cout << "material name: " << materialNormalName << std::endl;
-		std::cout << materialNormal->getTexture()->getTexUnitUint() << std::endl;
-	}
+	if (materialNormalName.compare("") != 0) materialNormal = Global::graphics.getMaterial(materialNormalName);
 }
 
 void DrawComponent::drawPhong()

@@ -76,7 +76,7 @@ float computeSpecularIntensity(vec3 worldSpace_toLight, vec3 worldSpace_toEye, v
     }
 
     //reflect toLight
-    vec3 worldSpace_toLightReflected = reflect(-worldSpace_toLight, normalize(particular_norm));
+    vec3 worldSpace_toLightReflected = reflect(-worldSpace_toLight, normalize(worldSpace_norm));
 
     //Compute specular intensity using toEye, reflected light, and shininess
     return pow(max(dot(worldSpace_toLightReflected, worldSpace_toEye), 0), shininess);
@@ -118,9 +118,7 @@ void main() {
     if(fragNormalSource == 1) {
         vec3 normal = texture(normalMap, tex_coord).rgb;
         normal = normal * 2.0 - 1.0;   
-        if(length(TBN * normal) == 0) worldSpace_norm = particular_norm;
-        else worldSpace_norm = normalize(TBN * normal); 
-        // worldSpace_norm = particular_norm;
+        worldSpace_norm = normalize(TBN * normal); 
     } else {
         worldSpace_norm = particular_norm;
     }

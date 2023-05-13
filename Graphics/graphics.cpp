@@ -288,7 +288,6 @@ void Graphics::drawShape(std::shared_ptr<Shape> myShape, glm::mat4 modelMatrix, 
         m_active_shader->setMaterial(material);
     }
     if (materialNormal == nullptr) {
-        std::cout << "defaultNormal";
         m_active_shader->setNormalMap(getMaterial("defaultNormal"));
     }
     else {
