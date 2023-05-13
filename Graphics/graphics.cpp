@@ -121,7 +121,7 @@ std::shared_ptr<Shape> Graphics::addShape(std::string shapeName, std::vector<flo
     m_shapes.insert({shapeName, std::make_shared<Shape>(std::make_shared<VAO>(std::make_shared<VBO>(data), attribs))});
     return m_shapes.at(shapeName);
 }
-std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string filepath, bool hasUV){
+std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string filepath, bool hasUV, int uvScale){
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
@@ -146,6 +146,7 @@ std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string fil
 
     int i = 0;
     int j = 0;
+    glm::vec3 minPoint = { 10000, 10000, 10000 }, maxPoint = { -10000, -10000, -10000 };
     for(size_t s = 0; s < shapes.size(); s++) {
         size_t index_offset = 0;
         for(size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
@@ -166,8 +167,8 @@ std::vector<glm::vec3> Graphics::addShape(std::string shapeName, std::string fil
                 drawData[i + 6] = 0;
                 drawData[i + 7] = 0;
                 if(hasUV){
-                    drawData[i + 6] = attrib.texcoords[2*idx.texcoord_index];
-                    drawData[i + 7] = attrib.texcoords[2*idx.texcoord_index + 1];
+                    drawData[i + 6] = attrib.texcoords[2*idx.texcoord_index] * uvScale;
+                    drawData[i + 7] = attrib.texcoords[2*idx.texcoord_index + 1] * uvScale;
                 }
 
                 // Add collision position data

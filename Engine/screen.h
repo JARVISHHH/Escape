@@ -16,7 +16,7 @@ public:
     static std::unordered_map<int, bool> mousePressing;
 
     virtual void init();
-    void addEnvironmentMesh(std::string name, std::string path);
+    void addEnvironmentMesh(std::string name, std::string path, bool hasUV = true, int uvScale = 1);
     std::vector<std::shared_ptr<Triangle>> getEnvironmentMesh(std::string name);
 
     virtual void update(double seconds);

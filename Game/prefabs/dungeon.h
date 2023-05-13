@@ -66,7 +66,7 @@ void createDungeonRooms(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Sc
 
 void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen> screen, std::shared_ptr<Map> map, std::shared_ptr<GameObject> gameHandlerObject) {
 	for (auto& connector : map->getConnectors()) {
-		// Floor
+		// Walls
 		glm::vec3 source = connector.first->room->getCenter(), target = connector.second->room->getCenter();
 		glm::vec3 center = (source + target) / 2.0f;
 		auto transform = std::make_shared<ModelTransform>();
@@ -75,9 +75,6 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		if (target[2] > source[2]) angle = -angle;
 		transform->rotate(angle, glm::vec3(0, 1, 0));
 		transform->translate(glm::vec3(center[0], (connector.first->room->getMinPoint()[1] + connector.second->room->getMinPoint()[1]) / 2.0f, center[2]));
-		createEnvironment(gameWorld, screen, "plane", "ground", "", transform);
-
-		// Walls
 		// Get intersection
 		std::vector<std::pair<glm::vec3, glm::vec3>> wallPos;
 		glm::vec4 direction1(1, 0, 0, 0);
@@ -109,13 +106,21 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 		createWall(gameWorld, screen, wallPos[0].first, wallPos[1].first, HEIGHT);
 		createWall(gameWorld, screen, wallPos[0].second, wallPos[1].second, HEIGHT);
 
+		// Floor
+		transform = std::make_shared<ModelTransform>();
+		transform->rotate(angle, glm::vec3(0, 1, 0));
+		transform->scale(glm::vec3(glm::length(wallPos[0].first - wallPos[1].first), 1.0f, 2.0f));
+		auto connectorCenter = (wallPos[0].first + wallPos[1].second) / 2.0f;
+		transform->translate(glm::vec3(connectorCenter[0], (connector.first->room->getMinPoint()[1] + connector.second->room->getMinPoint()[1]) / 2.0f, connectorCenter[2]));
+		createEnvironment(gameWorld, screen, "plane", "connector", "connectorNormal", transform);
+
 		// Ceiling
 		transform = std::make_shared<ModelTransform>();
 		transform->scale(glm::vec3(glm::length(source - target) / 2, 1.0f, 1.0f));
 		transform->rotate(angle, glm::vec3(0, 1, 0));
 		transform->rotate(M_PI, glm::vec3(1, 0, 0));
 		transform->translate(glm::vec3(center[0], (connector.first->room->getMinPoint()[1] + connector.second->room->getMinPoint()[1]) / 2.0f, center[2]) + glm::vec3(0, HEIGHT, 0));
-		createEnvironment(gameWorld, screen, "plane", "ground", "", transform);
+		createEnvironment(gameWorld, screen, "plane", "wall", "wallNormal", transform);
 	}
 
 	// create rooms

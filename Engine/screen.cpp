@@ -10,10 +10,10 @@ void Screen::init()
 	windowResizeEvent(width, height);
 }
 
-void Screen::addEnvironmentMesh(std::string name, std::string path)
+void Screen::addEnvironmentMesh(std::string name, std::string path, bool hasUV, int uvScale)
 {
 	meshTriangles[name] = std::vector<std::shared_ptr<Triangle>>();
-	auto temp = Global::graphics.addShape(name, path);
+	auto temp = Global::graphics.addShape(name, path, hasUV, uvScale);
 	for (int i = 0; i < temp.size(); i += 3) {
 		meshTriangles[name].push_back(std::make_shared<Triangle>(temp[i], temp[i + 1], temp[i + 2]));
 	}

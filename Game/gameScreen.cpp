@@ -36,18 +36,25 @@ GameScreen::GameScreen()
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.png");
 	Global::graphics.addMaterial("monomi", "Resources/Images/monomi.png");
 	Global::graphics.addMaterial("learn", "Resources/Images/learn.jpg");
-	Global::graphics.addMaterial("wall", "Resources/Images/brickwall.jpg");
-	Global::graphics.addMaterial("wallNormal", "Resources/Images/brickwall_normal.jpg", GL_TEXTURE1, 1.f);
-	Global::graphics.addMaterial("ground", "Resources/Images/grass.png");
+	Global::graphics.addMaterial("wall", "Resources/Images/wall.jpg");
+	Global::graphics.addMaterial("wallNormal", "Resources/Images/wall_normal.jpg", GL_TEXTURE1, 1.f);
+	//Global::graphics.addMaterial("wall", "Resources/Images/brickwall.jpg");
+	//Global::graphics.addMaterial("wallNormal", "Resources/Images/brickwall_normal.jpg", GL_TEXTURE1, 1.f);
+	Global::graphics.addMaterial("ground", "Resources/Images/ground.jpg");
+	Global::graphics.addMaterial("groundNormal", "Resources/Images/ground_normal.jpg", GL_TEXTURE1, 1.f);
+	Global::graphics.addMaterial("connector", "Resources/Images/connector.jpg");
+	Global::graphics.addMaterial("connectorNormal", "Resources/Images/connector_normal.jpg", GL_TEXTURE1, 1.f);
+	Global::graphics.addMaterial("platform", "Resources/Images/platform.jpg");
+	Global::graphics.addMaterial("platformNormal", "Resources/Images/platform_normal.jpg", GL_TEXTURE1, 1.f);
 
 	Global::graphics.addShape("coin", "./Resources/Meshes/coin.obj");
 	Global::graphics.addShape("health", "./Resources/Meshes/health.obj");
 	Global::graphics.addShape("bullet", "./Resources/Meshes/ninja_star.obj");
 
-	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj");
-	addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj");
-	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj");
-	addEnvironmentMesh("box", "./Resources/Meshes/box.obj");
+	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj", true, 10);
+	addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj", true, 10);
+	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj", true, 2);
+	addEnvironmentMesh("box", "./Resources/Meshes/box.obj", true, 10);
 	addEnvironmentMesh("spike", "./Resources/Meshes/spike.obj");
 	addEnvironmentMesh("test", "./Resources/Meshes/test.obj");
 }

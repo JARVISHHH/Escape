@@ -31,7 +31,7 @@ public:
 
     // Shape-related methods
     std::shared_ptr<Shape> addShape(std::string shapeName, std::vector<float> data, VAOAttrib attribs);
-    std::vector<glm::vec3> addShape(std::string shapeName, std::string filepath, bool hasUV = true);
+    std::vector<glm::vec3> addShape(std::string shapeName, std::string filepath, bool hasUV = true, int uvScale = 1);
     // Returns pair containing positions followed by triangles indexed into the positions vector
     std::pair<std::vector<glm::vec3>, std::vector<glm::ivec3>> getNavmeshData(std::string filepath);
     void removeShape(std::string shapeName);
