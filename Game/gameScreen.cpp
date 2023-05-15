@@ -63,7 +63,7 @@ void GameScreen::init()
 {
 	Screen::init();
 
-	auto camera = std::make_shared<Camera>();
+	auto camera = std::make_shared<Camera>(width, height);
 
 	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this(), width, height);
 
@@ -95,17 +95,7 @@ void GameScreen::init()
 	createDungeon(gameWorld, shared_from_this(), map, gameHandler);
 	createLights(gameWorld, map);
 
-	// Create game object
-	//std::shared_ptr<GameObject> character = createCharacter(gameWorld, glm::vec3(0, 3, 0), gameHandler);
-	//std::shared_ptr<GameObject> goalObject = createGoal(gameWorld, glm::vec3(11, 5, 0));
-	//std::shared_ptr<GameObject> environment = createEnvironment(gameWorld, shared_from_this(), "test", "grass");
-	//auto transform = std::shared_ptr<ModelTransform>();
-	//transform->translate
-	//std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "box", "grass");
-	//std::shared_ptr<GameObject> ground = createEnvironment(gameWorld, shared_from_this(), "ground", "ground");
-	//std::shared_ptr<GameObject> chasingEnemy = createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(4, 0.5, -3), navMesh);
-	//std::shared_ptr<GameObject> shootingEnemy = createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(2, 0.5, -3));
-
+	// Collision
 	collisionSystem->buildBVH();
 	collisionSystem->buildHG();
 	//collisionSystem->addLayer("projectile");

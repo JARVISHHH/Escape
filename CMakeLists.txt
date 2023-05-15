@@ -107,6 +107,8 @@ add_executable(${PROJECT_NAME}
     Engine/UIKit/button.cpp
     Engine/UIKit/label.h
     Engine/UIKit/label.cpp
+    Engine/UIKit/text.h
+    Engine/UIKit/text.cpp
 
     Engine/Game/gameComponent.h
     Engine/Game/gameComponent.cpp

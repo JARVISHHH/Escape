@@ -1,5 +1,5 @@
 #include "menuScreen.h"
-#include <Engine/UIKit/uiElement.h>
+#include "ui.h"
 
 extern std::shared_ptr<App> app;
 
@@ -7,6 +7,19 @@ void MenuScreen::init()
 {
 	Screen::init();
 
+	// Title text
+	std::shared_ptr<Text> title = std::make_shared<Text>();
+	title->setContent("Escape");
+	title->setLocalPosition(glm::vec3(175, 350, 0));
+	title->setFontSize(2.0f);
+	// Start text
+	std::shared_ptr<Text> start = std::make_shared<Text>();
+	start->setContent("Start");
+	start->setLocalPosition(glm::vec3(175, 100, 0));
+	start->setFontSize(0.5f);
+	// Add to UI
+	ui->add(title);
+	ui->add(start);
 }
 
 void MenuScreen::draw() {
@@ -14,10 +27,10 @@ void MenuScreen::draw() {
 	Global::graphics.setClearColor(glm::vec3(0.0f, 1.0f, 1.0f));
 	Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Text
-	Global::graphics.bindShader("text");
-	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Search", glm::ivec2(175, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 2.0f, 0.1f, glm::vec3(0, 0, 1));
-	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press any key to start...", glm::ivec2(175, 100), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(0, 0, 1));
+	//// Text
+	//Global::graphics.bindShader("text");
+	//Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Search", glm::ivec2(175, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 2.0f, 0.1f, glm::vec3(0, 0, 1));
+	//Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press any key to start...", glm::ivec2(175, 100), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(0, 0, 1));
 
 	// UI
 	ui->draw();
