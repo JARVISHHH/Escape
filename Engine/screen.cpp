@@ -38,6 +38,7 @@ void Screen::draw() {
 }
 
 void Screen::keyEvent(int key, int action) {
+	if (!active) return;
 	if (action == GLFW_PRESS) keyPressing[key] = true;
 	else if (action == GLFW_RELEASE) keyPressing[key] = false;
 }
@@ -49,8 +50,10 @@ void Screen::mousePosEvent(double xpos, double ypos) {
 }
 
 void Screen::mouseButtonEvent(int button, int action) {
+	if (!active) return;
 	if (action == GLFW_PRESS) mousePressing[button] = true;
 	else if (action == GLFW_RELEASE) mousePressing[button] = false;
+	ui->mouseButtonEvent(button, action);
 }
 
 void Screen::scrollEvent(double distance) {

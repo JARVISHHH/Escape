@@ -10,8 +10,9 @@
 
 class UIElement: public std::enable_shared_from_this<UIElement> {
 public:
+
 	virtual void draw();
-	virtual void click();
+	virtual void mouseButtonEvent(int button, int action);
 
 	void setPosition(glm::vec3 position);
 	void setLocalPosition(glm::vec3 localPosition);

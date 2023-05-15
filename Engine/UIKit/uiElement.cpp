@@ -6,10 +6,10 @@ void UIElement::draw()
 		child->draw();
 }
 
-void UIElement::click()
+void UIElement::mouseButtonEvent(int button, int action)
 {
 	for (auto& child : children)
-		child->draw();
+		child->mouseButtonEvent(button, action);
 }
 
 void UIElement::setPosition(glm::vec3 position)

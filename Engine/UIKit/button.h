@@ -4,15 +4,15 @@
 
 class Button : public UIElement {
 public:
+	Button(glm::vec3 localPosition, glm::vec3 size, void (*doAction)());
+
 	void draw() override;
-	void click() override;
+	void mouseButtonEvent(int button, int action) override;
 
 protected:
 	glm::vec3 size;
 
-	virtual void action();
-
 private:
 	bool inButton();
-
+	void (*doAction)();
 };

@@ -7,19 +7,24 @@ void MenuScreen::init()
 {
 	Screen::init();
 
+	// Text
 	// Title text
-	std::shared_ptr<Text> title = std::make_shared<Text>();
-	title->setContent("Escape");
-	title->setLocalPosition(glm::vec3(175, 350, 0));
-	title->setFontSize(2.0f);
+	std::shared_ptr<Text> titleText = std::make_shared<Text>();
+	titleText->setContent("Escape");
+	titleText->setLocalPosition(glm::vec3(175, 350, 0));
+	titleText->setFontSize(2.0f);
 	// Start text
-	std::shared_ptr<Text> start = std::make_shared<Text>();
-	start->setContent("Start");
-	start->setLocalPosition(glm::vec3(175, 100, 0));
-	start->setFontSize(0.5f);
+	std::shared_ptr<Text> startText = std::make_shared<Text>();
+	startText->setContent("Start");
+	startText->setLocalPosition(glm::vec3(175, 100, 0));
+	startText->setFontSize(0.5f);
+	// Button
+	// Start button
+	std::shared_ptr<Button> startButton = std::make_shared<Button>(glm::vec3(175, 100, 0), glm::vec3(50, 50, 0), MenuScreen::activeGame);
 	// Add to UI
-	ui->add(title);
-	ui->add(start);
+	ui->add(titleText);
+	ui->add(startText);
+	ui->add(startButton);
 }
 
 void MenuScreen::draw() {
@@ -39,6 +44,11 @@ void MenuScreen::draw() {
 void MenuScreen::keyEvent(int key, int action) {
 	Screen::keyEvent(key, action);
 	if (action == GLFW_PRESS) {
-		app->activateScreen("game");
+		activeGame();
 	}
+}
+
+void MenuScreen::activeGame()
+{
+	app->activateScreen("game");
 }
