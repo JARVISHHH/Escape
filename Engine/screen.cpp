@@ -3,6 +3,7 @@
 
 
 std::unordered_map<int, bool> Screen::keyPressing;
+glm::vec2 Screen::mousePos(0, 0);
 std::unordered_map<int, bool> Screen::mousePressing;
 
 void Screen::init()
@@ -42,6 +43,7 @@ void Screen::keyEvent(int key, int action) {
 
 void Screen::mousePosEvent(double xpos, double ypos) {
 	if (!active) return;
+	mousePos[0] = xpos, mousePos[1] = ypos;
 	if (gameWorld != nullptr) gameWorld->mousePosEvent(xpos, ypos);
 }
 

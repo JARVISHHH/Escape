@@ -37,7 +37,7 @@ add_subdirectory(${GLFW_SOURCE_DIR})
 add_subdirectory(${GLM_SOURCE_DIR})
 add_subdirectory(${FREETYPE_SOURCE_DIR})
 
-add_library(StaticGLEW STATIC ${GLEW_SOURCE_DIR}/src/glew.c)
+add_library(StaticGLEW STATIC ${GLEW_SOURCE_DIR}/src/glew.c )
 
 include_directories(${GLFW_SOURCE_DIR}/include
                     ${GLFW_SOURCE_DIR}/deps
@@ -100,6 +100,11 @@ add_executable(${PROJECT_NAME}
     Engine/Mesh/vertex.cpp
     Engine/Mesh/triangle.h
     Engine/Mesh/triangle.cpp
+
+    Engine/UIKit/uiElement.h
+    Engine/UIKit/uiElement.cpp
+    Engine/UIKit/button.h
+    Engine/UIKit/button.cpp
 
     Engine/Game/gameComponent.h
     Engine/Game/gameComponent.cpp
@@ -241,7 +246,7 @@ add_executable(${PROJECT_NAME}
     Game/gameComponents/enemyHealth.cpp
     Game/gameComponents/lightComponent.h
     Game/gameComponents/lightComponent.cpp
- )
+)
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})
 
