@@ -61,6 +61,8 @@ GameScreen::GameScreen()
 
 void GameScreen::init()
 {
+	Screen::init();
+
 	auto camera = std::make_shared<Camera>();
 
 	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this(), width, height);
@@ -113,12 +115,7 @@ void GameScreen::init()
 	collisionSystem->deleteLayerCollision("character", "character");
 
 	gameWorld->start();
-
-	//score = 0;
-	//result = "";
 	active = true;
-
-	Screen::init();
 }
 
 void GameScreen::update(double seconds) {

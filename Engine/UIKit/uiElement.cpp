@@ -1,18 +1,18 @@
 #include "uiElement.h"
 
-void UIElemnet::draw()
+void UIElement::draw()
 {
 	for (auto& child : children)
 		child->draw();
 }
 
-void UIElemnet::click()
+void UIElement::click()
 {
 	for (auto& child : children)
 		child->draw();
 }
 
-void UIElemnet::add(std::shared_ptr<UIElemnet> element)
+void UIElement::add(std::shared_ptr<UIElement> element)
 {
 	children.push_back(element);
 }

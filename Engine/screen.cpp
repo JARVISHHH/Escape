@@ -1,6 +1,6 @@
 #include "screen.h"
 #include <Engine/Game/gameWorld.h>
-
+#include <Engine/UIKit/uiElement.h>
 
 std::unordered_map<int, bool> Screen::keyPressing;
 glm::vec2 Screen::mousePos(0, 0);
@@ -9,6 +9,7 @@ std::unordered_map<int, bool> Screen::mousePressing;
 void Screen::init()
 {
 	windowResizeEvent(width, height);
+	ui = std::make_shared<UIElement>();
 }
 
 void Screen::addEnvironmentMesh(std::string name, std::string path, bool hasUV, int uvScale)
@@ -33,7 +34,7 @@ void Screen::update(double seconds) {
 }
 
 void Screen::draw() {
-	
+
 }
 
 void Screen::keyEvent(int key, int action) {

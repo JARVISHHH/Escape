@@ -9,6 +9,7 @@
 #include "glm/glm.hpp"
 
 class GameWorld;
+class UIElement;
 
 class Screen : public std::enable_shared_from_this<Screen>
 {
@@ -33,6 +34,7 @@ public:
 protected:
     std::shared_ptr<GameWorld> gameWorld;
     std::unordered_map<std::string, std::vector<std::shared_ptr<Triangle>>> meshTriangles;
+    std::shared_ptr<UIElement> ui;
     int width = 640, height = 480;
     bool active = true;
 };

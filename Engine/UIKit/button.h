@@ -2,7 +2,7 @@
 
 #include "uiElement.h"
 
-class Button : public UIElemnet {
+class Button : public UIElement {
 public:
 	void draw() override;
 	void click() override;
