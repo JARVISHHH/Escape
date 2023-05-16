@@ -8,8 +8,8 @@
 class Texture
 {
 public:
-    Texture(int width, int height, GLenum texUnit = GL_TEXTURE0, GLint internalFormat = GL_RGB, GLenum texTarget = GL_TEXTURE_2D);
-    Texture(std::string filePath, GLenum texUnit = GL_TEXTURE0, GLint internalFormat = GL_RGB, GLenum texTarget = GL_TEXTURE_2D);
+    Texture(int width, int height, GLenum texUnit = GL_TEXTURE0, GLint internalFormat = GL_RGBA, GLenum texTarget = GL_TEXTURE_2D);
+    Texture(std::string filePath, GLenum texUnit = GL_TEXTURE0, GLint internalFormat = GL_RGBA, GLenum texTarget = GL_TEXTURE_2D);
     ~Texture();
 
     void bind();

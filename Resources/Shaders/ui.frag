@@ -16,6 +16,12 @@ void main()
         color = vec4(UIColor, 1.0);
     }
     else if(renderType == 2) {
+        if(texture(sprite, TexCoords).r < 1) {
+        color = vec4(1.0, 1.0, 1.0, 1.0);
+        }
+        else {
+            color = vec4(1.0, 1.0, 1.0, texture(sprite, TexCoords).r);
+        }
         color = texture(sprite, TexCoords);
     }
 }  

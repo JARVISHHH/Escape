@@ -17,9 +17,7 @@ void Button::draw()
 void Button::mouseButtonEvent(int button, int action)
 {
 	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT) {
-		std::cout << "button tried" << std::endl;
 		if (!inButton()) return;
-		std::cout << "do action" << std::endl;
 		doAction();
 	}
 }

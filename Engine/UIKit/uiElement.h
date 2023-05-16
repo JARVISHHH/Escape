@@ -42,7 +42,7 @@ protected:
 
 	RenderType renderType = TextureRender;
 	glm::vec3 color = glm::vec3(0, 1, 0);
-	std::string materialName = "grass";
+	std::string materialName = "button";
 
 	std::weak_ptr<UIElement> parent;
 	std::vector<std::shared_ptr<UIElement>> children;  // Children elements

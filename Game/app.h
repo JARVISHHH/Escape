@@ -9,6 +9,7 @@ public:
 	~App();
 
 	void start() override;
+	void loadResources();
 
 private:
 
