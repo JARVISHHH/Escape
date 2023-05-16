@@ -270,6 +270,8 @@ add_executable(${PROJECT_NAME}
     Game/gameComponents/enemyHealth.cpp
     Game/gameComponents/lightComponent.h
     Game/gameComponents/lightComponent.cpp
+    Game/gameComponents/characterMoving.h
+    Game/gameComponents/characterMoving.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} glfw StaticGLEW glm freetype ${OPENGL_LIBRARIES})

@@ -1,4 +1,5 @@
 #include "character.h"
+#include <Game/gameComponents/characterMoving.h>
 
 std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld, glm::vec3 pos, std::shared_ptr<GameObject> gameHandlerObject)
 {
@@ -51,7 +52,7 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	return character;
 }
 
-std::shared_ptr<GameObject> createMovingCharacter(std::shared_ptr<GameWorld> gameWorld, glm::vec3 pos)
+std::shared_ptr<GameObject> createMovingCharacter(std::shared_ptr<GameWorld> gameWorld, glm::vec3 pos, std::shared_ptr<Map> map, std::shared_ptr<MapNode> mapNode)
 {
 	std::shared_ptr<GameObject> character = std::make_shared<GameObject>("character");
 
@@ -67,17 +68,19 @@ std::shared_ptr<GameObject> createMovingCharacter(std::shared_ptr<GameWorld> gam
 	// Collision component
 	std::shared_ptr<CylinderComponent> cylinderComponent = std::make_shared<CylinderComponent>();
 	// Moving compinent
-	// TODO
+	std::shared_ptr<CharacterMoving> characterMoving = std::make_shared<CharacterMoving>(map, mapNode);
 
 
 	// Add components to game objects
 	character->addComponent(transformComponent);
 	character->addComponent(drawComponent);
 	character->addComponent(cylinderComponent);
+	character->addComponent(characterMoving);
 
 	gameWorld->getGameSystem<CameraSystem>("camera")->setCharacter(character);
 	gameWorld->getGameSystem<DrawSystem>("draw")->addComponent(drawComponent);
 	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(character, "character");
+	gameWorld->getGameSystem<TickSystem>("tick")->addComponent(characterMoving);
 	gameWorld->addGameObject(character);
 
 	return character;

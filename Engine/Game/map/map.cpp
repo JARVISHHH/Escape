@@ -56,6 +56,16 @@ std::vector<std::pair<std::shared_ptr<MapNode>, std::shared_ptr<MapNode>>>& Map:
 	return connectors;
 }
 
+std::vector<std::shared_ptr<MapNode>> Map::findConnectors(std::shared_ptr<MapNode> mapNode)
+{
+	std::vector<std::shared_ptr<MapNode>> nodes;
+	for (int i = 0; i < connectors.size(); i++) {
+		if (connectors[i].first == mapNode) nodes.push_back(connectors[i].second);
+		if (connectors[i].second == mapNode) nodes.push_back(connectors[i].first);
+	}
+	return nodes;
+}
+
 std::shared_ptr<MapNode> Map::findNode(std::shared_ptr<GameObject> object)
 {
 	for (auto& mapNode : leaves) {
