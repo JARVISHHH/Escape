@@ -35,6 +35,13 @@ void GameScreen::init()
 {
 	Screen::init();
 
+	// Shoot image
+	std::shared_ptr<Image> shootImage = std::make_shared<Image>();
+	shootImage->setPosition(glm::vec3((float)width / 2 - 25, (float)height / 2 + 25, -1));
+	shootImage->setSize(glm::vec3(50, 50, 0));
+	shootImage->setMaterial("shoot");
+
+	ui->add(shootImage);
 }
 
 void GameScreen::activateAction()
@@ -105,4 +112,10 @@ void GameScreen::draw() {
 	// Text
 	Global::graphics.bindShader("ui");
 	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press B to go back. Press R to restart.", glm::ivec2(0, 30), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.3f, 0.1f, glm::vec3(1, 0, 1));
+
+	// UI
+	glDisable(GL_DEPTH_TEST);
+	Global::graphics.bindShader("ui");
+	ui->draw();
+	glEnable(GL_DEPTH_TEST);
 }
