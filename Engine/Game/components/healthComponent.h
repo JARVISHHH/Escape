@@ -9,7 +9,7 @@ public:
 	void update(double seconds) override;
 
 	virtual bool damage(int damageNumber);
-	bool heal(int healNumber);
+	virtual bool heal(int healNumber);
 
 	float getCurrentHealth() { return currentHealth; }
 

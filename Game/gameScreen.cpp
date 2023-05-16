@@ -28,7 +28,6 @@
 #include <Engine/Game/gameSystems/particleSystem.h>
 #include <Game/prefabs/lights.h>
 
-#include "ui.h"
 #include "buttonAction.h"
 
 void GameScreen::init()
@@ -40,8 +39,19 @@ void GameScreen::init()
 	shootImage->setPosition(glm::vec3((float)width / 2 - 25, (float)height / 2 + 25, -1));
 	shootImage->setSize(glm::vec3(50, 50, 0));
 	shootImage->setMaterial("shoot");
+	// Hp
+	std::shared_ptr<Image> hpBarImage = std::make_shared<Image>();
+	hpBarImage->setPosition(glm::vec3(15, height + 10, -1));
+	hpBarImage->setSize(glm::vec3(120, 80, 0));
+	hpBarImage->setMaterial("hp");
+	hpImage = std::make_shared<Image>();
+	hpImage->setPosition(glm::vec3(35, height + 10, -1));
+	hpImage->setSize(glm::vec3(97, 80, 0));
+	hpImage->setMaterial("hp_red");
 
 	ui->add(shootImage);
+	ui->add(hpBarImage);
+	ui->add(hpImage);
 }
 
 void GameScreen::activateAction()
@@ -77,6 +87,9 @@ void GameScreen::activateAction()
 	//map->printMap();
 	createDungeon(gameWorld, shared_from_this(), map, gameHandler);
 	createLights(gameWorld, map);
+
+	// Set hp
+	gameWorld->getGameObject("character")->getComponent<CharacterHealth>("health")->setHP(hpImage);
 
 	// Collision
 	collisionSystem->buildBVH();

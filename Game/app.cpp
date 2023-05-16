@@ -36,6 +36,9 @@ void App::loadResources()
 	Global::graphics.addMaterial("button", "Resources/Images/button.png");
 	Global::graphics.addMaterial("shoot", "Resources/Images/shoot.png");
 
+	Global::graphics.addMaterial("hp", "Resources/Images/hp.png");
+	Global::graphics.addMaterial("hp_red", "Resources/Images/hp_red.png");
+
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.jpg");
 	Global::graphics.addMaterial("monomi", "Resources/Images/monomi.jpg");
 	Global::graphics.addMaterial("wall", "Resources/Images/wall.jpg");

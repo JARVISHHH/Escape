@@ -2,6 +2,7 @@
 
 #include "Engine/Game/components/physicsComponent.h"
 #include <Game/gameComponents/characterShoot.h>
+#include <Game/gameComponents/characterHealth.h>
 
 CharacterCollisionResponse::CharacterCollisionResponse(std::shared_ptr<GameObject> gameHandlerObject)
 	:gameHandlerObject(gameHandlerObject)
@@ -58,7 +59,7 @@ void CharacterCollisionResponse::responseCollision(std::vector<std::shared_ptr<C
 			if (physicsComponent != nullptr) physicsComponent->setVelocity(glm::vec3(physicsComponent->getVelocity().x, 0.0f, physicsComponent->getVelocity().z));
 		}
 		if (collision->environmentComponent.lock()->getGameObject()->getTag().compare("spike") == 0) {
-			gameHandler->endGame(false);
+			getGameObject()->getComponent<CharacterHealth>("health")->damage(2);
 		}
 	}
 }

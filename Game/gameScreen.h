@@ -15,6 +15,8 @@
 
 #include <Engine/screen.h>
 
+#include "ui.h"
+
 class GameScreen : public Screen {
 
 public:
@@ -28,4 +30,6 @@ private:
     std::shared_ptr<DrawSystem> drawSystem;
     std::shared_ptr<PhysicsSystem> physicsSystem;
     std::shared_ptr<CollisionSystem> collisionSystem;
+
+    std::shared_ptr<Image> hpImage;
 };
