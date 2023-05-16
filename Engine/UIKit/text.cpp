@@ -15,6 +15,13 @@ void Text::draw()
 	Global::graphics.drawUIText(Global::graphics.getFont(font), content, anchorPosition, AnchorPoint::TopLeft, width, fontSize, 0.1f, color);
 }
 
+void Text::resize(glm::vec2 scale)
+{
+	UIElement::resize(scale);
+	width *= scale[0];
+	fontSize *= scale[1];
+}
+
 void Text::setWidth(float width)
 {
 	this->width = width;

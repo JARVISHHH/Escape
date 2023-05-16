@@ -4,6 +4,7 @@
 
 #include "Graphics/global.h"
 #include <Engine/Mesh/triangle.h>
+#include "application.h"
 
 #include <GLFW/glfw3.h>
 #include "glm/glm.hpp"
@@ -17,8 +18,10 @@ public:
     static std::unordered_map<int, bool> keyPressing;
     static glm::vec2 mousePos;
     static std::unordered_map<int, bool> mousePressing;
+    static std::shared_ptr<Application> application;
 
     virtual void init();
+    static std::shared_ptr<Application> getApp();
     void addEnvironmentMesh(std::string name, std::string path, bool hasUV = true, int uvScale = 1);
     std::vector<std::shared_ptr<Triangle>> getEnvironmentMesh(std::string name);
 
@@ -35,6 +38,7 @@ protected:
     std::shared_ptr<GameWorld> gameWorld;
     std::unordered_map<std::string, std::vector<std::shared_ptr<Triangle>>> meshTriangles;
     std::shared_ptr<UIElement> ui;
-    int width = 640, height = 480;
+
     bool active = true;
+    int width, height;
 };

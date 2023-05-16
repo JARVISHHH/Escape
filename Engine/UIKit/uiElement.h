@@ -19,6 +19,7 @@ public:
 
 	virtual void draw();
 	virtual void mouseButtonEvent(int button, int action);
+	virtual void resize(glm::vec2 scale);
 
 	void setPosition(glm::vec3 position);
 	glm::vec3 getPosition();

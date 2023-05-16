@@ -28,8 +28,6 @@
 #include <Engine/Game/gameSystems/particleSystem.h>
 #include <Game/prefabs/lights.h>
 
-extern std::shared_ptr<App> app;
-
 GameScreen::GameScreen() 
 	: Screen(){
 	Global::graphics.addMaterial("grass", "Resources/Images/grass.png");
@@ -110,7 +108,7 @@ void GameScreen::init()
 
 void GameScreen::update(double seconds) {
 	if (keyPressing[GLFW_KEY_B]) {
-		app->activateScreen("menu");
+		getApp()->activateScreen("menu");
 		return;
 	}
 	if (keyPressing[GLFW_KEY_R]) {

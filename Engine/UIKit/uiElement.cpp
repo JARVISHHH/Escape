@@ -12,6 +12,15 @@ void UIElement::mouseButtonEvent(int button, int action)
 		child->mouseButtonEvent(button, action);
 }
 
+void UIElement::resize(glm::vec2 scale)
+{
+	auto newLocalPosition = glm::vec3(localPosition.x * scale.x, localPosition.y * scale.y, localPosition.z);
+	setLocalPosition(newLocalPosition);
+	size = glm::vec3(size[0] * scale[0], size[1] * scale[1], size[2]);
+	for (auto element : children)
+		element->resize(scale);
+}
+
 void UIElement::setPosition(glm::vec3 position)
 {
 	this->localPosition += position - this->position;

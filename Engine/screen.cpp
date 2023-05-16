@@ -8,8 +8,14 @@ std::unordered_map<int, bool> Screen::mousePressing;
 
 void Screen::init()
 {
+	width = application->getWidth(), height = application->getHeight();
 	windowResizeEvent(width, height);
 	ui = std::make_shared<UIElement>();
+}
+
+std::shared_ptr<Application> Screen::getApp()
+{
+	return Screen::application;
 }
 
 void Screen::addEnvironmentMesh(std::string name, std::string path, bool hasUV, int uvScale)
@@ -68,5 +74,6 @@ void Screen::framebufferResizeEvent(int width, int height) {
 void Screen::windowResizeEvent(int width, int height) {
 	Global::graphics.setWindowSize(glm::ivec2(width, height));
 	if (gameWorld != nullptr) gameWorld->windowResizeEvent(width, height);
+	if (ui != nullptr) ui->resize(glm::vec2((float)width / this->width, (float)height / this->height));
 	this->width = width, this->height = height;
 }

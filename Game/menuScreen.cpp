@@ -1,7 +1,7 @@
 #include "menuScreen.h"
 #include "ui.h"
 
-extern std::shared_ptr<App> app;
+//extern std::shared_ptr<App> app;
 
 void MenuScreen::init()
 {
@@ -50,5 +50,5 @@ void MenuScreen::keyEvent(int key, int action) {
 
 void MenuScreen::activeGame()
 {
-	app->activateScreen("game");
+	getApp()->activateScreen("game");
 }

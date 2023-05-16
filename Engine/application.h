@@ -6,9 +6,9 @@
 
 #include <GLFW/glfw3.h>
 
-#include "screen.h"
+class Screen;
 
-class Application
+class Application: std::enable_shared_from_this<Application>
 {
 public:
     Application();
@@ -27,6 +27,9 @@ public:
     void scrollEvent(double distance);
     void windowResizeEvent(int width, int height);
     void framebufferResizeEvent(int width, int height);
+
+    int getWidth();
+    int getHeight();
 
 protected:
     std::unordered_map<std::string, std::shared_ptr<Screen>> screens;

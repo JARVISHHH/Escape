@@ -7,6 +7,7 @@ public:
 	Text();
 
 	void draw() override;
+	void resize(glm::vec2 scale) override;
 
 	void setWidth(float width);
 	void setFontSize(float fontSize);

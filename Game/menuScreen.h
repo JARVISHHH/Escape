@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Engine/application.h"
 #include "app.h"
 
 #include "Graphics/global.h"
 
 #include <GLFW/glfw3.h>
 
+#include <Engine/screen.h>
 
 class MenuScreen : public Screen {
 
