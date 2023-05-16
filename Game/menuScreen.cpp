@@ -12,8 +12,8 @@ void MenuScreen::init()
 	image->setSize(glm::vec3(Screen::application->getWidth(), Screen::application->getHeight(), 0));
 	image->setMaterial("title");
 	// Start button
-	std::shared_ptr<Button> startButton = std::make_shared<Button>(glm::vec3(210, 225, 0), glm::vec3(190, 60, 0), ButtonAction::loadGame);
-	std::shared_ptr<Button> instructionsButton = std::make_shared<Button>(glm::vec3(140, 165, 0), glm::vec3(360, 70, 0), ButtonAction::loadInstruction);
+	std::shared_ptr<Button> startButton = std::make_shared<Button>(glm::vec3(215, 210, 0), glm::vec3(190, 60, 0), ButtonAction::loadGame);
+	std::shared_ptr<Button> instructionsButton = std::make_shared<Button>(glm::vec3(140, 125, 0), glm::vec3(360, 70, 0), ButtonAction::loadInstruction);
 
 	ui->add(image);
 	ui->add(startButton);
