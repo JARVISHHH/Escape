@@ -50,3 +50,35 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 
 	return character;
 }
+
+std::shared_ptr<GameObject> createMovingCharacter(std::shared_ptr<GameWorld> gameWorld, glm::vec3 pos)
+{
+	std::shared_ptr<GameObject> character = std::make_shared<GameObject>("character");
+
+	// Create components
+	// Transform Component
+	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
+	auto modelTransform = transformComponent->getModelTransform();
+	modelTransform->scale(0.25);
+	modelTransform->translate(pos);
+	gameWorld->getCamera()->setPos(modelTransform->getPos());
+	// Draw component
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monokuma");
+	// Collision component
+	std::shared_ptr<CylinderComponent> cylinderComponent = std::make_shared<CylinderComponent>();
+	// Moving compinent
+	// TODO
+
+
+	// Add components to game objects
+	character->addComponent(transformComponent);
+	character->addComponent(drawComponent);
+	character->addComponent(cylinderComponent);
+
+	gameWorld->getGameSystem<CameraSystem>("camera")->setCharacter(character);
+	gameWorld->getGameSystem<DrawSystem>("draw")->addComponent(drawComponent);
+	gameWorld->getGameSystem<CollisionSystem>("collision")->addGameObject(character, "character");
+	gameWorld->addGameObject(character);
+
+	return character;
+}

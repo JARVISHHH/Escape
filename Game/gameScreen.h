@@ -18,8 +18,6 @@
 class GameScreen : public Screen {
 
 public:
-	GameScreen();
-
     void init() override;
     void activateAction() override;
 

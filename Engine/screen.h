@@ -26,7 +26,7 @@ public:
     void activate();
     virtual void activateAction();
     static std::shared_ptr<Application> getApp();
-    void addEnvironmentMesh(std::string name, std::string path, bool hasUV = true, int uvScale = 1);
+    static void addEnvironmentMesh(std::string name, std::string path, bool hasUV = true, int uvScale = 1);
     std::vector<std::shared_ptr<Triangle>> getEnvironmentMesh(std::string name);
 
     virtual void update(double seconds);
@@ -40,7 +40,7 @@ public:
 
 protected:
     std::shared_ptr<GameWorld> gameWorld;
-    std::unordered_map<std::string, std::vector<std::shared_ptr<Triangle>>> meshTriangles;
+    static std::unordered_map<std::string, std::vector<std::shared_ptr<Triangle>>> meshTriangles;
     std::shared_ptr<UIElement> ui;
 
     bool initiated = false;

@@ -11,3 +11,5 @@
 #include <Game/gameComponents/characterShoot.h>
 
 std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld, glm::vec3 pos, std::shared_ptr<GameObject> gameHandlerObject);
+
+std::shared_ptr<GameObject> createMovingCharacter(std::shared_ptr<GameWorld> gameWorld, glm::vec3 pos);

@@ -5,6 +5,7 @@
 std::unordered_map<int, bool> Screen::keyPressing;
 glm::vec2 Screen::mousePos(0, 0);
 std::unordered_map<int, bool> Screen::mousePressing;
+std::unordered_map<std::string, std::vector<std::shared_ptr<Triangle>>> Screen::meshTriangles;
 
 Screen::Screen()
 {

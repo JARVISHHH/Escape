@@ -49,4 +49,11 @@ void App::loadResources()
 	Global::graphics.addShape("coin", "./Resources/Meshes/coin.obj");
 	Global::graphics.addShape("health", "./Resources/Meshes/health.obj");
 	Global::graphics.addShape("bullet", "./Resources/Meshes/ninja_star.obj");
+
+	Screen::addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj", true, 10);
+	Screen::addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj", true, 10);
+	Screen::addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj", true, 2);
+	Screen::addEnvironmentMesh("box", "./Resources/Meshes/box.obj", true, 10);
+	Screen::addEnvironmentMesh("spike", "./Resources/Meshes/spike.obj");
+	Screen::addEnvironmentMesh("test", "./Resources/Meshes/test.obj");
 }

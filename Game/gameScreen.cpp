@@ -31,16 +31,6 @@
 #include "ui.h"
 #include "buttonAction.h"
 
-GameScreen::GameScreen() 
-	: Screen(){
-	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj", true, 10);
-	addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj", true, 10);
-	addEnvironmentMesh("plane", "./Resources/Meshes/plane.obj", true, 2);
-	addEnvironmentMesh("box", "./Resources/Meshes/box.obj", true, 10);
-	addEnvironmentMesh("spike", "./Resources/Meshes/spike.obj");
-	addEnvironmentMesh("test", "./Resources/Meshes/test.obj");
-}
-
 void GameScreen::init()
 {
 	Screen::init();

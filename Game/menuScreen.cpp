@@ -4,7 +4,7 @@
 #include <Engine/Game/gameSystems/drawSystem.h>
 #include <Engine/Game/gameSystems/cameraSystem.h>
 #include <Engine/Game/map/map.h>
-//#include <Game/prefabs/dungeon.h>
+#include <Game/prefabs/dungeon.h>
 #include <Game/prefabs/lights.h>
 
 //extern std::shared_ptr<App> app;
@@ -27,27 +27,41 @@ void MenuScreen::init()
 	ui->add(instructionsButton);
 
 	// Create background animation
-	//auto camera = std::make_shared<Camera>(width, height);
-	//gameWorld = std::make_shared<GameWorld>(camera, shared_from_this(), width, height);
-	//auto drawSystem = std::make_shared<DrawSystem>();
-	//std::shared_ptr<CameraSystem> cameraSystem = std::make_shared<CameraSystem>(camera);
-	//gameWorld->addGameSystem(drawSystem);
-	//gameWorld->addGameSystem(cameraSystem);
+	auto camera = std::make_shared<Camera>(width, height);
+	gameWorld = std::make_shared<GameWorld>(camera, shared_from_this(), width, height);
+	auto drawSystem = std::make_shared<DrawSystem>();
+	auto physicsSystem = std::make_shared<PhysicsSystem>();
+	auto cameraSystem = std::make_shared<CameraSystem>(camera);
+	auto collisionSystem = std::make_shared<CollisionSystem>(gameWorld, 6);
+	auto tickSystem = std::make_shared<TickSystem>();
+	gameWorld->addGameSystem(drawSystem);
+	gameWorld->addGameSystem(physicsSystem);
+	gameWorld->addGameSystem(cameraSystem);
+	gameWorld->addGameSystem(collisionSystem);
+	gameWorld->addGameSystem(tickSystem);
 
-	//// Generate map
-	//std::shared_ptr<Map> map = std::make_shared<Map>(gameWorld->getAABB());
-	//map->generateMap();
-	////map->printMap();
-	//createDungeon(gameWorld, shared_from_this(), map, nullptr);
-	//createLights(gameWorld, map);
+	// Generate map
+	std::shared_ptr<Map> map = std::make_shared<Map>(gameWorld->getAABB());
+	map->generateMap();
+	//map->printMap();
+	createDungeon(gameWorld, shared_from_this(), map, nullptr);
+	createLights(gameWorld, map);
 
-	//gameWorld->start();
+	// Collision
+	collisionSystem->buildBVH();
+	collisionSystem->buildHG();
+
+	gameWorld->start();
 }
 
 void MenuScreen::draw() {
 	// Set background color
 	Global::graphics.setClearColor(glm::vec3(0.0f, 1.0f, 1.0f));
 	Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Game
+	if (gameWorld != nullptr)
+		gameWorld->draw();
 
 	// UI
 	glDisable(GL_DEPTH_TEST);

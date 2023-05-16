@@ -106,7 +106,10 @@ void createDungeon(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Screen>
 
 	// create character
 	auto characterRoomCenter = characterRoom->room->getCenter();
-	createCharacter(gameWorld, glm::vec3(characterRoomCenter[0], characterRoom->room->getMinPoint()[1] + 2, characterRoomCenter[2]) + glm::vec3(0, 1, 0), gameHandlerObject);
+	if (gameHandlerObject != nullptr)
+		createCharacter(gameWorld, glm::vec3(characterRoomCenter[0], characterRoom->room->getMinPoint()[1] + 2, characterRoomCenter[2]) + glm::vec3(0, 1, 0), gameHandlerObject);
+	else
+		createMovingCharacter(gameWorld, glm::vec3(characterRoomCenter[0], characterRoom->room->getMinPoint()[1] + 2, characterRoomCenter[2]) + glm::vec3(0, 1, 0));
 	// create goal
 	auto goalRoomCenter = goalRoom->room->getCenter();
 	createGoal(gameWorld, glm::vec3(goalRoomCenter[0], goalRoom->room->getMinPoint()[1] + 1, goalRoomCenter[2]) + glm::vec3(0, 1, 0));
