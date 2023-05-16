@@ -109,6 +109,8 @@ add_executable(${PROJECT_NAME}
     Engine/UIKit/label.cpp
     Engine/UIKit/text.h
     Engine/UIKit/text.cpp
+    Engine/UIKit/image.h
+    Engine/UIKit/image.cpp
 
     Engine/Game/gameComponent.h
     Engine/Game/gameComponent.cpp

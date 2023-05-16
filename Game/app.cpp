@@ -26,6 +26,8 @@ void App::start() {
 
 void App::loadResources()
 {
+	Global::graphics.addMaterial("title", "Resources/Images/title.png");
+
 	Global::graphics.addMaterial("button", "Resources/Images/button.png");
 
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.jpg");

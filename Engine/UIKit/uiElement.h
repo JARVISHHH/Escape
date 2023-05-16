@@ -30,6 +30,7 @@ public:
 
 	RenderType getRenderType();
 	glm::vec3 getColor();
+	void setMaterial(std::string materialName);
 	std::string getMaterialName();
 
 	void add(std::shared_ptr<UIElement> element);

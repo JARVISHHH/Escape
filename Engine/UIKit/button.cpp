@@ -10,8 +10,9 @@ Button::Button(glm::vec3 localPosition, glm::vec3 size, void (*doAction)())
 void Button::draw()
 {
 	UIElement::draw();
-	Global::graphics.bindShader("ui");
+	// Global::graphics.bindShader("ui");
 	Global::graphics.drawUI(shared_from_this());
+	
 }
 
 void Button::mouseButtonEvent(int button, int action)

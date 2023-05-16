@@ -2,7 +2,7 @@
 
 #include "uiElement.h"
 
-class Label : public UIElement {
+class Image : public UIElement {
 public:
 	void draw() override;
 

@@ -33,7 +33,7 @@ Texture::Texture(std::string filepath, GLenum texUnit, GLint internalFormat, GLe
     glTexParameteri(m_texTarget, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(m_texTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(m_texTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    stbi_set_flip_vertically_on_load(1);
+    //stbi_set_flip_vertically_on_load(1);
     int width, height, numChannels;
     unsigned char* data = stbi_load(filepath.c_str(), &width, &height, &numChannels, STBI_rgb_alpha);
     std::cout << "num channels " << numChannels << std::endl;

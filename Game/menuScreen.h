@@ -13,7 +13,7 @@ class MenuScreen : public Screen {
 public:
 	void init() override;
 	void draw() override;
-	void keyEvent(int key, int action) override;
+	//void keyEvent(int key, int action) override;
 
 	static void activeGame();
 };

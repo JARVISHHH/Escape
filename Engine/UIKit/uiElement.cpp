@@ -67,6 +67,11 @@ glm::vec3 UIElement::getColor()
 	return color;
 }
 
+void UIElement::setMaterial(std::string materialName)
+{
+	this->materialName = materialName;
+}
+
 std::string UIElement::getMaterialName()
 {
 	return materialName;
