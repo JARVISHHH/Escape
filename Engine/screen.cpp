@@ -73,6 +73,7 @@ void Screen::mousePosEvent(double xpos, double ypos) {
 	if (!active) return;
 	mousePos[0] = xpos, mousePos[1] = ypos;
 	if (gameWorld != nullptr) gameWorld->mousePosEvent(xpos, ypos);
+	ui->mousePosEvent(xpos, ypos);
 }
 
 void Screen::mouseButtonEvent(int button, int action) {

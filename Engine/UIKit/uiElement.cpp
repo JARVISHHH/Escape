@@ -2,8 +2,15 @@
 
 void UIElement::draw()
 {
+	if (!show) return;
 	for (auto& child : children)
 		child->draw();
+}
+
+void UIElement::mousePosEvent(double xpos, double ypos)
+{
+	for (auto& child : children)
+		child->mousePosEvent(xpos, ypos);
 }
 
 void UIElement::mouseButtonEvent(int button, int action)

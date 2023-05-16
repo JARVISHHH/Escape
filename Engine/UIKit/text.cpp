@@ -9,6 +9,7 @@ Text::Text()
 
 void Text::draw()
 {
+	if (!show) return;
 	width = Global::graphics.getFramebufferSize().x;
 	glm::vec2 anchorPosition = glm::vec2(position.x, position.y);
 	// Global::graphics.bindShader("ui");

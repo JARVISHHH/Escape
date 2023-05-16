@@ -18,6 +18,7 @@ class UIElement: public std::enable_shared_from_this<UIElement> {
 public:
 
 	virtual void draw();
+	virtual void mousePosEvent(double xpos, double ypos);
 	virtual void mouseButtonEvent(int button, int action);
 	virtual void resize(glm::vec2 scale);
 
@@ -50,4 +51,6 @@ protected:
 
 	std::shared_ptr<UIElement> getParent();
 	void updatePosition();
+
+	bool show = true;
 };

@@ -2,7 +2,7 @@
 
 void Image::draw()
 {
+	if (!show) return;
 	UIElement::draw();
-	// Global::graphics.bindShader("ui");
 	Global::graphics.drawUI(shared_from_this());
 }

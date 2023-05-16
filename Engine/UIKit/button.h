@@ -7,6 +7,7 @@ public:
 	Button(glm::vec3 localPosition, glm::vec3 size, void (*doAction)());
 
 	void draw() override;
+	void mousePosEvent(double xpos, double ypos) override;
 	void mouseButtonEvent(int button, int action) override;
 
 private:

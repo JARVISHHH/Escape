@@ -96,7 +96,7 @@ void GameScreen::update(double seconds) {
 		return;
 	}
 	if (keyPressing[GLFW_KEY_R]) {
-		init();
+		getApp()->activateScreen("game");
 		return;
 	}
 	if (!active) return;
