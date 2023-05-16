@@ -1,11 +1,14 @@
 #include "app.h"
 #include <Engine/screen.h>
+#include <Engine/sceneManager.h>
 #include "menuScreen.h"
 #include "gameScreen.h"
+#include "instructionScreen.h"
 #include <Engine/Mesh/triangle.h>
 
 std::shared_ptr<App> app = std::make_shared<App>();
 std::shared_ptr<Application> Screen::application = app;
+std::shared_ptr<Application> SceneManager::application = app;
 
 App::App(){
 	srand(time(NULL));
@@ -19,6 +22,7 @@ void App::start() {
 	loadResources();
 
 	addScreen("menu", std::make_shared<MenuScreen>());
+	addScreen("instructions", std::make_shared<InstructionScreen>());
 	addScreen("game", std::make_shared<GameScreen>());
 	
 	activateScreen("menu");
@@ -27,6 +31,7 @@ void App::start() {
 void App::loadResources()
 {
 	Global::graphics.addMaterial("title", "Resources/Images/title.png");
+	Global::graphics.addMaterial("instructions", "Resources/Images/instructions.png");
 
 	Global::graphics.addMaterial("button", "Resources/Images/button.png");
 

@@ -14,6 +14,4 @@ public:
 	void init() override;
 	void draw() override;
 	//void keyEvent(int key, int action) override;
-
-	static void activeGame();
 };

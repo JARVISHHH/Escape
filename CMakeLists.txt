@@ -59,6 +59,7 @@ add_executable(${PROJECT_NAME}
     Engine/application.h
     Engine/screen.cpp
     Engine/screen.h
+    Engine/sceneManager.h
 
     Graphics/graphics.h
     Graphics/graphics.cpp
@@ -202,10 +203,14 @@ add_executable(${PROJECT_NAME}
     Game/app.cpp
     Game/menuScreen.h
     Game/menuScreen.cpp
+    Game/instructionScreen.h
+    Game/instructionScreen.cpp
     Game/gameScreen.h
     Game/gameScreen.cpp
+    Game/buttonAction.h
 
     Game/components.h
+    Game/ui.h
 
     Game/prefabs/character.h
     Game/prefabs/environment.h

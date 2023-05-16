@@ -20,7 +20,8 @@ class GameScreen : public Screen {
 public:
 	GameScreen();
 
-    void init();
+    void init() override;
+    void activateAction() override;
 
     void update(double seconds) override;
     void draw() override;

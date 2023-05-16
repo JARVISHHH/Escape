@@ -17,13 +17,14 @@ void Application::addScreen(std::string name, std::shared_ptr<Screen> screen) {
 	screens[name] = screen;
 }
 
-void Application::activateScreen(std::string name) {
+bool Application::activateScreen(std::string name) {
 	if (screens.find(name) == screens.end()) {
 		std::cerr << "Screen with name " << name << " does not exist." << std::endl;
+		return false;
 	}
-	screens[name]->init();
-	screens[name]->windowResizeEvent(width, height);
+	screens[name]->activate();
 	activeScreen = screens[name];
+	return true;
 }
 
 void Application::update(double seconds) {

@@ -89,6 +89,7 @@ void GameWorld::windowResizeEvent(int width, int height)
 {
 	auto cameraSystem = getGameSystem<CameraSystem>("camera");
 	if (cameraSystem != nullptr) cameraSystem->windowResizeEvent(width, height);
+	setFramebufferSize(width, height);
 }
 
 void GameWorld::setFramebufferSize()

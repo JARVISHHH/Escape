@@ -6,11 +6,31 @@ std::unordered_map<int, bool> Screen::keyPressing;
 glm::vec2 Screen::mousePos(0, 0);
 std::unordered_map<int, bool> Screen::mousePressing;
 
+Screen::Screen()
+{
+	ui = std::make_shared<UIElement>();
+	//init();
+}
+
 void Screen::init()
 {
-	width = application->getWidth(), height = application->getHeight();
-	windowResizeEvent(width, height);
-	ui = std::make_shared<UIElement>();
+	initiated = true;
+}
+
+void Screen::activate()
+{
+	windowResizeEvent(640, 480);
+	if (!initiated) {
+		init();
+		initiated = true;
+	}
+	activateAction();
+	windowResizeEvent(application->getWidth(), application->getHeight());
+	active = true;
+}
+
+void Screen::activateAction()
+{
 }
 
 std::shared_ptr<Application> Screen::getApp()

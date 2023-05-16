@@ -1,44 +1,27 @@
 #include "menuScreen.h"
 #include "ui.h"
+#include "buttonAction.h"
 
 //extern std::shared_ptr<App> app;
 
 void MenuScreen::init()
 {
-	Screen::init();
-
-	//// Text
-	//// Title text
-	//std::shared_ptr<Text> titleText = std::make_shared<Text>();
-	//titleText->setContent("Escape");
-	//titleText->setLocalPosition(glm::vec3(175, 350, 0));
-	//titleText->setFontSize(2.0f);
-	//// Start text
-	//std::shared_ptr<Text> startText = std::make_shared<Text>();
-	//startText->setContent("Start");
-	//startText->setLocalPosition(glm::vec3(0, 0, 0));
-	//startText->setFontSize(0.5f);
-	//// Button
-	//// Start button
-	//std::shared_ptr<Button> startButton = std::make_shared<Button>(glm::vec3(175, 100, 0), glm::vec3(50, 50, 0), MenuScreen::activeGame);
-	//std::shared_ptr<Button> testButton = std::make_shared<Button>(glm::vec3(200, 100, 0), glm::vec3(50, 50, 0), MenuScreen::activeGame);
-	//// Add to UI
-	//ui->add(titleText);
-	//ui->add(startButton);
-	//startButton->add(startText);
-	//ui->add(testButton);
-
 	// Image
 	std::shared_ptr<Image> image = std::make_shared<Image>();
 	image->setPosition(glm::vec3(0, Screen::application->getHeight(), -1));
 	image->setSize(glm::vec3(Screen::application->getWidth(), Screen::application->getHeight(), 0));
 	image->setMaterial("title");
 	// Start button
-	std::shared_ptr<Button> startButton = std::make_shared<Button>(glm::vec3(225, 210, 0), glm::vec3(160, 50, 0), MenuScreen::activeGame);
-	
-	ui->add(startButton);
+	std::shared_ptr<Button> startButton = std::make_shared<Button>(glm::vec3(210, 225, 0), glm::vec3(190, 60, 0), ButtonAction::loadGame);
+	std::shared_ptr<Button> instructionsButton = std::make_shared<Button>(glm::vec3(140, 165, 0), glm::vec3(360, 70, 0), ButtonAction::loadInstruction);
+
 	ui->add(image);
-	
+	ui->add(startButton);
+	ui->add(instructionsButton);
+
+	Screen::init();
+
+	std::cout << "menu added" << std::endl;
 }
 
 void MenuScreen::draw() {
@@ -56,16 +39,4 @@ void MenuScreen::draw() {
 	Global::graphics.bindShader("ui");
 	ui->draw();
 	glEnable(GL_DEPTH_TEST);
-}
-
-//void MenuScreen::keyEvent(int key, int action) {
-//	Screen::keyEvent(key, action);
-//	if (action == GLFW_PRESS) {
-//		activeGame();
-//	}
-//}
-
-void MenuScreen::activeGame()
-{
-	getApp()->activateScreen("game");
 }

@@ -17,7 +17,7 @@ public:
     virtual void start();
 
     void addScreen(std::string name, std::shared_ptr<Screen> screen);
-    void activateScreen(std::string name);
+    bool activateScreen(std::string name);
     
     void update(double seconds);
     void draw();
