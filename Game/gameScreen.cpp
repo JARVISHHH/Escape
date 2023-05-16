@@ -28,6 +28,9 @@
 #include <Engine/Game/gameSystems/particleSystem.h>
 #include <Game/prefabs/lights.h>
 
+#include "ui.h"
+#include "buttonAction.h"
+
 GameScreen::GameScreen() 
 	: Screen(){
 	addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj", true, 10);

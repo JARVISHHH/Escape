@@ -213,16 +213,29 @@ add_executable(${PROJECT_NAME}
     Game/ui.h
 
     Game/prefabs/character.h
+    Game/prefabs/character.cpp
     Game/prefabs/environment.h
+    Game/prefabs/environment.cpp
     Game/prefabs/goal.h
+    Game/prefabs/goal.cpp
     Game/prefabs/enemy.h
+    Game/prefabs/enemy.cpp
     Game/prefabs/gamehandler.h
+    Game/prefabs/gamehandler.cpp
     Game/prefabs/projectile.h
+    Game/prefabs/projectile.cpp
     Game/prefabs/rooms.h
+    Game/prefabs/rooms.cpp
     Game/prefabs/spike.h
+    Game/prefabs/spike.cpp
     Game/prefabs/bullet.h
+    Game/prefabs/bullet.cpp
     Game/prefabs/treasure.h
+    Game/prefabs/treasure.cpp
     Game/prefabs/lights.h
+    Game/prefabs/lights.cpp
+    Game/prefabs/dungeon.h
+    Game/prefabs/dungeon.cpp
 
     Game/ai/scopeCondition.h
     Game/ai/scopeCondition.cpp
