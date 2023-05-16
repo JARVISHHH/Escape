@@ -78,8 +78,8 @@ add_executable(${PROJECT_NAME}
     Graphics/light.cpp
     Graphics/font.h
     Graphics/font.cpp
-    Graphics/textrenderer.h
-    Graphics/textrenderer.cpp
+    Graphics/uirenderer.h
+    Graphics/uirenderer.cpp
     Graphics/GLWrappers/shader.h
     Graphics/GLWrappers/shader.cpp
     Graphics/GLWrappers/texture.h

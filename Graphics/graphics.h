@@ -11,7 +11,7 @@
 #include "shape.h"
 #include "modeltransform.h"
 #include "light.h"
-#include "textrenderer.h"
+#include "uirenderer.h"
 
 class Graphics
 {
@@ -59,6 +59,8 @@ public:
     void removeFont(std::string fontName);
     std::shared_ptr<Font> getFont(std::string fontName);
     void drawUIText(std::shared_ptr<Font> font, std::string text, glm::vec2 anchorPosition, AnchorPoint anchorPoint, float textBoxWidth, float fontSize, float lineSpacing, glm::vec3 textColor);
+    // UI related methods
+    void drawUI(std::shared_ptr<UIElement> uiElement);
 
     void setGlobalData(glm::vec3 globalCoeffs);
 
@@ -81,7 +83,7 @@ private:
     glm::ivec2 m_windowSize;
     glm::ivec2 m_framebufferSize;
 
-    std::shared_ptr<TextRenderer> m_textRenderer;
+    std::shared_ptr<UIRenderer> m_uiRenderer;
 
     std::map<std::string, std::shared_ptr<Shader>> m_shaders;
     std::map<std::string, std::shared_ptr<Shape>> m_shapes;

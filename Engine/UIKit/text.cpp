@@ -1,10 +1,17 @@
 #include "text.h"
 
+Text::Text()
+	:UIElement()
+{
+	width = Global::graphics.getFramebufferSize().x;
+	renderType = AlphaRender;
+}
+
 void Text::draw()
 {
 	width = Global::graphics.getFramebufferSize().x;
 	glm::vec2 anchorPosition = glm::vec2(position.x, position.y);
-	Global::graphics.bindShader("text");
+	Global::graphics.bindShader("ui");
 	Global::graphics.drawUIText(Global::graphics.getFont(font), content, anchorPosition, AnchorPoint::TopLeft, width, fontSize, 0.1f, color);
 }
 

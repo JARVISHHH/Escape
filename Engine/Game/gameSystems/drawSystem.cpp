@@ -55,7 +55,7 @@ void DrawSystem::drawPhong()
 
 void DrawSystem::drawText()
 {
-	Global::graphics.bindShader("text");
+	Global::graphics.bindShader("ui");
 	std::shared_ptr<DrawComponent> drawComponent = nullptr;
 	for (auto component : components) {
 		component->drawText();

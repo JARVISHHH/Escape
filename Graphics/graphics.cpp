@@ -1,5 +1,6 @@
 #include "graphics.h"
 #include "shapedata.h"
+#include <Engine/UIKit/uiElement.h>
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
@@ -8,7 +9,7 @@ const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 const float near_plane = 0.1f, far_plane = 100.f;
 
 Graphics::Graphics():
-    m_textRenderer(std::make_shared<TextRenderer>())
+    m_uiRenderer(std::make_shared<UIRenderer>())
 {
 
 }
@@ -29,7 +30,7 @@ void Graphics::initialize(){
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
 
     std::cout<<"initialize text renderer"<<std::endl;
-    m_textRenderer->initialize();
+    m_uiRenderer->initialize();
 
     std::cout<<"add shapes"<<std::endl;
     addShape("quad", quadVertexBufferData, VAOAttrib::POS | VAOAttrib::NORM | VAOAttrib::UV);
@@ -39,7 +40,7 @@ void Graphics::initialize(){
     addShape("cone", coneVertexBufferData, VAOAttrib::POS | VAOAttrib::NORM | VAOAttrib::UV);
 
     addShader("phong", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/phong.vert", "Resources/Shaders/phong.frag"});
-    addShader("text", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/text.vert", "Resources/Shaders/text.frag"});
+    addShader("ui", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/ui.vert", "Resources/Shaders/ui.frag"});
     addShader("particle", {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER}, {"Resources/Shaders/particle.vert", "Resources/Shaders/particle.frag"});
     addShader("shadow", { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER }, { "Resources/Shaders/shadow.vert", "Resources/Shaders/shadow.frag" });
     addShader("pointShadow", { GL_VERTEX_SHADER, GL_GEOMETRY_SHADER, GL_FRAGMENT_SHADER }, { "Resources/Shaders/pointShadow.vert", "Resources/Shaders/pointShadow.geom", "Resources/Shaders/pointShadow.frag" });
@@ -479,8 +480,18 @@ std::shared_ptr<Font> Graphics::getFont(std::string fontName){
 }
 
 void Graphics::drawUIText(std::shared_ptr<Font> font, std::string text, glm::vec2 anchorPosition, AnchorPoint anchorPoint, float textBoxWidth, float fontSize, float lineSpacing, glm::vec3 textColor){
-    m_active_shader->setTextUniforms(m_windowSize.x, m_windowSize.y, textColor);
-    m_textRenderer->renderUIText(font, text, anchorPosition, anchorPoint, textBoxWidth, fontSize, lineSpacing, textColor);
+    m_active_shader->setUIUniforms(m_windowSize.x, m_windowSize.y, textColor);
+    m_uiRenderer->renderUIText(font, text, anchorPosition, anchorPoint, textBoxWidth, fontSize, lineSpacing, textColor);
+}
+
+void Graphics::drawUI(std::shared_ptr<UIElement> uiElement)
+{
+    m_active_shader->setUIUniforms(m_windowSize.x, m_windowSize.y, uiElement);
+    auto material = getMaterial(uiElement->getMaterialName());
+    //std::cout << "material: " << uiElement->getMaterialName() << std::endl;
+    material->getTexture()->bind();
+    glUniform1i(glGetUniformLocation(m_active_shader->getHandle(), "sprite"), material->getTexture()->getTexUnitUint());
+    m_uiRenderer->renderUI(uiElement);
 }
 
 void Graphics::setGlobalData(glm::vec3 globalCoeffs){

@@ -16,15 +16,15 @@ void MenuScreen::init()
 	// Start text
 	std::shared_ptr<Text> startText = std::make_shared<Text>();
 	startText->setContent("Start");
-	startText->setLocalPosition(glm::vec3(175, 100, 0));
+	startText->setLocalPosition(glm::vec3(0, 0, 0));
 	startText->setFontSize(0.5f);
 	// Button
 	// Start button
 	std::shared_ptr<Button> startButton = std::make_shared<Button>(glm::vec3(175, 100, 0), glm::vec3(50, 50, 0), MenuScreen::activeGame);
 	// Add to UI
 	ui->add(titleText);
-	ui->add(startText);
 	ui->add(startButton);
+	startButton->add(startText);
 }
 
 void MenuScreen::draw() {

@@ -1,4 +1,5 @@
 #include "shader.h"
+#include <Engine/UIKit/uiElement.h>
 
 Shader::Shader(std::vector<GLenum> shaderTypes, std::vector<const char*> filepaths){
     m_handle = ShaderLoader::createShaderProgram(shaderTypes, filepaths);  
@@ -142,10 +143,20 @@ void Shader::clearLights(){
     glUniform1i(glGetUniformLocation(m_handle, "numLights"), 0);
 }
 
-void Shader::setTextUniforms(float screenWidth, float screenHeight, glm::vec3 color){
+void Shader::setUIUniforms(float screenWidth, float screenHeight, glm::vec3 color) {
     glm::mat4 projection = glm::ortho(0.0f, screenWidth, 0.0f, screenHeight);
     glUniformMatrix4fv(glGetUniformLocation(m_handle, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform3f(glGetUniformLocation(m_handle, "textColor"), color.r, color.g, color.b);
+    glUniform3f(glGetUniformLocation(m_handle, "UIColor"), color.r, color.g, color.b);
+    glUniform1i(glGetUniformLocation(m_handle, "renderType"), 0);
+}
+
+void Shader::setUIUniforms(float screenWidth, float screenHeight, std::shared_ptr<UIElement> ui){
+    glm::mat4 projection = glm::ortho(0.0f, screenWidth, 0.0f, screenHeight);
+    glUniformMatrix4fv(glGetUniformLocation(m_handle, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    auto color = ui->getColor();
+    auto renderType = ui->getRenderType();
+    glUniform3f(glGetUniformLocation(m_handle, "UIColor"), color.r, color.g, color.b);
+    glUniform1i(glGetUniformLocation(m_handle, "renderType"), renderType);
 }
 
 void Shader::setUniform4fv(const GLchar* uniform, glm::vec4 value)

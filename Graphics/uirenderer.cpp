@@ -1,7 +1,8 @@
-#include "textrenderer.h"
+#include "uirenderer.h"
 #include "debug.h"
+#include <Engine/UIKit/uiElement.h>
 
-void TextRenderer::initialize(){
+void UIRenderer::initialize(){
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
     glBindVertexArray(m_vao);
@@ -13,7 +14,7 @@ void TextRenderer::initialize(){
     glBindVertexArray(0);   
 }
 
-void TextRenderer::renderUIText(std::shared_ptr<Font> font, std::string text, glm::vec2 anchorPosition, AnchorPoint anchorPoint, float textBoxWidth, float fontSize, float lineSpacing, glm::vec3 textColor){
+void UIRenderer::renderUIText(std::shared_ptr<Font> font, std::string text, glm::vec2 anchorPosition, AnchorPoint anchorPoint, float textBoxWidth, float fontSize, float lineSpacing, glm::vec3 textColor){
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(m_vao);
 
@@ -62,6 +63,7 @@ void TextRenderer::renderUIText(std::shared_ptr<Font> font, std::string text, gl
 
 
         // update VBO for each character
+        //std::cout << "text position: " << xpos << " " << ypos + h << std::endl;
         float vertices[6][4] = {
             { xpos,     ypos + h,   0.0f, 0.0f },            
             { xpos,     ypos,       0.0f, 1.0f },
@@ -84,4 +86,32 @@ void TextRenderer::renderUIText(std::shared_ptr<Font> font, std::string text, gl
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void UIRenderer::renderUI(std::shared_ptr<UIElement> uiElement)
+{
+    //std::cout << "render ui" << std::endl;
+    glBindVertexArray(m_vao);
+
+    auto position = uiElement->getPosition();
+    auto size = uiElement->getSize();
+    //std::cout << "position: " << position[0] << " " << position[1] << std::endl;
+    //std::cout << "size: " << size[0] << " " << size[1] << std::endl;
+    // update VBO for each character
+    float vertices[6][4] = {
+        { position[0],     position[1],   0.0f, 0.0f },
+        { position[0],     position[1] - size[1],       0.0f, 1.0f },
+        { position[0] + size[0], position[1] - size[1],       1.0f, 1.0f },
+
+        { position[0],     position[1],   0.0f, 0.0f },
+        { position[0] + size[0], position[1] - size[1],       1.0f, 1.0f },
+        { position[0] + size[0], position[1],   1.0f, 0.0f }
+    };
+    // update content of VBO memory
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    // render quad
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }

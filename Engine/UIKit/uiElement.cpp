@@ -20,12 +20,47 @@ void UIElement::setPosition(glm::vec3 position)
 		element->updatePosition();
 }
 
+glm::vec3 UIElement::getPosition()
+{
+	return position;
+}
+
 void UIElement::setLocalPosition(glm::vec3 localPosition)
 {
 	this->position += localPosition - this->localPosition;
 	this->localPosition = localPosition;
 	for (auto element : children)
 		element->updatePosition();
+}
+
+glm::vec3 UIElement::getLocalPosition()
+{
+	return localPosition;
+}
+
+void UIElement::setSize(glm::vec3 size)
+{
+	this->size = size;
+}
+
+glm::vec3 UIElement::getSize()
+{
+	return size;
+}
+
+RenderType UIElement::getRenderType()
+{
+	return renderType;
+}
+
+glm::vec3 UIElement::getColor()
+{
+	return color;
+}
+
+std::string UIElement::getMaterialName()
+{
+	return materialName;
 }
 
 void UIElement::add(std::shared_ptr<UIElement> element)

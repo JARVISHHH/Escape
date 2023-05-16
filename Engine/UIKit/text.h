@@ -4,6 +4,8 @@
 
 class Text : public UIElement {
 public:
+	Text();
+
 	void draw() override;
 
 	void setWidth(float width);

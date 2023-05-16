@@ -9,9 +9,6 @@ public:
 	void draw() override;
 	void mouseButtonEvent(int button, int action) override;
 
-protected:
-	glm::vec3 size;
-
 private:
 	bool inButton();
 	void (*doAction)();
