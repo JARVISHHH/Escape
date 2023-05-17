@@ -92,8 +92,8 @@ void createMixEnemies(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<Scre
 	std::shared_ptr<Map> roomMap = std::make_shared<Map>(mapNode->room, glm::vec3(1, 1, 1), 0, 3);
 	roomMap->generateMap();
 	for (auto leaf : roomMap->leaves) {
-		if ((rand() % 4) == 0) createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + 1, leaf->getAABB()->getCenter()[2]), mapNode->navMesh, gameHandlerObject);
-		if ((rand() % 4) == 0) createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + HEIGHT - 2, leaf->getAABB()->getCenter()[2]), gameHandlerObject);
+		if ((rand() % 4) == 0) createChasingEnemy(gameWorld, "enemy", "", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + 1, leaf->getAABB()->getCenter()[2]), mapNode->navMesh, gameHandlerObject);
+		if ((rand() % 4) == 0) createShootingEnemy(gameWorld, "enemy", "", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + HEIGHT - 3, leaf->getAABB()->getCenter()[2]), gameHandlerObject);
 	}
 }
 
@@ -101,7 +101,7 @@ void createShootingEnemies(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr
 	std::shared_ptr<Map> roomMap = std::make_shared<Map>(mapNode->room, glm::vec3(1, 1, 1), 0, 3);
 	roomMap->generateMap();
 	for (auto leaf : roomMap->leaves) {
-		if ((rand() % 4) == 0) createShootingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + HEIGHT - 2, leaf->getAABB()->getCenter()[2]), gameHandlerObject);
+		if ((rand() % 4) == 0) createShootingEnemy(gameWorld, "enemy", "", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + HEIGHT - 3, leaf->getAABB()->getCenter()[2]), gameHandlerObject);
 	}
 }
 
@@ -111,7 +111,7 @@ void createChasingEnemies(std::shared_ptr<GameWorld> gameWorld, std::shared_ptr<
 	std::shared_ptr<Map> roomMap = std::make_shared<Map>(mapNode->room, glm::vec3(1, 1, 1), 0, 3);
 	roomMap->generateMap();
 	for (auto leaf : roomMap->leaves) {
-		if ((rand() % 4) == 0) createChasingEnemy(gameWorld, "cylinder", "monokuma", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + 1, leaf->getAABB()->getCenter()[2]), mapNode->navMesh, gameHandlerObject);
+		if ((rand() % 4) == 0) createChasingEnemy(gameWorld, "enemy", "", glm::vec3(leaf->getAABB()->getCenter()[0], leaf->getAABB()->getMinPoint()[1] + 1, leaf->getAABB()->getCenter()[2]), mapNode->navMesh, gameHandlerObject);
 	}
 }
 

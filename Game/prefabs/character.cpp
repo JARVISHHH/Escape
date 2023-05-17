@@ -23,7 +23,7 @@ std::shared_ptr<GameObject> createCharacter(std::shared_ptr<GameWorld> gameWorld
 	// Collision component
 	modelTransform = std::make_shared<ModelTransform>();
 	modelTransform->scale(3.3);
-	modelTransform->translate(glm::vec3(0, 1.7, 0));
+	//modelTransform->translate(glm::vec3(0, 1.7, 0));
 	std::shared_ptr<CylinderComponent> cylinderComponent = std::make_shared<CylinderComponent>(modelTransform);
 	// Collision response component
 	std::shared_ptr<CharacterCollisionResponse> collisionResponseComponent = std::make_shared<CharacterCollisionResponse>(gameHandlerObject);
@@ -71,7 +71,7 @@ std::shared_ptr<GameObject> createMovingCharacter(std::shared_ptr<GameWorld> gam
 	// Collision component
 	modelTransform = std::make_shared<ModelTransform>();
 	modelTransform->scale(3.3);
-	modelTransform->translate(glm::vec3(0, 1.7, 0));
+	//modelTransform->translate(glm::vec3(0, 1.7, 0));
 	std::shared_ptr<CylinderComponent> cylinderComponent = std::make_shared<CylinderComponent>(modelTransform);
 	// Moving compinent
 	std::shared_ptr<CharacterMoving> characterMoving = std::make_shared<CharacterMoving>(map, mapNode);

@@ -61,6 +61,7 @@ void App::loadResources()
 	Global::graphics.addShape("health", "./Resources/Meshes/health.obj");
 	Global::graphics.addShape("bullet", "./Resources/Meshes/ninja_star.obj");
 	Global::graphics.addShape("character", "./Resources/Meshes/character.obj");
+	Global::graphics.addShape("enemy", "./Resources/Meshes/enemy.obj");
 
 	Screen::addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj", true, 10);
 	Screen::addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj", true, 10);

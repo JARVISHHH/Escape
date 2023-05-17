@@ -23,7 +23,10 @@ std::shared_ptr<GameObject> createChasingEnemy(std::shared_ptr<GameWorld> gameWo
 	}
 	else {
 		// Collision component
-		std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>();
+		modelTransform = std::make_shared<ModelTransform>();
+		//modelTransform->scale(glm::vec3(0.24, 0.48, 0.3));
+		//modelTransform->translate(glm::vec3(0, 0.24, 0));
+		std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>(modelTransform);
 		std::shared_ptr<EnemyCollisionResponse> collisionResponse = std::make_shared<EnemyCollisionResponse>(true);
 		// Health component
 		std::shared_ptr<EnemyHealth> healthComponent = std::make_shared<EnemyHealth>(10, gameHandlerObject);
@@ -84,7 +87,10 @@ std::shared_ptr<GameObject> createShootingEnemy(std::shared_ptr<GameWorld> gameW
 	}
 	else {
 		// Collision component
-		std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>();
+		modelTransform = std::make_shared<ModelTransform>();
+		//modelTransform->scale(glm::vec3(0.24, 0.48, 0.3));
+		//modelTransform->translate(glm::vec3(0, 0.24, 0));
+		std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>(modelTransform);
 		std::shared_ptr<EnemyCollisionResponse> collisionResponse = std::make_shared<EnemyCollisionResponse>(true);
 		// Health component
 		std::shared_ptr<EnemyHealth> healthComponent = std::make_shared<EnemyHealth>(10, gameHandlerObject);
