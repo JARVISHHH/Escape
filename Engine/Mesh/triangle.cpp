@@ -141,26 +141,26 @@ bool Triangle::intersectVertices(std::shared_ptr<Ray> sphereSpaceRay, std::share
 
 // transformMatrix world space -> sphere space
 // triangleTransformMatrix triangle space -> world space
-std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, glm::mat4x4 triangleTransformMatrix, std::shared_ptr<Ray> sphereSpaceRay)
+std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 inverseTransformMatrix, glm::mat4x4 triangleTransformMatrix, std::shared_ptr<Ray> sphereSpaceRay)
 {
 	auto res = std::make_shared<CollisionInfo>();
 
 	// Transform the triangle to sphere space
 	for (int i = 0; i < 3; i++)
-		v[i]->setPosition(transformMatrix * triangleTransformMatrix * v[i]->getPosition());
+		v[i]->setPosition(inverseTransformMatrix * triangleTransformMatrix * v[i]->getPosition());
 	calculateFaceNormal();
 
 	// Sphere-interior collision
 	if (intersectInterior(sphereSpaceRay, res)) {
 		// Transform the triangle back to world space
 		for (int i = 0; i < 3; i++)
-			v[i]->setPosition(glm::inverse(transformMatrix) * v[i]->getPosition());
+			v[i]->setPosition(glm::inverse(inverseTransformMatrix) * v[i]->getPosition());
 		calculateFaceNormal();
 
 		// Fill CollisionInfo
 		res->normal = faceNormal;
-		res->contact = glm::inverse(transformMatrix) * res->contact;
-		res->center = glm::inverse(transformMatrix) * res->center;
+		res->contact = glm::inverse(inverseTransformMatrix) * res->contact;
+		res->center = glm::inverse(inverseTransformMatrix) * res->center;
 
 		// Transform the triangle back to triangles space
 		for (int i = 0; i < 3; i++)
@@ -175,21 +175,21 @@ std::shared_ptr<CollisionInfo> Triangle::intersect(glm::mat4x4 transformMatrix, 
 		//std::cout << "try edges" << std::endl;
 		// Sphere-edges collision
 		if (intersectEdges(sphereSpaceRay, res)) {
-			res->contact = glm::inverse(transformMatrix) * res->contact;
-			res->center = glm::inverse(transformMatrix) * res->center;
+			res->contact = glm::inverse(inverseTransformMatrix) * res->contact;
+			res->center = glm::inverse(inverseTransformMatrix) * res->center;
 			res->normal = glm::normalize(res->center - res->contact);
 			//std::cout << "collide with edges: " << res->center[0] << " " << res->center[1] << " " << res->center[2] << " " << std::endl;
 		}
 		// Sphere-vertices collision
 		if (intersectVertices(sphereSpaceRay, res)) {
-			res->contact = glm::inverse(transformMatrix) * res->contact;
-			res->center = glm::inverse(transformMatrix) * res->center;
+			res->contact = glm::inverse(inverseTransformMatrix) * res->contact;
+			res->center = glm::inverse(inverseTransformMatrix) * res->center;
 			res->normal = glm::normalize(res->center - res->contact);
 		}
 
 		// Transform the triangle back to triangles space
 		for (int i = 0; i < 3; i++)
-			v[i]->setPosition(glm::inverse(triangleTransformMatrix) * glm::inverse(transformMatrix) * v[i]->getPosition());
+			v[i]->setPosition(glm::inverse(triangleTransformMatrix) * glm::inverse(inverseTransformMatrix) * v[i]->getPosition());
 		calculateFaceNormal();
 
 		return res;
