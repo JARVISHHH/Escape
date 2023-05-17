@@ -46,6 +46,8 @@ glm::vec3 CylinderComponent::checkCollision(std::shared_ptr<CylinderComponent> c
 	return MTV;
 }
 
+// Transform collision component from world space to sphere space
+// pos -> world space position
 glm::mat4x4 CylinderComponent::getInverseTransformMatrix(bool curPos, glm::vec3 pos)
 {
 	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
@@ -106,8 +108,9 @@ std::shared_ptr<AABB> CylinderComponent::getAABB(std::shared_ptr<Ray> ray)
 
 	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
 	glm::mat4x4 transformMatrix = transformComponent->getModelTransform()->getModelMatrix() * modelTransform->getModelMatrix();
-	auto curPos3 = transformComponent->getModelTransform()->getPos();
-	auto curPos = glm::vec4(curPos3[0], curPos3[1], curPos3[2], 1);
+	//auto curPos3 = transformComponent->getModelTransform()->getPos();
+	//auto curPos = glm::vec4(curPos3[0], curPos3[1], curPos3[2], 1);
+	auto curPos = transformMatrix * glm::vec4(0, 0, 0, 1);
 	for (int i = 0; i < 8; i++) {
 		worldPoints[i] = transformMatrix * points[i] + ray->endPoint - curPos;
 	}
@@ -132,8 +135,10 @@ void CylinderComponent::updateOnGround()
 	glm::mat4x4 transformMatrix = transformComponent->getModelTransform()->getModelMatrix() * modelTransform->getModelMatrix();
 	glm::vec3 source = transformMatrix * glm::vec4(0, 0, 0, 1);
 	glm::vec3 target = source + glm::vec3(0, -1, 0);
+	//std::cout << "source: " << source[0] << " " << source[1] << " " << source[2] << std::endl;
+	//std::cout << "target: " << target[0] << " " << target[1] << " " << target[2] << std::endl;
 	auto collisionInfo = collisionSystem.lock()->environmentRayCast(shared_from_this(), source, target, getInverseTransformMatrix());
 	//std::cout << collisionInfo->t << std::endl;
-	if (std::abs(collisionInfo->t) > 0.01) transformComponent->setOnGround(false);
+	if(std::abs(collisionInfo->t) > 0.01) transformComponent->setOnGround(false);
 	else transformComponent->setOnGround(true);
 }

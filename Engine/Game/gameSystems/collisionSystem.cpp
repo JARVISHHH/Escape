@@ -223,6 +223,10 @@ std::shared_ptr<CollisionInfo> CollisionSystem::environmentRayCast(std::shared_p
 	glm::vec4 target4 = transformMatrix * glm::vec4(target[0], target[1], target[2], 1);
 	auto ray = std::make_shared<Ray>(source4, target4);
 
+	//std::cout << "transformed source: " << source4[0] << " " << source4[1] << " " << source4[2] << std::endl;
+	//std::cout << "transformed target: " << target4[0] << " " << target4[1] << " " << target4[2] << std::endl;
+
+
 	auto aabb = collisionComponent->getAABB(std::make_shared<Ray>(source, target));
 		
 	auto thisCollision = bvh->getClosestCollision(transformMatrix, aabb, ray);

@@ -4,7 +4,7 @@
 
 #include <Engine/Game/components/collisionComponents/cylinderComponent.h>
 
-const float EPSILON = 0.0000001;
+const float EPSILON = 0.0001;
 
 CollisionComponent::CollisionComponent()
 	:GameComponent("collision")
@@ -161,36 +161,27 @@ glm::mat4x4 CollisionComponent::getTransformMatrix()
 std::shared_ptr<Ray> CollisionComponent::getRay()
 {
 	auto ray = getGameObject()->getComponent<TransformComponent>("transform")->getRay();
-	glm::vec4 collisionOrigin, collisionEnd;
+
+	//std::cout << "pos before collision: " << ray->endPoint[0] << " " << ray->endPoint[1] << " " << ray->endPoint[2] << std::endl;
+
+	auto collisionTranslateInObjectSpace = modelTransform->getModelMatrix() * glm::vec4(0, 0, 0, 1);
+	
 	auto objectModelTransform = getGameObject()->getComponent<TransformComponent>("transform")->getModelTransform();
-	{
-		auto objectTransformMatrix = objectModelTransform->getModelMatrix();
-		auto objectInverse = glm::inverse(objectTransformMatrix);
-		auto totalMatrix = objectTransformMatrix * modelTransform->getModelMatrix() * objectInverse;
-		collisionEnd = totalMatrix * ray->endPoint;
-		//for (int i = 0; i < 4; i++) {
-			//for (int j = 0; j < 4; j++)
-				//std::cout << modelTransform->getModelMatrix()[i][j] << " ";
-			//std::cout << std::endl;
-		//}
-		//auto temp = objectInverse * ray->endPoint;
-		//std::cout << "temp: " << temp[0] << " " << temp[1] << " " << temp[2] << " " << temp[3] << std::endl;
-		//std::cout << "object pos: " << ray->endPoint[0] << " " << ray->endPoint[1] << " " << ray->endPoint[2] << " " << ray->endPoint[3] << std::endl;
-		//std::cout << "collision pos: " << collisionEnd[0] << " " << collisionEnd[1] << " " << collisionEnd[2] << " " << collisionEnd[3] << std::endl;
-	}
-	{
-		auto tempModelTransform = std::make_shared<ModelTransform>();
-		tempModelTransform->copy(objectModelTransform);
-		tempModelTransform->translate(ray->origin - ray->endPoint);
-		auto objectTransformMatrix = tempModelTransform->getModelMatrix();
-		auto objectInverse = glm::inverse(objectTransformMatrix);
-		auto totalMatrix = objectTransformMatrix * modelTransform->getModelMatrix() * objectInverse;
-		collisionOrigin = totalMatrix * ray->origin;
-		//std::cout << "object pos: " << ray->origin[0] << " " << ray->origin[1] << " " << ray->origin[2] << std::endl;
-		//std::cout << "collision pos: " << collisionOrigin[0] << " " << collisionOrigin[1] << " " << collisionOrigin[2] << std::endl;
-	}
+	auto objectTransformMatrix = objectModelTransform->getModelMatrix();
+	auto objectInverse = glm::inverse(objectTransformMatrix);
+
+	glm::vec4 collisionOrigin, collisionEnd;
+	// Transform object to current object space
+	// Get collision position in object space
+	// Transform back to world space
+	collisionEnd = objectTransformMatrix * ((objectInverse * ray->endPoint) + collisionTranslateInObjectSpace - glm::vec4(0, 0, 0, 1));
+	collisionOrigin = objectTransformMatrix * ((objectInverse * ray->origin) + collisionTranslateInObjectSpace - glm::vec4(0, 0, 0, 1));
 	ray->update(collisionOrigin, collisionEnd);
+
+	//std::cout << "pos of collision: " << collisionEnd[0] << " " << collisionEnd[1] << " " << collisionEnd[2] << std::endl;
+
 	return ray;
+	//return getGameObject()->getComponent<TransformComponent>("transform")->getRay();
 }
 
 std::shared_ptr<CollisionInfo> CollisionComponent::getEnvironmentClosestCollision(glm::mat4x4 inverseTransformMatrix, std::shared_ptr<Ray> ray, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents)
@@ -228,7 +219,7 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 {
 	auto ray = getRay();
 
-	if (glm::length(ray->direction) == 0) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
+	if (glm::length(ray->direction) <= EPSILON) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
 
 	//std::cout << std::endl;
 	//std::cout << "start from: " << ray->origin[0] << " " << ray->origin[1] << " " << ray->origin[2] << std::endl;
@@ -258,20 +249,25 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 	}
 
 	auto objectTransformMatrix = getGameObject()->getComponent<TransformComponent>("transform")->getModelTransform()->getModelMatrix();
-	auto collisionTrnasformMatrix = modelTransform->getModelMatrix();
-	auto pos = objectTransformMatrix * glm::inverse(collisionTrnasformMatrix) * glm::inverse(objectTransformMatrix) * curPos;
+	auto inverseObject = glm::inverse(objectTransformMatrix);
+	auto collisionTransformMatrix = modelTransform->getModelMatrix();
+	// Transform collision to object space
+	// get object position in object space
+	// Transform back to world space
+	auto collisionObjectSpacePos = inverseObject * glm::vec4(curPos[0], curPos[1], curPos[2], 1);
+	auto pos = objectTransformMatrix * (collisionObjectSpacePos + (glm::vec4(0, 0, 0, 1) - collisionTransformMatrix * glm::vec4(0, 0, 0, 1)));
 
 	return { collisions, pos };
 }
 
 std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionComponent::ellipsoidTriangleCollision(std::shared_ptr<BVH> bvh)
 {
-	auto ray = getRay();
+	auto ray = getRay();  // World space ray
 
-	if (glm::length(ray->direction) == 0) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
+	if (glm::length(ray->direction) <= EPSILON) return std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3>();
 
-	auto start = ray->origin;
-	auto end = ray->endPoint;
+	//auto start = ray->origin;
+	//auto end = ray->endPoint;
 	//std::cout << "start: " << start[0] << " " << start[1] << " " << start[2] << std::endl;
 	//std::cout << "end: " << end[0] << " " << end[1] << " " << end[2] << std::endl;
 
@@ -299,10 +295,17 @@ std::pair<std::vector<std::shared_ptr<CollisionInfo>>, glm::vec3> CollisionCompo
 	//else std::cout << "collision" << std::endl;
 
 	auto objectTransformMatrix = getGameObject()->getComponent<TransformComponent>("transform")->getModelTransform()->getModelMatrix();
-	auto collisionTrnasformMatrix = modelTransform->getModelMatrix();
-	auto pos = objectTransformMatrix * glm::inverse(collisionTrnasformMatrix) * glm::inverse(objectTransformMatrix) * curPos;
+	auto inverseObject = glm::inverse(objectTransformMatrix);
+	auto collisionTransformMatrix = modelTransform->getModelMatrix();
+	// Transform collision to object space
+	// get object position in object space
+	// Transform back to world space
+	auto collisionObjectSpacePos = inverseObject * glm::vec4(curPos[0], curPos[1], curPos[2], 1);
+	auto pos = objectTransformMatrix * (collisionObjectSpacePos + (glm::vec4(0, 0, 0, 1) - collisionTransformMatrix * glm::vec4(0, 0, 0, 1)));
 
-	return { collisions, pos };
+	//std::cout << "after collision pos: " << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
+
+	return { collisions, pos};
 }
 
 glm::vec4 CollisionComponent::doNudge(glm::vec4 curPos, std::shared_ptr<CollisionInfo> collision, std::vector<std::shared_ptr<EnvironmentComponent>>& environmentComponents)

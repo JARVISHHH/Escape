@@ -44,6 +44,8 @@ void App::loadResources()
 	Global::graphics.addMaterial("die", "Resources/Images/die.png");
 	Global::graphics.addMaterial("win", "Resources/Images/win.png");
 
+	Global::graphics.addMaterial("trashcan", "Resources/Images/TrashCan.png");
+	Global::graphics.addMaterial("trashcanNormal", "Resources/Images/TrashCanNormal.png", GL_TEXTURE1, 1.f);
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.jpg");
 	Global::graphics.addMaterial("monomi", "Resources/Images/monomi.jpg");
 	Global::graphics.addMaterial("wall", "Resources/Images/wall.jpg");
@@ -58,6 +60,7 @@ void App::loadResources()
 	Global::graphics.addShape("coin", "./Resources/Meshes/coin.obj");
 	Global::graphics.addShape("health", "./Resources/Meshes/health.obj");
 	Global::graphics.addShape("bullet", "./Resources/Meshes/ninja_star.obj");
+	Global::graphics.addShape("character", "./Resources/Meshes/character.obj");
 
 	Screen::addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj", true, 10);
 	Screen::addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj", true, 10);

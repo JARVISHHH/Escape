@@ -42,6 +42,10 @@ void CollisionResponseComponent::resolveCollision(std::vector<std::shared_ptr<Co
 {
 	if (isStatic || collisions.size() <= 0) return;
 	auto transformComponent = getGameObject()->getComponent<TransformComponent>("transform");
+	//auto objectTransformMatrix = transformComponent->getModelTransform()->getModelMatrix();
+	//auto inverseObject = glm::inverse(objectTransformMatrix);
+	//auto collisionObjectSpacePos = inverseObject * glm::vec4(curPos[0], curPos[1], curPos[2], 1);
+	//curpos = collisionObjectSpacePos + (glm::vec4(0, 0, 0, 1) -)
 	transformComponent->getModelTransform()->setPos(curPos);
 }
 
