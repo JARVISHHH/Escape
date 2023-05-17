@@ -48,10 +48,27 @@ void GameScreen::init()
 	hpImage->setPosition(glm::vec3(35, height + 10, -1));
 	hpImage->setSize(glm::vec3(97, 80, 0));
 	hpImage->setMaterial("hp_red");
+	// Time
+	std::shared_ptr<Image> timeBarImage = std::make_shared<Image>();
+	timeBarImage->setPosition(glm::vec3(200, height + 18, -1));
+	timeBarImage->setSize(glm::vec3(100, 80, 0));
+	timeBarImage->setMaterial("time");
+	timeImage = std::make_shared<Image>();
+	timeImage->setPosition(glm::vec3(240, height + 10, -1));
+	timeImage->setSize(glm::vec3(200, 80, 0));
+	timeImage->setMaterial("time_blue");
+	// Result
+	resultImage = std::make_shared<Image>();
+	resultImage->setPosition(glm::vec3(100, height, -1));
+	resultImage->setSize(glm::vec3(500, 350, 0));
+	resultImage->setShow(false);
 
 	ui->add(shootImage);
 	ui->add(hpBarImage);
 	ui->add(hpImage);
+	ui->add(timeBarImage);
+	ui->add(timeImage);
+	ui->add(resultImage);
 }
 
 void GameScreen::activateAction()
@@ -79,7 +96,7 @@ void GameScreen::activateAction()
 	gameWorld->addGameSystem(particleSystem);
 
 	// Create game handler
-	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 600);
+	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 90, timeImage, resultImage);
 
 	// Generate map
 	std::shared_ptr<Map> map = std::make_shared<Map>(gameWorld->getAABB());
@@ -101,6 +118,11 @@ void GameScreen::activateAction()
 	collisionSystem->deleteLayerCollision("character", "character");
 
 	gameWorld->start();
+
+	hpImage->setSize(glm::vec3(97, 80, 0));
+	timeImage->setSize(glm::vec3(200, 80, 0));
+	resultImage->setSize(glm::vec3(500, 350, 0));
+	resultImage->setShow(false);
 }
 
 void GameScreen::update(double seconds) {

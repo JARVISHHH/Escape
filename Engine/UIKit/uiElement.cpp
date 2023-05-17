@@ -84,6 +84,11 @@ std::string UIElement::getMaterialName()
 	return materialName;
 }
 
+void UIElement::setShow(bool show)
+{
+	this->show = show;
+}
+
 void UIElement::add(std::shared_ptr<UIElement> element)
 {
 	children.push_back(element);

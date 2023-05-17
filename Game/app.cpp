@@ -38,6 +38,11 @@ void App::loadResources()
 
 	Global::graphics.addMaterial("hp", "Resources/Images/hp.png");
 	Global::graphics.addMaterial("hp_red", "Resources/Images/hp_red.png");
+	Global::graphics.addMaterial("time", "Resources/Images/time.png");
+	Global::graphics.addMaterial("time_blue", "Resources/Images/time_blue.png");
+
+	Global::graphics.addMaterial("die", "Resources/Images/die.png");
+	Global::graphics.addMaterial("win", "Resources/Images/win.png");
 
 	Global::graphics.addMaterial("monokuma", "Resources/Images/monokuma.jpg");
 	Global::graphics.addMaterial("monomi", "Resources/Images/monomi.jpg");

@@ -33,6 +33,7 @@ public:
 	glm::vec3 getColor();
 	void setMaterial(std::string materialName);
 	std::string getMaterialName();
+	void setShow(bool show);
 
 	void add(std::shared_ptr<UIElement> element);
 	void setParent(std::shared_ptr<UIElement> parent);

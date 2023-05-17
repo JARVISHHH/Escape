@@ -32,4 +32,6 @@ private:
     std::shared_ptr<CollisionSystem> collisionSystem;
 
     std::shared_ptr<Image> hpImage;
+    std::shared_ptr<Image> timeImage;
+    std::shared_ptr<Image> resultImage;
 };
