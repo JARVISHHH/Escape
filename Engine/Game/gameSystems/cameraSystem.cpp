@@ -27,8 +27,8 @@ void CameraSystem::mousePosEvent(double xpos, double ypos)
 	auto look = camera->getLook();
 	if (Screen::mousePressing[GLFW_MOUSE_BUTTON_RIGHT]) {
 		if (firstPerson) {
-			camera->rotate(rotateSpeed * (xpos - previousMousePosition.x), glm::vec3(0, 1, 0));
-			camera->rotate(rotateSpeed * (ypos - previousMousePosition.y), glm::vec3(look.z, 0, look.x));
+			camera->rotate(rotateSpeed * (-xpos + previousMousePosition.x), glm::vec3(0, 1, 0));
+			camera->rotate(rotateSpeed * (-ypos + previousMousePosition.y), glm::vec3(look.z, 0, look.x));
 			//camera->rotate(rotateSpeed * (previousMousePosition.x - xpos), glm::vec3(0, 1, 0));
 			//camera->rotate(rotateSpeed * (previousMousePosition.y - ypos), glm::vec3(look.z, 0, look.x));
 		}

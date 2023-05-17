@@ -87,6 +87,8 @@ std::string UIElement::getMaterialName()
 void UIElement::setShow(bool show)
 {
 	this->show = show;
+	for (auto element : children)
+		element->setShow(show);
 }
 
 void UIElement::add(std::shared_ptr<UIElement> element)
@@ -99,6 +101,12 @@ void UIElement::setParent(std::shared_ptr<UIElement> parent)
 {
 	this->parent = parent;
 	updatePosition();
+}
+
+std::shared_ptr<UIElement> UIElement::getChild(int index)
+{
+	if (index >= children.size() || index < 0) return nullptr;
+	return children[index];
 }
 
 std::shared_ptr<UIElement> UIElement::getParent()

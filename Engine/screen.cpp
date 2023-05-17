@@ -85,6 +85,7 @@ void Screen::mouseButtonEvent(int button, int action) {
 }
 
 void Screen::scrollEvent(double distance) {
+	if (!active) return;
 	if (gameWorld != nullptr) gameWorld->scrollEvent(distance);
 }
 

@@ -43,6 +43,7 @@ void App::loadResources()
 
 	Global::graphics.addMaterial("die", "Resources/Images/die.png");
 	Global::graphics.addMaterial("win", "Resources/Images/win.png");
+	Global::graphics.addMaterial("score", "Resources/Images/score.png");
 
 	Global::graphics.addMaterial("trashcan", "Resources/Images/TrashCan.png");
 	Global::graphics.addMaterial("trashcanNormal", "Resources/Images/TrashCanNormal.png", GL_TEXTURE1, 1.f);

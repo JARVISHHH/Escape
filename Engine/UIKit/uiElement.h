@@ -37,6 +37,7 @@ public:
 
 	void add(std::shared_ptr<UIElement> element);
 	void setParent(std::shared_ptr<UIElement> parent);
+	std::shared_ptr<UIElement> getChild(int index);
 
 protected:
 	glm::vec3 position = glm::vec3(0, 0, 0);  // Absolute top-left position

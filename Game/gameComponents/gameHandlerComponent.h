@@ -13,7 +13,7 @@ enum GameState {
 
 class GameHandlerComponent : public GameComponent {
 public:
-	GameHandlerComponent(float maxTime, std::shared_ptr<UIElement> time, std::shared_ptr<UIElement> resultImage);
+	GameHandlerComponent(float maxTime, std::shared_ptr<UIElement> time, std::shared_ptr<UIElement> resultImage, std::shared_ptr<UIElement> scoreImage);
 
 	void start() override;
 	void update(double seconds) override;
@@ -35,4 +35,7 @@ private:
 
 	int score = 0;
 	int killedEnemies = 0;
+	std::shared_ptr<UIElement> scoreImage;
+
+	void calculateScore();
 };

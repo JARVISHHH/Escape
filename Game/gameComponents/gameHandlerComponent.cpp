@@ -1,7 +1,8 @@
 #include "gameHandlerComponent.h"
+#include <Engine/UIKit/text.h>
 
-GameHandlerComponent::GameHandlerComponent(float maxTime, std::shared_ptr<UIElement> time, std::shared_ptr<UIElement> resultImage)
-	: GameComponent("gameHandler"), maxTime(maxTime), leftTime(maxTime), time(time), resultImage(resultImage)
+GameHandlerComponent::GameHandlerComponent(float maxTime, std::shared_ptr<UIElement> time, std::shared_ptr<UIElement> resultImage, std::shared_ptr<UIElement> scoreImage)
+	: GameComponent("gameHandler"), maxTime(maxTime), leftTime(maxTime), time(time), resultImage(resultImage), scoreImage(scoreImage)
 {
 	gameState = GameState::OnHold;
 }
@@ -50,6 +51,10 @@ void GameHandlerComponent::endGame(bool win)
 		result = "You win!";
 		resultImage->setMaterial("win");
 		resultImage->setShow(true);
+		calculateScore();
+		scoreImage->setShow(true);
+		auto scoreText = std::static_pointer_cast<Text>(scoreImage->getChild(0));
+		scoreText->setContent(std::to_string(score));
 	}
 	else {
 		gameState = GameState::Lose;
@@ -59,4 +64,10 @@ void GameHandlerComponent::endGame(bool win)
 	}
 	getGameObject()->getGameWorld()->setWin(win);
 	getGameObject()->getGameWorld()->setFinish(true);
+}
+
+void GameHandlerComponent::calculateScore()
+{
+	score += killedEnemies * 10;
+	score += leftTime;
 }

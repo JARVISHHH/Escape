@@ -75,12 +75,14 @@ void GameWorld::draw()
 
 void GameWorld::mousePosEvent(double xpos, double ypos)
 {
+	if (stop || finish) return;
 	auto cameraSystem = getGameSystem<CameraSystem>("camera");
 	if (cameraSystem != nullptr) cameraSystem->mousePosEvent(xpos, ypos);
 }
 
 void GameWorld::scrollEvent(double distance)
 {
+	if (stop || finish) return;
 	auto cameraSystem = getGameSystem<CameraSystem>("camera");
 	if (cameraSystem != nullptr) cameraSystem->scrollEvent(distance);
 }

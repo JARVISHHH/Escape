@@ -19,7 +19,7 @@ protected:
 	std::shared_ptr<Camera> camera;
 	std::shared_ptr<GameObject> character;
 
-	float rotateSpeed = 0.005f;
+	float rotateSpeed = 0.0025f;
 	glm::vec2 previousMousePosition = { 0, 0 };
 	glm::vec3 focus = {0, 0, 0};
 	glm::vec3 focus2Camera = { 0, 0, 0 };

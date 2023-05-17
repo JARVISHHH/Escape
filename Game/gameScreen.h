@@ -34,4 +34,5 @@ private:
     std::shared_ptr<Image> hpImage;
     std::shared_ptr<Image> timeImage;
     std::shared_ptr<Image> resultImage;
+    std::shared_ptr<Image> scoreImage;
 };

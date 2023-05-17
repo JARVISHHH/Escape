@@ -62,6 +62,17 @@ void GameScreen::init()
 	resultImage->setPosition(glm::vec3(100, height, -1));
 	resultImage->setSize(glm::vec3(500, 350, 0));
 	resultImage->setShow(false);
+	scoreImage = std::make_shared<Image>();
+	scoreImage->setPosition(glm::vec3(250, height - 300, -1));
+	scoreImage->setSize(glm::vec3(100, 120, 0));
+	scoreImage->setMaterial("score");
+	scoreImage->setShow(false);
+	auto score = std::make_shared<Text>();
+	score->setLocalPosition(glm::vec3(75, -43, -1));
+	score->setFontSize(0.8);
+	score->setColor(glm::vec3(1, 1, 1));
+	//score->setContent("50");
+	score->setShow(false);
 
 	ui->add(shootImage);
 	ui->add(hpBarImage);
@@ -69,6 +80,8 @@ void GameScreen::init()
 	ui->add(timeBarImage);
 	ui->add(timeImage);
 	ui->add(resultImage);
+	ui->add(scoreImage);
+	scoreImage->add(score);
 }
 
 void GameScreen::activateAction()
@@ -96,7 +109,7 @@ void GameScreen::activateAction()
 	gameWorld->addGameSystem(particleSystem);
 
 	// Create game handler
-	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 90, timeImage, resultImage);
+	std::shared_ptr<GameObject> gameHandler = createGameHandler(gameWorld, 90, timeImage, resultImage, scoreImage);
 
 	// Generate map
 	std::shared_ptr<Map> map = std::make_shared<Map>(gameWorld->getAABB());
@@ -111,9 +124,6 @@ void GameScreen::activateAction()
 	// Collision
 	collisionSystem->buildBVH();
 	collisionSystem->buildHG();
-	//collisionSystem->addLayer("projectile");
-	//collisionSystem->deleteLayerCollision("projectile", "enemy");
-	//collisionSystem->deleteLayerCollision("projectile", "projectile");
 	collisionSystem->deleteLayerCollision("enemy", "enemy");
 	collisionSystem->deleteLayerCollision("character", "character");
 
@@ -123,6 +133,7 @@ void GameScreen::activateAction()
 	timeImage->setSize(glm::vec3(200, 80, 0));
 	resultImage->setSize(glm::vec3(500, 350, 0));
 	resultImage->setShow(false);
+	scoreImage->setShow(false);
 }
 
 void GameScreen::update(double seconds) {
