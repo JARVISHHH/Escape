@@ -9,10 +9,10 @@ std::shared_ptr<GameObject> createGoal(std::shared_ptr<GameWorld> gameWorld, glm
 	// Transform Component
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
-	modelTransform->scale(0.25);
+	modelTransform->scale(1);
 	modelTransform->translate(pos);
 	// Draw component
-	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("cylinder", "monomi");
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("door", "");
 	// Collision component
 	std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>();
 	std::shared_ptr<CollisionResponseComponent> collisionResponse = std::make_shared<CollisionResponseComponent>(true);

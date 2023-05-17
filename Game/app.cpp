@@ -56,12 +56,16 @@ void App::loadResources()
 	Global::graphics.addMaterial("connectorNormal", "Resources/Images/connector_normal.jpg", GL_TEXTURE1, 1.f);
 	Global::graphics.addMaterial("platform", "Resources/Images/platform.jpg");
 	Global::graphics.addMaterial("platformNormal", "Resources/Images/platform_normal.jpg", GL_TEXTURE1, 1.f);
+	Global::graphics.addMaterial("projectile", "Resources/Images/projectile.png");
+	Global::graphics.addMaterial("projectileNormal", "Resources/Images/projectile_normal.png", GL_TEXTURE1, 1.f);
 
 	Global::graphics.addShape("coin", "./Resources/Meshes/coin.obj");
 	Global::graphics.addShape("health", "./Resources/Meshes/health.obj");
 	Global::graphics.addShape("bullet", "./Resources/Meshes/ninja_star.obj");
 	Global::graphics.addShape("character", "./Resources/Meshes/character.obj");
 	Global::graphics.addShape("enemy", "./Resources/Meshes/enemy.obj");
+	Global::graphics.addShape("door", "./Resources/Meshes/door.obj");
+	Global::graphics.addShape("projectile", "./Resources/Meshes/projectile.obj");
 
 	Screen::addEnvironmentMesh("wall", "./Resources/Meshes/wall.obj", true, 10);
 	Screen::addEnvironmentMesh("ground", "./Resources/Meshes/ground.obj", true, 10);

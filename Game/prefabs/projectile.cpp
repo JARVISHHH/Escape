@@ -7,10 +7,10 @@ std::shared_ptr<GameObject> createProjectile(std::shared_ptr<GameWorld> gameWorl
 	// Transform Component
 	std::shared_ptr<TransformComponent> transformComponent = std::make_shared<TransformComponent>();
 	auto modelTransform = transformComponent->getModelTransform();
-	modelTransform->scale(0.05);
+	modelTransform->scale(1);
 	modelTransform->translate(pos);
 	// Draw component
-	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>(shape, material);
+	std::shared_ptr<DrawComponent> drawComponent = std::make_shared<DrawComponent>("projectile", "projectile", "projectileNormal");
 	// Collision component
 	std::shared_ptr<CylinderComponent> collisionComponent = std::make_shared<CylinderComponent>();
 	std::shared_ptr<ProjectileCollisionResponse> collisionResponseComponent = std::make_shared<ProjectileCollisionResponse>(true);
