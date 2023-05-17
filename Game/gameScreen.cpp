@@ -34,6 +34,13 @@ void GameScreen::init()
 {
 	Screen::init();
 
+	// Back/Restart
+	std::shared_ptr<Image> image = std::make_shared<Image>();
+	image->setPosition(glm::vec3(width - 80, height - 10, -1));
+	image->setSize(glm::vec3(80, 60, 0));
+	image->setMaterial("back");
+	std::shared_ptr<Button> backButton = std::make_shared<Button>(glm::vec3(width - 75, height - 10, -1), glm::vec3(70, 25, 0), ButtonAction::loadTitle);
+	std::shared_ptr<Button> restartButton = std::make_shared<Button>(glm::vec3(width - 85, height - 40, -1), glm::vec3(90, 25, 0), ButtonAction::loadGame);
 	// Shoot image
 	std::shared_ptr<Image> shootImage = std::make_shared<Image>();
 	shootImage->setPosition(glm::vec3((float)width / 2 - 25, (float)height / 2 + 25, -1));
@@ -74,6 +81,9 @@ void GameScreen::init()
 	//score->setContent("50");
 	score->setShow(false);
 
+	ui->add(image);
+	ui->add(backButton);
+	ui->add(restartButton);
 	ui->add(shootImage);
 	ui->add(hpBarImage);
 	ui->add(hpImage);
@@ -156,8 +166,8 @@ void GameScreen::draw() {
 		gameWorld->draw();
 
 	// Text
-	Global::graphics.bindShader("ui");
-	Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press B to go back. Press R to restart.", glm::ivec2(0, 30), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.3f, 0.1f, glm::vec3(1, 0, 1));
+	//Global::graphics.bindShader("ui");
+	//Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press B to go back. Press R to restart.", glm::ivec2(0, 30), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.3f, 0.1f, glm::vec3(1, 0, 1));
 
 	// UI
 	glDisable(GL_DEPTH_TEST);

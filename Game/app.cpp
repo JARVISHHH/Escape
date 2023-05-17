@@ -32,6 +32,7 @@ void App::loadResources()
 {
 	Global::graphics.addMaterial("title", "Resources/Images/title.png");
 	Global::graphics.addMaterial("instructions", "Resources/Images/instructions.png");
+	Global::graphics.addMaterial("back", "Resources/Images/back.png");
 
 	Global::graphics.addMaterial("button", "Resources/Images/button.png");
 	Global::graphics.addMaterial("shoot", "Resources/Images/shoot.png");
