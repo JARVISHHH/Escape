@@ -12,6 +12,10 @@ For QtCreator, open the `CMakeList.txt` and run.
 
 ## Demo
 
+This is a speedrun demo video. Please take your time and enjoy the game!
+
+https://github.com/JARVISHHH/Escape/assets/54977500/4c20416f-0536-418b-b4ee-8a5da5b88c67
+
 
 
 ## Engine Feature
