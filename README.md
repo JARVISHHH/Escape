@@ -4,7 +4,9 @@ Hello, this is Escape, a dungeon escape rogue-like game created by a self-made 3
 
 Check out this slides to have an insight about this game (and some advanced engine features): [Escape 3D game engine](https://docs.google.com/presentation/d/1uaBW2uZxgA3INfNzQe-RBvGKkVebQzpuPwg3CGzBgKc/edit#slide=id.p)
 
+## How to run
 
+Run the main.cpp.
 
 ## Engine Feature
 
