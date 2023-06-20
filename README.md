@@ -6,7 +6,13 @@ Check out this slides to have an insight about this game (and some advanced engi
 
 ## How to run
 
-Run the main.cpp.
+For Visual Studio, open the folder and run the `CMakeList.txt`.
+
+For QtCreator, open the `CMakeList.txt` and run.
+
+## Demo
+
+
 
 ## Engine Feature
 
