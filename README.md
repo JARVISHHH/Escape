@@ -36,9 +36,9 @@ Static game objects (environments): using Ellipsoid-Triangle collision.
 
 #### Optimizations
 
-Dynamic game objects: optimized using BVH.
+Dynamic game objects: optimized using Hierarchical Grid.
 
-Static game objects (environments): optimized using Hierarchical Grid.
+Static game objects (environments): optimized using BVH.
 
 ### AI
 
